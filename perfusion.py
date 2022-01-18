@@ -16,6 +16,7 @@ def select_file():
     
     # define allowed file types
     filetypes = (
+        ('Image files', '*.jpg'),
         ('All files', '*.*')
     )
 
@@ -25,7 +26,6 @@ def select_file():
         initialdir='/',
         filetypes=filetypes)
 
-# ALSO INCLUDED IN DIALOG CODE. DO WE NEED?
 # open button
 open_button = ttk.Button(
     root,
