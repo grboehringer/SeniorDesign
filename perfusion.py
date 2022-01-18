@@ -26,7 +26,7 @@ def select_file():
         filetypes=filetypes)
 
 # ALSO INCLUDED IN DIALOG CODE. DO WE NEED?
-""" # open button
+# open button
 open_button = ttk.Button(
     root,
     text='Open an Image',
@@ -35,7 +35,7 @@ open_button = ttk.Button(
 
 open_button.pack(expand=True)
 
-root.mainloop() """
+#root.mainloop()
 
 # import image
 I = select_file()
