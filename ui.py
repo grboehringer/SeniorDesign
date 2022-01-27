@@ -1,16 +1,15 @@
-import numpy as np
-
-import tkinter as tk
-from tkinter import ttk
+from tkinter import *
+from PIL import ImageTk, Image
 from tkinter import filedialog as fd
 
-# create the root window
-root = tk.Tk()                          # creates box
-root.title('Image Selection')           # name of box
-root.resizable(False, False)            # user can't change size
-root.geometry('300x150')                # size of box
+perIndex = 55.5
 
-# file selection function (Should this be in its own file?)
+root = Tk()
+root.title('Testing GUI')
+#filepath on my computer, a filepath is only needed if the photo is not running in the same location as the code
+# root.iconbitmap('C:\Users\Johns\Desktop\School\BME 590\SeniorDesign')
+
+#finding the filename
 def select_file():
     
     # define allowed file types
@@ -19,19 +18,37 @@ def select_file():
         ('All files', '*.*')
     )
 
-    # prompt dialog box
+        # prompt dialog box
     filename = fd.askopenfilename(
         title='Open an image',
         initialdir='/',
         filetypes=filetypes)
+        
+    return filename
 
-# open button
-open_button = ttk.Button(
-    root,
-    text='Open an Image',
-    command=select_file
-)
+def importImg(filename):
+    #tells software what photo to open
+    #myImage = ImageTk.PhotoImage(Image.open(filename))
+    #myLabel = Label(image = myImage)
+    #myLabel.pack()
 
-open_button.pack(expand=True)
+    image = Image.open(filename)
+    image.Label(image)
 
-#root.mainloop()
+#creating a label for the perfusion index, using a filler value now
+perfusion = Label(root, text = "Perfusion Index = " + str(perIndex))
+
+#button that allows the user to exit the program
+buttonExit = Button(root, text = "Exit Program", command = root.quit)
+#buttonExit.pack(expand=YES)
+
+#Grid layout for the GUI
+buttonExit.grid(row = 1, column = 1)
+perfusion.grid(row = 2, column = 0, columnspan = 3)
+
+filename = select_file()
+importImg(filename)
+
+
+
+root.mainloop()
