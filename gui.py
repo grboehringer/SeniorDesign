@@ -38,3 +38,12 @@ upload.grid(row = 2, column = 1, columnspan = 4)
 
 
 root.mainloop() #allows the window to stay open
+
+""" 
+To Do:
+    1) Add adjustable threshold values with a default to start (DT & IT)
+    2) Add the perfusion value
+    3) Make image size larger
+    4) Make GUI look appealing (buttons all on one side, items properly spaced, etc.)
+    5) Work on zooming in on the image, showing the percentage the pixels take up of perfusion value
+    """
