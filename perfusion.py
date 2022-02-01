@@ -15,13 +15,12 @@ red = img[:,:,2]
 green = img[:,:,1]
 blue = img[:,:,0]
 
-"""
-if (abs(red - green) > dt):
-    bool = 1
-elif (abs(green - blue) > dt):
-    bool = 1
-elif (abs(red - blue) > dt):
-    bool = 1
-else:
-    bool = 0
-"""
+boolean = np.abs(red - green) > differenceThreshold
+boolean = boolean | np.abs(red - blue) > differenceThreshold
+boolean = boolean | np.abs(green - blue) > differenceThreshold
+
+perfusion = intensity * boolean
+print('boolean:\n')
+print(boolean)
+print('perfusion:\n')
+print(perfusion)

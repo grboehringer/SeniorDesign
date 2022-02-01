@@ -23,6 +23,9 @@ def select_file():
     filename = tk.filedialog.askopenfilename( filetypes = f_types)
     #dynamic column variable
     #image resizing before displaying
+    return filename
+
+def open_image(filename):
     img = Image.open(filename)
     img = img.resize((300,300))
     #image display code
