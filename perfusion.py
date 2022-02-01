@@ -24,5 +24,3 @@ print('boolean:\n')
 print(boolean)
 print('perfusion:\n')
 print(perfusion)
-
-cv2.imshow(perfusion)
