@@ -7,7 +7,7 @@ from PIL import ImageTk, Image
 def select_file():
 
     # define allowed file types
-    f_types = [('Jpg files', '*.jpg'), ('PNG files','*.png')]
+    f_types = [('Jpg files', '*.jpg'), ('jpeg files', '*.jpeg'), ('PNG files','*.png')]
 
     # prompt dialog box
     filename = tk.filedialog.askopenfilename( filetypes = f_types)

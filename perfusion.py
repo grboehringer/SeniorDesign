@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 from gui import select_file
+import time
+import matplotlib.pyplot as plt
 
 I = select_file()
 
@@ -24,3 +26,7 @@ print('boolean:\n')
 print(boolean)
 print('perfusion:\n')
 print(perfusion)
+
+plt.imshow(perfusion, 'gray')
+plt.show()
+
