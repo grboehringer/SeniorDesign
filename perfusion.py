@@ -4,29 +4,31 @@ from gui import select_file
 import time
 import matplotlib.pyplot as plt
 
-I = select_file()
+def algorithm(img):
+    intensityThreshold = 5
+    differenceThreshold = 6
 
-img = cv2.imread(I)     # Import image
+    intensity = np.mean(img, axis=2)    # Find intensity
 
-intensityThreshold = 5
-differenceThreshold = 6
+    red = img[:,:,2]
+    green = img[:,:,1]
+    blue = img[:,:,0]
 
-intensity = np.mean(img, axis=2)    # Find intensity
+    boolean = np.abs(red - green) > differenceThreshold
+    boolean = boolean | np.abs(red - blue) > differenceThreshold
+    boolean = boolean | np.abs(green - blue) > differenceThreshold
 
-red = img[:,:,2]
-green = img[:,:,1]
-blue = img[:,:,0]
+    perfusion = intensity * boolean
 
-boolean = np.abs(red - green) > differenceThreshold
-boolean = boolean | np.abs(red - blue) > differenceThreshold
-boolean = boolean | np.abs(green - blue) > differenceThreshold
+    return perfusion
 
-perfusion = intensity * boolean
-print('boolean:\n')
-print(boolean)
-print('perfusion:\n')
-print(perfusion)
+if __name__ == '__main__':
+    I = select_file()
 
-plt.imshow(perfusion, 'gray')
-plt.show()
+    img = cv2.imread(I)     # Import image
+
+    perfusion = algorithm(img)
+
+    plt.imshow(perfusion, 'gray')
+    plt.show()
 
