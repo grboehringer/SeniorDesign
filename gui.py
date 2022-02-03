@@ -49,7 +49,7 @@ if __name__ == '__main__':
     perIndex = 55.5
 
     root = tk.Tk()
-    root.geometry("680x534")
+    root.geometry("706x534")
     root.title('Testing GUI')
     root.configure(bg='#3A3B3C')
 
