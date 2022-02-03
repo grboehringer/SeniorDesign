@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 def algorithm(img_filename):
     intensityThreshold = 5
-    differenceThreshold = 6
+    differenceThreshold = 200
 
     img = cv2.imread(img_filename) 
 
@@ -16,9 +16,11 @@ def algorithm(img_filename):
     green = img[:,:,1]
     blue = img[:,:,0]
 
-    boolean = np.abs(red - green) > differenceThreshold
-    boolean = boolean | np.abs(red - blue) > differenceThreshold
-    boolean = boolean | np.abs(green - blue) > differenceThreshold
+    dt = np.where(intensity > intensityThreshold, differenceThreshold / 3, differenceThreshold)
+
+    boolean = np.abs(red - green) > dt
+    boolean = boolean | np.abs(red - blue) > dt
+    boolean = boolean | np.abs(green - blue) > dt
 
     perfusion = intensity * boolean
 
