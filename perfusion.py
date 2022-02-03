@@ -4,9 +4,11 @@ from gui import select_file
 import time
 import matplotlib.pyplot as plt
 
-def algorithm(img):
+def algorithm(img_filename):
     intensityThreshold = 5
     differenceThreshold = 6
+
+    img = cv2.imread(I) 
 
     intensity = np.mean(img, axis=2)    # Find intensity
 
@@ -23,11 +25,9 @@ def algorithm(img):
     return perfusion
 
 if __name__ == '__main__':
-    I = select_file()
+    img_filename = select_file()
 
-    img = cv2.imread(I)     # Import image
-
-    perfusion = algorithm(img)
+    perfusion = algorithm(img_filename)
 
     plt.imshow(perfusion, 'gray')
     plt.show()
