@@ -18,45 +18,45 @@ def select_file():
 def open_image():
     filename = select_file()
     img = Image.open(filename)
-    img = img.resize((300,300))
+    img = img.resize((512,512))
     #image display code
     # Use this code if no image resizing is wanted/needed: img = ImageTk.PhotoImage(file = filename)
     img = ImageTk.PhotoImage(img)
     size = tk.Label(root)
-    size.grid(row = 2, column = 0, columnspan=2, rowspan=35,padx=10,pady=10)
+    size.grid(row = 0, column = 0, columnspan=2, rowspan=35,padx=10,pady=10)
     size.image = img
     size['image'] = img
 
     threshold_intensity = Label(root, text="Intensity Threshold")
-    threshold_intensity.grid(row=3, column=3, padx=5)
+    threshold_intensity.grid(row=3, column=2, padx=5)
     intensity_thresh_entry = Entry(root)
     intensity_thresh_entry.insert(0,'Intensity Threshold') #need to bring over intensity threshold from perfusion.py
-    intensity_thresh_entry.grid(row=4, column=3, padx=5)
+    intensity_thresh_entry.grid(row=4, column=2, padx=5)
 
     diff_threshold = Label(root, text="Difference Threshold")
-    diff_threshold.grid(row=6, column=3, padx=5)
+    diff_threshold.grid(row=6, column=2, padx=5)
     diff_thresh_entry = Entry(root)
     diff_thresh_entry.insert(0,'Difference Threshold') #need to bring over difference threshold from perfusion.py
-    diff_thresh_entry.grid(row=7, column=3, padx=5)
+    diff_thresh_entry.grid(row=7, column=2, padx=5)
 
     perfusion_value = Label(root, text="Perfusion value")
-    perfusion_value.grid(row=9, column=3, padx=5)
+    perfusion_value.grid(row=9, column=2, padx=5)
     per_val_entry = Entry(root)
     per_val_entry.insert(0,'Perfusion value') #need to bring over perfusion value from perfusion.py
-    per_val_entry.grid(row=10, column=3, padx=5)
-
+    per_val_entry.grid(row=10, column=2, padx=5)
+    
 if __name__ == '__main__':
     perIndex = 55.5
 
     root = tk.Tk()
-    root.geometry("410x300")
+    root.geometry("680x534")
     root.title('Testing GUI')
 
     intro = tk.Label(root, text = 'Upload Files and Display')
-    intro.grid(row = 0, column = 0, padx=5)
+    intro.grid(row = 0, column = 2, padx=5)
 
     upload = tk.Button(root, text = 'Upload Files', width = 20, command =lambda:open_image())
-    upload.grid(row = 1, column = 0, padx=5)
+    upload.grid(row = 1, column = 2, padx=5)
     
     root.mainloop() #allows the window to stay open
 
