@@ -8,7 +8,7 @@ def algorithm(img_filename):
     intensityThreshold = 5
     differenceThreshold = 6
 
-    img = cv2.imread(I) 
+    img = cv2.imread(img_filename) 
 
     intensity = np.mean(img, axis=2)    # Find intensity
 
