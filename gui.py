@@ -27,19 +27,19 @@ def open_image():
     size.image = img
     size['image'] = img
 
-    threshold_intensity = Label(root, text="Intensity Threshold")
+    threshold_intensity = Label(root, text="Intensity Threshold", bg ='#3A3B3C', fg = 'white')
     threshold_intensity.grid(row=3, column=2, padx=5)
     intensity_thresh_entry = Entry(root)
     intensity_thresh_entry.insert(0,'Intensity Threshold') #need to bring over intensity threshold from perfusion.py
     intensity_thresh_entry.grid(row=4, column=2, padx=5)
 
-    diff_threshold = Label(root, text="Difference Threshold")
+    diff_threshold = Label(root, text="Difference Threshold",bg ='#3A3B3C', fg = 'white')
     diff_threshold.grid(row=6, column=2, padx=5)
     diff_thresh_entry = Entry(root)
     diff_thresh_entry.insert(0,'Difference Threshold') #need to bring over difference threshold from perfusion.py
     diff_thresh_entry.grid(row=7, column=2, padx=5)
 
-    perfusion_value = Label(root, text="Perfusion value")
+    perfusion_value = Label(root, text="Perfusion value",bg ='#3A3B3C', fg = 'white')
     perfusion_value.grid(row=9, column=2, padx=5)
     per_val_entry = Entry(root)
     per_val_entry.insert(0,'Perfusion value') #need to bring over perfusion value from perfusion.py
@@ -51,17 +51,21 @@ if __name__ == '__main__':
     root = tk.Tk()
     root.geometry("680x534")
     root.title('Testing GUI')
+    root.configure(bg='#3A3B3C')
 
-    intro = tk.Label(root, text = 'Upload Files and Display')
+    intro = tk.Label(root, text = 'Upload Files and Display', bg ='#3A3B3C', fg = 'white')
     intro.grid(row = 0, column = 2, padx=5)
 
-    upload = tk.Button(root, text = 'Upload Files', width = 20, command =lambda:open_image())
+    upload = tk.Button(root, text = 'Upload Files', width = 20, bg ='#3A3B3C', fg = 'white', command =lambda:open_image())
     upload.grid(row = 1, column = 2, padx=5)
     
     root.mainloop() #allows the window to stay open
 
 """ 
 To Do:
+    i) Rectangular Image Select - John
+    ii) Grid Layout understanding - Brady
+    iii) Save the GUI info
     1) Add adjustable threshold values with a default to start (DT & IT)
     2) Add the perfusion value
     3) Make image size larger
