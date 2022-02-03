@@ -26,11 +26,17 @@ def algorithm(img_filename):
 
     return perfusion
 
+def finalVal(perfusion):
+    perfusionVal = np.mean(perfusion)
+    
+    return perfusionVal
+
 if __name__ == '__main__':
     img_filename = select_file()
-
+    
     perfusion = algorithm(img_filename)
+    perfusionVal = finalVal(perfusion)
 
+    print(perfusionVal)
     plt.imshow(perfusion, 'gray')
     plt.show()
-
