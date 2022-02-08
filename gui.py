@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import *
 from tkinter.filedialog import askopenfilename
 from PIL import ImageTk, Image
+from perfusion import *
 
 def start_window():
     intial_img = Image.open("test.jpg")
@@ -53,9 +54,9 @@ def open_image():
     size.image = img
     size['image'] = img
 
-    intensity_thresh_entry.insert(0,'Intensity Threshold') #need to bring over intensity threshold from perfusion.py
+    intensity_thresh_entry.insert(0,intensityThreshold)
 
-    diff_thresh_entry.insert(0,'Difference Threshold') #need to bring over difference threshold from perfusion.py
+    diff_thresh_entry.insert(0,differenceThreshold)
 
     per_val_entry.insert(0,'Perfusion value') #need to bring over perfusion value from perfusion.py
 
