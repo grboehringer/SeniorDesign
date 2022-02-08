@@ -84,6 +84,7 @@ if __name__ == '__main__':
 
     start_window()
     
+    # Double window is occuring because the select_file() function was taken out of open_image() and called here. Need to fix.
     filename = select_file()
     threshold_display(filename,intensityThreshold,differenceThreshold)
 
