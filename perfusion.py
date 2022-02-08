@@ -5,8 +5,8 @@ import time
 import matplotlib.pyplot as plt
 
 def algorithm(img_filename):
-    intensityThreshold = 5
-    differenceThreshold = 200
+    intensityThreshold = 60
+    differenceThreshold = 20
 
     img = cv2.imread(img_filename) 
 
@@ -24,7 +24,7 @@ def algorithm(img_filename):
 
     perfusion = intensity * boolean
 
-    return perfusion
+    return perfusion, dt
 
 def finalVal(perfusion):
     perfusionVal = np.mean(perfusion)
@@ -34,9 +34,9 @@ def finalVal(perfusion):
 if __name__ == '__main__':
     img_filename = select_file()
     
-    perfusion = algorithm(img_filename)
+    perfusion, dt = algorithm(img_filename)
     perfusionVal = finalVal(perfusion)
 
     print(perfusionVal)
-    plt.imshow(perfusion, 'gray')
+    plt.imshow(dt, 'gray')
     plt.show()
