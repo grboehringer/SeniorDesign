@@ -42,7 +42,8 @@ def select_file():
     #image resizing before displaying
     return filename
 
-def open_image(filename):
+def open_image():
+    filename = select_file()
     img = Image.open(filename)
     img = img.resize((512,512))
     #image display code
@@ -52,6 +53,15 @@ def open_image(filename):
     size.grid(row = 0, column = 0, columnspan=2, rowspan=40,padx=10,pady=10)
     size.image = img
     size['image'] = img
+
+    perfusion = algorithm(filename,intensityThreshold,differenceThreshold)
+    perfusionVal = finalVal(perfusion)
+
+    intensity_thresh_entry.insert(0,intensityThreshold)
+
+    diff_thresh_entry.insert(0,differenceThreshold)
+
+    per_val_entry.insert(0,perfusionVal)
 
 def threshold_display(filename,intensityThreshold,differenceThreshold):
     perfusion = algorithm(filename,intensityThreshold,differenceThreshold)
@@ -85,8 +95,8 @@ if __name__ == '__main__':
     start_window()
     
     # Double window is occuring because the select_file() function was taken out of open_image() and called here. Need to fix.
-    filename = select_file()
-    threshold_display(filename,intensityThreshold,differenceThreshold)
+    
+    #threshold_display(filename,intensityThreshold,differenceThreshold)
 
     root.mainloop() #allows the window to stay open
 
