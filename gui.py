@@ -1,6 +1,8 @@
+from functools import update_wrapper
 import tkinter as tk
 from tkinter import *
 from tkinter.filedialog import askopenfilename
+from turtle import left, right
 from PIL import ImageTk, Image
 from perfusion import *
 
