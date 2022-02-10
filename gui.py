@@ -4,7 +4,7 @@ from tkinter import *
 from tkinter.filedialog import askopenfilename
 from turtle import left, right
 from PIL import ImageTk, Image
-from perfusion import *
+# from perfusion import *
 
 def start_window():
     intial_img = Image.open("Instructions.jpg")
