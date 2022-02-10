@@ -4,9 +4,10 @@ from tkinter import *
 from tkinter.filedialog import askopenfilename
 from turtle import left, right
 from PIL import ImageTk, Image
+from perfusion import *
 
 def start_window():
-    intial_img = Image.open("test.jpg")
+    intial_img = Image.open("Instructions.jpg")
     intial_img = intial_img.resize((512,512))
     intial_img = ImageTk.PhotoImage(intial_img)
     size = tk.Label(root)
@@ -43,8 +44,7 @@ def select_file():
     #image resizing before displaying
     return filename
 
-def open_image():
-    filename = select_file()
+def open_image(filename):
     img = Image.open(filename)
     img = img.resize((512,512))
     #image display code
@@ -55,11 +55,15 @@ def open_image():
     size.image = img
     size['image'] = img
 
-    intensity_thresh_entry.insert(0,'Intensity Threshold') #need to bring over intensity threshold from perfusion.py
+def threshold_display(filename,intensityThreshold,differenceThreshold):
+    perfusion = algorithm(filename,intensityThreshold,differenceThreshold)
+    perfusionVal = finalVal(perfusion)
 
-    diff_thresh_entry.insert(0,'Difference Threshold') #need to bring over difference threshold from perfusion.py
+    intensity_thresh_entry.insert(0,intensityThreshold)
 
-    per_val_entry.insert(0,'Perfusion value') #need to bring over perfusion value from perfusion.py
+    diff_thresh_entry.insert(0,differenceThreshold)
+
+    per_val_entry.insert(0,perfusionVal)
 
 '''def ImgCrop():
     gridLeft.insert(1, 'Crop Left')
@@ -74,7 +78,7 @@ if __name__ == '__main__':
     root.geometry("706x534")
     root.title('Testing GUI')
     root.configure(bg='#3A3B3C')
-    
+
     threshold_intensity = Label(root, text="Intensity Threshold", bg ='#3A3B3C', fg = 'white')
     intensity_thresh_entry = Entry(root)
 
@@ -97,6 +101,10 @@ if __name__ == '__main__':
     save = tk.Button(root, text = 'Save Files', width = 20, bg ='#3A3B3C', fg = 'white') #doesn't do anything at the moment
 
     start_window()
+    
+    # Double window is occuring because the select_file() function was taken out of open_image() and called here. Need to fix.
+    filename = select_file()
+    threshold_display(filename,intensityThreshold,differenceThreshold)
 
     root.mainloop() #allows the window to stay open
 
