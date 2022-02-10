@@ -65,12 +65,6 @@ def threshold_display(filename,intensityThreshold,differenceThreshold):
 
     per_val_entry.insert(0,perfusionVal)
 
-'''def ImgCrop():
-    gridLeft.insert(1, 'Crop Left')
-    upper.insert(1, 'Crop Upper')
-    gridRight.insert(1, 'Crop Right')
-    lower.insert(1, 'Crop Lower')'''
-
 if __name__ == '__main__':
     perIndex = 55.5
 
@@ -87,16 +81,6 @@ if __name__ == '__main__':
 
     perfusion_value = Label(root, text="Perfusion value",bg ='#3A3B3C', fg = 'white')
     per_val_entry = Entry(root)
-
-   ''' # locations used for image cropping
-    gridLeftL = Label(root, text = "Left", bg ='#3A3B3C', fg = 'white')
-    gridLeft = Entry(root)
-    upperL = Label(root, text = "Upper", bg ='#3A3B3C', fg = 'white')
-    upper = Entry(root)
-    gridRightL = Label(root, text = "Right", bg ='#3A3B3C', fg = 'white')
-    gridRight = Entry(root)
-    lowerL = Label(root, text = "Lower", bg ='#3A3B3C', fg = 'white')
-    lower = Entry(root)'''
 
     save = tk.Button(root, text = 'Save Files', width = 20, bg ='#3A3B3C', fg = 'white') #doesn't do anything at the moment
 
