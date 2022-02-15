@@ -44,6 +44,7 @@ def select_file():
     return filename
 
 def open_image():
+    global filename
     filename = select_file()
     img = Image.open(filename)
     img = img.resize((512,512))
