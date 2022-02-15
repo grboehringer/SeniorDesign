@@ -38,5 +38,5 @@ if __name__ == '__main__':
     perfusionVal = finalVal(perfusion)
 
     print(perfusionVal)
-    plt.imshow(dt, 'gray')
+    plt.imshow(perfusion, 'gray')
     plt.show()

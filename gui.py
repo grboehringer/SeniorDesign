@@ -4,7 +4,6 @@ from tkinter import *
 from tkinter.filedialog import askopenfilename
 from turtle import left, right
 from PIL import ImageTk, Image
-# from perfusion import *
 
 def start_window():
     intial_img = Image.open("Instructions.jpg")
@@ -76,6 +75,7 @@ def threshold_display(filename,intensityThreshold,differenceThreshold):
     per_val_entry.insert(0,perfusionVal)
 
 if __name__ == '__main__':
+    from perfusion import *
     perIndex = 55.5
 
     root = tk.Tk()
