@@ -121,12 +121,11 @@ if __name__ == '__main__':
 
 """ 
 To Do:
-    i) Rectangular Image Select - John
-    ii) Grid Layout understanding - Bradie
-    iii) Save the GUI info
+
     1) Add adjustable threshold values with a default to start (DT & IT)
-    2) Add the perfusion value
-    3) Make image size larger
-    4) Make GUI look appealing (buttons all on one side, items properly spaced, etc.)
-    5) Work on zooming in on the image, showing the percentage the pixels take up of perfusion value
+    2) Save GUI info and Image/Video
+    3) Cropping Image and saving new image with GUI info
+    4) Allow for PI comparison
+    5) Import video and plot PIs
+    6) Make GUI look appealing (buttons all on one side, items properly spaced, etc.)
     """
