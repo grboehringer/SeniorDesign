@@ -5,7 +5,7 @@ import time
 import matplotlib.pyplot as plt
 
 intensityThreshold = 20
-differenceThreshold = 10
+differenceThreshold = 20
 
 def algorithm(img_filename, intensityThreshold, differenceThreshold):
     img = cv2.imread(img_filename) 

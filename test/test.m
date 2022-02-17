@@ -5,7 +5,7 @@ green = I(:,:,2);
 blue = I(:,:,3);
 
 differenceThreshold = 20;
-intensityThreshold = 8;
+intensityThreshold = 20;
 
 intensity = mean(I, 3);
 
@@ -18,4 +18,9 @@ boolean = boolean | abs(blue - green) > dt;
 
 perfusion = intensity .* boolean;
 
+pv = mean(perfusion, 'all')
+
+figure(1)
+imshow(uint8(dt))
+figure(2)
 imshow(uint8(perfusion))
