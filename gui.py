@@ -7,7 +7,7 @@ from PIL import ImageTk, Image
 #from perfusion import *
 
 def start_window():
-    intial_img = Image.open("Instructions.jpg")
+    intial_img = Image.open("images/Instructions.jpg")
     intial_img = intial_img.resize((512,512))
     intial_img = ImageTk.PhotoImage(intial_img)
     size = tk.Label(root)
@@ -87,7 +87,7 @@ if __name__ == '__main__':
 
     root = tk.Tk()
     root.geometry("706x534")
-    root.title('Testing GUI')
+    root.title('Perfusion Index')
     root.configure(bg='#3A3B3C')
 
     threshold_intensity = Label(root, text="Intensity Threshold", bg ='#3A3B3C', fg = 'white')
