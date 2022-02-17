@@ -1,5 +1,5 @@
 
-function pv = test(filename, differenceThreshold, intensityThreshold)
+function [pv, perfusion, dt, intensity] = test(filename, differenceThreshold, intensityThreshold)
     I = imread(filename);
 
     red = I(:,:,1);
