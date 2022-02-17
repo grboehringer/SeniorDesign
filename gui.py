@@ -4,11 +4,7 @@ from tkinter import *
 from tkinter.filedialog import askopenfilename
 from turtle import left, right
 from PIL import ImageTk, Image
-<<<<<<< HEAD
 #from perfusion import *
-=======
-# from perfusion import *
->>>>>>> d6790ea83a084d493247036c5eddb16b112471a8
 
 def start_window():
     intial_img = Image.open("Instructions.jpg")
@@ -31,10 +27,15 @@ def start_window():
     diff_threshold.grid(row=8, column=2, padx=5, sticky = "s")
     diff_thresh_entry.grid(row=9, column=2, padx=5, sticky = "n")
 
-    perfusion_value.grid(row=11, column=2, padx=5, sticky = "s")
-    per_val_entry.grid(row=12, column=2, padx=5, sticky = "n")
+    gain_val.grid(row=11, column=2, padx=5, sticky = "s")
+    gain_val_entry.grid(row=12, column=2, padx=5, sticky = "n")
 
-    save.grid(row = 15, column = 2, padx=5)
+    perfusion_value.grid(row=14, column=2, padx=5, sticky = "s")
+    per_val_entry.grid(row=15, column=2, padx=5, sticky = "n")
+
+    crop.grid(row = 21, column = 2, padx=5)
+    compare.grid(row = 23, column = 2, padx=5)
+    save.grid(row = 25, column = 2, padx=5)
 
 #finding the filename
 def select_file():
@@ -49,6 +50,7 @@ def select_file():
     return filename
 
 def open_image():
+    global filename
     filename = select_file()
     img = Image.open(filename)
     img = img.resize((512,512))
@@ -67,6 +69,8 @@ def open_image():
 
     diff_thresh_entry.insert(0,differenceThreshold)
 
+    gain_val_entry.insert(0,"Enter Gain Value")
+
     per_val_entry.insert(0,perfusionVal)
 
 def threshold_display(filename,intensityThreshold,differenceThreshold):
@@ -77,9 +81,12 @@ def threshold_display(filename,intensityThreshold,differenceThreshold):
 
     diff_thresh_entry.insert(0,differenceThreshold)
 
+    gain_val_entry.insert(0,"Enter Gain Value")
+
     per_val_entry.insert(0,perfusionVal)
 
 if __name__ == '__main__':
+    from perfusion import *
     perIndex = 55.5
 
     root = tk.Tk()
@@ -93,8 +100,15 @@ if __name__ == '__main__':
     diff_threshold = Label(root, text="Difference Threshold",bg ='#3A3B3C', fg = 'white')
     diff_thresh_entry = Entry(root)
 
-    perfusion_value = Label(root, text="Perfusion value",bg ='#3A3B3C', fg = 'white')
+    gain_val = Label(root, text="Gain Value", bg ='#3A3B3C', fg = 'white')
+    gain_val_entry = Entry(root)
+
+    perfusion_value = Label(root, text="Perfusion Index Value",bg ='#3A3B3C', fg = 'white')
     per_val_entry = Entry(root)
+
+    crop = tk.Button(root, text = 'Crop Image', width = 20, bg ='#3A3B3C', fg = 'white') #doesn't do anything at the moment
+
+    compare = tk.Button(root, text = 'Compare Images', width = 20, bg ='#3A3B3C', fg = 'white') #doesn't do anything at the moment
 
     save = tk.Button(root, text = 'Save Files', width = 20, bg ='#3A3B3C', fg = 'white') #doesn't do anything at the moment
 
@@ -108,12 +122,11 @@ if __name__ == '__main__':
 
 """ 
 To Do:
-    i) Rectangular Image Select - John
-    ii) Grid Layout understanding - Bradie
-    iii) Save the GUI info
+
     1) Add adjustable threshold values with a default to start (DT & IT)
-    2) Add the perfusion value
-    3) Make image size larger
-    4) Make GUI look appealing (buttons all on one side, items properly spaced, etc.)
-    5) Work on zooming in on the image, showing the percentage the pixels take up of perfusion value
+    2) Save GUI info and Image/Video
+    3) Cropping Image and saving new image with GUI info
+    4) Allow for PI comparison
+    5) Import video and plot PIs
+    6) Make GUI look appealing (buttons all on one side, items properly spaced, etc.)
     """
