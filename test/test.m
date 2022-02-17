@@ -4,8 +4,8 @@ red = I(:,:,1);
 green = I(:,:,2);
 blue = I(:,:,3);
 
-differenceThreshold = 20;
-intensityThreshold = 20;
+differenceThreshold = 80;
+intensityThreshold = 80;
 
 intensity = mean(I, 3);
 
