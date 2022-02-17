@@ -2,13 +2,9 @@ from tkinter import *
 
 # Event Handler
 
-def select_coordinates(event, x, y, flags, params):
+def left_click(event):
 	# checking for left mouse clicks
-	if event == cv2.EVENT_LBUTTONDOWN:
-
-		# displaying the coordinates
-		# on the Shell
-		print(x, ' ', y)
+	print('hello')
 
 if __name__ == '__main__':
     print("This is main rn. Run GUI.")

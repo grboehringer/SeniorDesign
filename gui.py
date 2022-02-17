@@ -97,7 +97,7 @@ if __name__ == '__main__':
     perfusion_value = Label(root, text="Perfusion Index Value",bg ='#3A3B3C', fg = 'white')
     per_val_entry = Entry(root)
 
-    crop = tk.Button(root, text = 'Crop Image', width = 20, bg ='#3A3B3C', fg = 'white', command =lambda:crop_image()) #doesn't do anything at the moment
+    crop = tk.Button(root, text = 'Crop Image', width = 20, bg ='#3A3B3C', fg = 'white') #doesn't do anything at the moment
 
     compare = tk.Button(root, text = 'Compare Images', width = 20, bg ='#3A3B3C', fg = 'white') #doesn't do anything at the moment
 
