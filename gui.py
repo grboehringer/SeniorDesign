@@ -4,7 +4,6 @@ from tkinter import *
 from tkinter.filedialog import askopenfilename
 from turtle import left, right
 from PIL import ImageTk, Image
-#from perfusion import *
 
 def start_window():
     intial_img = Image.open("images/Instructions.jpg")
@@ -75,10 +74,6 @@ def threshold_display(filename,intensityThreshold,differenceThreshold):
     gain_val_entry.insert(0,"Enter Gain Value")
 
     per_val_entry.insert(0,perfusionVal)
-
-def crop_image():
-    select_coordinates()
-    threshold_display(filename,intensityThreshold,differenceThreshold)
 
 if __name__ == '__main__':
     from perfusion import *
