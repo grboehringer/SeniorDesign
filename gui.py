@@ -14,7 +14,7 @@ def start_window():
     size.image = intial_img
     size['image'] = intial_img
 
-    intro = tk.Label(root, text = 'Upload Files and Display', bg ='#3A3B3C', fg = 'white')
+    intro = tk.Label(root, text = ' ', bg ='#3A3B3C', fg = 'white')
     intro.grid(row = 0, column = 2, padx=5, sticky = "s")
 
     upload = tk.Button(root, text = 'Upload Files', width = 20, bg ='#3A3B3C', fg = 'white', command =lambda:open_image())
@@ -61,16 +61,7 @@ def open_image():
     size.image = img
     size['image'] = img
 
-    perfusion = algorithm(filename,intensityThreshold,differenceThreshold)
-    perfusionVal = finalVal(perfusion)
-
-    intensity_thresh_entry.insert(0,intensityThreshold)
-
-    diff_thresh_entry.insert(0,differenceThreshold)
-
-    gain_val_entry.insert(0,"Enter Gain Value")
-
-    per_val_entry.insert(0,perfusionVal)
+    threshold_display(filename,intensityThreshold,differenceThreshold)
 
 def threshold_display(filename,intensityThreshold,differenceThreshold):
     perfusion = algorithm(filename,intensityThreshold,differenceThreshold)
@@ -84,8 +75,13 @@ def threshold_display(filename,intensityThreshold,differenceThreshold):
 
     per_val_entry.insert(0,perfusionVal)
 
+def crop_image():
+    select_coordinates()
+    threshold_display(filename,intensityThreshold,differenceThreshold)
+
 if __name__ == '__main__':
     from perfusion import *
+    from crop import *
     perIndex = 55.5
 
     root = tk.Tk()
@@ -105,7 +101,7 @@ if __name__ == '__main__':
     perfusion_value = Label(root, text="Perfusion Index Value",bg ='#3A3B3C', fg = 'white')
     per_val_entry = Entry(root)
 
-    crop = tk.Button(root, text = 'Crop Image', width = 20, bg ='#3A3B3C', fg = 'white') #doesn't do anything at the moment
+    crop = tk.Button(root, text = 'Crop Image', width = 20, bg ='#3A3B3C', fg = 'white', command =lambda:crop_image()) #doesn't do anything at the moment
 
     compare = tk.Button(root, text = 'Compare Images', width = 20, bg ='#3A3B3C', fg = 'white') #doesn't do anything at the moment
 
