@@ -20,9 +20,12 @@ function [pv, perfusion, dt, intensity] = test(filename, differenceThreshold, in
     pv = mean(perfusion, 'all');
 
     figure(1)
-    imshow(uint8(dt))
+    imshow(I)
+    title('Original Image');
     figure(2)
-    imshow(uint8(perfusion))
+    multi = cat(2,uint8(dt), uint8(perfusion));
+    montage(multi);
+    title(['Processed Image - Difference Threshold: ',num2str(differenceThreshold),' Intensity Threshold: ',num2str(intensityThreshold)]);
 end
 
 
