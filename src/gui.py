@@ -3,10 +3,11 @@ import tkinter as tk
 from tkinter import *
 from tkinter.filedialog import askopenfilename
 from turtle import left, right
-from PIL import ImageTk, Image
+from PIL import ImageTk
+import PIL.Image
 
 def start_window():
-    intial_img = Image.open("images/Instructions.jpg")
+    intial_img = PIL.Image.open("images/Instructions.jpg")
     intial_img = intial_img.resize((512,512))
     intial_img = ImageTk.PhotoImage(intial_img)
     size = tk.Label(root)
