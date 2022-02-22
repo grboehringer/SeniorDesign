@@ -3,6 +3,7 @@ from PIL import Image, ImageTk
 
 class Window(Frame):
 
+    # Set up class and top menu
     def __init__(self, master=None):
         Frame.__init__(self, master)
 
@@ -19,8 +20,9 @@ class Window(Frame):
         file = Menu(menu)
         file.add_command(label="Exit", command=self.client_exit)
         menu.add_cascade(label="File", menu=file)
-        analyze = Menu(menu)
+        file.add_command(label="Save Selection", command=self.save_selection)
 
+        analyze = Menu(menu)
         analyze.add_command(label="Region of Interest", 
         command=self.regionOfInterest)
 
@@ -32,17 +34,24 @@ class Window(Frame):
         img.image = render
         img.place(x=0, y=0)
 
+    # Select ROI
     def regionOfInterest(self):
         root.config(cursor="plus")
         canvas.bind("<Button-1>", self.imgClick)
 
-
+    # Exit Program
     def client_exit(self):
         exit()
 
+    # Save Coordinates for crop and crop image
+    def save_selection(self):
+        print('Does it work?')
+
+    # Image Selection Counter
+    # Displays rectangle, and stores selections.
     def imgClick(self, event):
 
-        if self.counter < 3:
+        if self.counter < 2:
             x = canvas.canvasx(event.x)
             y = canvas.canvasy(event.y)
             self.pos.append((x, y))
@@ -51,6 +60,7 @@ class Window(Frame):
             canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
             self.counter += 1
         else:
+            canvas.create_rectangle(self.pos[0][0], self.pos[0][1], self.pos[1][0], self.pos[1][1], outline="red")
             canvas.unbind("<Button 1>")
             root.config(cursor="arrow")
             self.counter = 0
