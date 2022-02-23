@@ -1,10 +1,20 @@
-from tkinter import *
+from perfusion import *     # Connects Perfusion.py file
+import tkinter as tk        # Imports tkinter library
+from tkinter import *       # Imports tkinter functions
+
+""" Are these redundant? May want to check. """
 from PIL import Image, ImageTk
+import PIL.Image
+
+""" What do these do? """
+from tkinter.filedialog import askopenfilename
+from functools import update_wrapper
+from turtle import left, right
 
 class Window(Frame):
 
-    # Set up class and top menu
     def __init__(self, master=None):
+        """Set up class and top menu."""
         Frame.__init__(self, master)
 
         self.master = master
@@ -17,40 +27,83 @@ class Window(Frame):
         menu = Menu(self.master)
         self.master.config(menu=menu)
 
+        """File drop down."""
         file = Menu(menu)
-        file.add_command(label="Exit", command=self.client_exit)
         menu.add_cascade(label="File", menu=file)
+        file.add_command(label="Upload Image", command=self.upload_image)
         file.add_command(label="Save Selection", command=self.save_selection)
-
+        file.add_command(label="Exit", command=self.client_exit)
+        
+        """Analyze drop down."""
         analyze = Menu(menu)
-        analyze.add_command(label="Region of Interest", 
-        command=self.regionOfInterest)
-
         menu.add_cascade(label="Analyze", menu=analyze)
+        analyze.add_command(label="Region of Interest", command=self.regionOfInterest)
+        
+        """Instructions image upload."""
         load = Image.open("images/Instructions.jpg")
         render = ImageTk.PhotoImage(load)
-
         img = Label(self, image=render)
         img.image = render
         img.place(x=0, y=0)
 
-    # Select ROI
+    """ MENU FUNCTIONS """
+
     def regionOfInterest(self):
+        """Select ROI."""
         root.config(cursor="plus")
         canvas.bind("<Button-1>", self.imgClick)
 
-    # Exit Program
     def client_exit(self):
+        """Exit program."""
         exit()
 
-    # Save Coordinates for crop and crop image
     def save_selection(self):
+        """Save selection coordinates and crop image for perfusion"""
         print('Does it work?')
 
-    # Image Selection Counter
-    # Displays rectangle, and stores selections.
-    def imgClick(self, event):
+    def upload_image():
+        """Open the selected image and resize."""
+        global filename
+        filename = select_file()
+        img = PIL.Image.open(filename)
+        img = img.resize((512,512))
+        
+        #image display code
+        img = ImageTk.PhotoImage(img)
+        size = tk.Label(root)
+        size.grid(row = 0, column = 0, columnspan=2, rowspan=40,padx=10,pady=10)
+        size.image = img
+        size['image'] = img
 
+        #threshold_display(filename,intensityThreshold,differenceThreshold)
+
+    """ SUBFUNCTIONS """
+
+    def threshold_display(filename,intensityThreshold,differenceThreshold):
+        """Update threshold values, perfusion value, and gain when changed by user."""
+        perfusion = algorithm(filename,intensityThreshold,differenceThreshold)
+        perfusionVal = finalVal(perfusion)
+
+        #intensity_thresh_entry.insert(0,intensityThreshold)
+
+        #diff_thresh_entry.insert(0,differenceThreshold)
+
+        #gain_val_entry.insert(0,"Enter Gain Value")
+
+        #per_val_entry.insert(0,perfusionVal)
+
+    def select_file():
+        """Finds the filename."""
+        # define allowed file types
+        f_types = [('Jpg files', '*.jpg'), ('jpeg files', '*.jpeg'), ('PNG files','*.png')]
+
+        # prompt dialog box
+        filename = tk.filedialog.askopenfilename( filetypes = f_types)
+
+        return filename
+
+    def imgClick(self, event):
+        """Selection counter, displays rectangle, and stores selection values"""
         if self.counter < 2:
             x = canvas.canvasx(event.x)
             y = canvas.canvasy(event.y)
@@ -65,16 +118,19 @@ class Window(Frame):
             root.config(cursor="arrow")
             self.counter = 0
 
-
+"""Gets image size"""
 root = Tk()
 imgSize = Image.open("images/Instructions.jpg")
 tkimage =  ImageTk.PhotoImage(imgSize)
 w, h = imgSize.size
 
+"""Figure out what this does!!!"""
 canvas = Canvas(root, width=w, height=h)
 canvas.create_image((w/2,h/2),image=tkimage)
 canvas.pack()
 
-root.geometry("%dx%d"%(w,h))
+"""Sets window???"""
+root.geometry("%dx%d"%(w,h))        # Why does the prefix "%dx%d"% need to be there?
+#root.geometry("%dx%d"%(512,512))
 app = Window(root)
 root.mainloop() 
