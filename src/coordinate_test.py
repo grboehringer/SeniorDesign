@@ -31,14 +31,16 @@ class Window(Frame):
         file = Menu(menu)
         menu.add_cascade(label="File", menu=file)
         file.add_command(label="Upload Image", command=self.upload_image)
-        file.add_command(label="Save Selection", command=self.save_selection)
+        file.add_command(label="Save Image and Data", command=self.save_all)
+        file.add_command(label="Settings", command=self.settings)
         file.add_command(label="Exit", command=self.client_exit)
         
         """Analyze drop down."""
         analyze = Menu(menu)
         menu.add_cascade(label="Analyze", menu=analyze)
         analyze.add_command(label="Region of Interest", command=self.regionOfInterest)
-        
+        analyze.add_command(label="Save Selection", command=self.save_selection)
+
         """Instructions image upload."""
         load = Image.open("images/Instructions.jpg")
         render = ImageTk.PhotoImage(load)
@@ -47,35 +49,43 @@ class Window(Frame):
         img.place(x=0, y=0)
 
     """ MENU FUNCTIONS """
+    
+    def upload_image():
+            """Open the selected image and resize."""
+            global filename
+            filename = select_file()
+            img = PIL.Image.open(filename)
+            img = img.resize((512,512))
+            
+            #image display code
+            img = ImageTk.PhotoImage(img)
+            size = tk.Label(root)
+            size.grid(row = 0, column = 0, columnspan=2, rowspan=40,padx=10,pady=10)
+            size.image = img
+            size['image'] = img
 
+            #threshold_display(filename,intensityThreshold,differenceThreshold)
+
+    def save_all(self):
+        """Save image and associated data to file"""
+        print('Image and Data Function')
+    
+    def settings(self):
+        """Allow thresholds and gain to be set manually"""
+        print('Threshold and gain settings')
+
+    def client_exit(self):
+        """Exit program."""
+        exit()
+    
     def regionOfInterest(self):
         """Select ROI."""
         root.config(cursor="plus")
         canvas.bind("<Button-1>", self.imgClick)
 
-    def client_exit(self):
-        """Exit program."""
-        exit()
-
     def save_selection(self):
         """Save selection coordinates and crop image for perfusion"""
-        print('Does it work?')
-
-    def upload_image():
-        """Open the selected image and resize."""
-        global filename
-        filename = select_file()
-        img = PIL.Image.open(filename)
-        img = img.resize((512,512))
-        
-        #image display code
-        img = ImageTk.PhotoImage(img)
-        size = tk.Label(root)
-        size.grid(row = 0, column = 0, columnspan=2, rowspan=40,padx=10,pady=10)
-        size.image = img
-        size['image'] = img
-
-        #threshold_display(filename,intensityThreshold,differenceThreshold)
+        print('Coordinate Selection Function')
 
     """ SUBFUNCTIONS """
 
