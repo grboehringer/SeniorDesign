@@ -29,13 +29,15 @@ def start_window():
 
     gain_val.grid(row=11, column=2, padx=5, sticky = "s")
     gain_val_entry.grid(row=12, column=2, padx=5, sticky = "n")
+    gain_val_entry.insert(0,"Enter Gain Value")
 
     perfusion_value.grid(row=14, column=2, padx=5, sticky = "s")
     per_val_entry.grid(row=15, column=2, padx=5, sticky = "n")
 
-    crop.grid(row = 21, column = 2, padx=5)
-    compare.grid(row = 23, column = 2, padx=5)
-    save.grid(row = 25, column = 2, padx=5)
+    change_Th.grid(row = 21, column = 2, padx=5)
+    crop.grid(row = 23, column = 2, padx=5)
+    compare.grid(row = 25, column = 2, padx=5)
+    save.grid(row = 27, column = 2, padx=5)
 
 #finding the filename
 def select_file():
@@ -68,13 +70,26 @@ def threshold_display(filename,intensityThreshold,differenceThreshold):
     perfusion = algorithm(filename,intensityThreshold,differenceThreshold)
     perfusionVal = finalVal(perfusion)
 
+    intensity_thresh_entry.delete(0, tk.END)
+    diff_thresh_entry.delete(0, tk.END)
+    per_val_entry.delete(0, tk.END)
+
     intensity_thresh_entry.insert(0,intensityThreshold)
-
     diff_thresh_entry.insert(0,differenceThreshold)
-
-    gain_val_entry.insert(0,"Enter Gain Value")
-
     per_val_entry.insert(0,perfusionVal)
+
+def change_Thresholds():
+    new_int_thresh = intensity_thresh_entry.get()
+    new_diff_thresh = diff_thresh_entry.get()
+    threshold_display(filename,int(new_int_thresh),int(new_diff_thresh))
+
+def save_file():
+    window = tk.Tk()
+    window.geometry("100x100")
+    window.title('Save')
+    window.configure(bg='#3A3B3C')
+    saved = tk.Label(window, text = ':)', bg ='#3A3B3C', fg = 'white')
+    saved.pack()
 
 if __name__ == '__main__':
     from perfusion import *
@@ -86,29 +101,23 @@ if __name__ == '__main__':
     root.title('Perfusion Index')
     root.configure(bg='#3A3B3C')
 
+
     threshold_intensity = Label(root, text="Intensity Threshold", bg ='#3A3B3C', fg = 'white')
     intensity_thresh_entry = Entry(root)
-
     diff_threshold = Label(root, text="Difference Threshold",bg ='#3A3B3C', fg = 'white')
     diff_thresh_entry = Entry(root)
-
     gain_val = Label(root, text="Gain Value", bg ='#3A3B3C', fg = 'white')
     gain_val_entry = Entry(root)
-
     perfusion_value = Label(root, text="Perfusion Index Value",bg ='#3A3B3C', fg = 'white')
     per_val_entry = Entry(root)
 
+    
+    change_Th = tk.Button(root, text = "Change Threshold Values", width = 20, bg ='#3A3B3C', fg = 'white',command =lambda:change_Thresholds())
     crop = tk.Button(root, text = 'Crop Image', width = 20, bg ='#3A3B3C', fg = 'white') #doesn't do anything at the moment
-
     compare = tk.Button(root, text = 'Compare Images', width = 20, bg ='#3A3B3C', fg = 'white') #doesn't do anything at the moment
-
-    save = tk.Button(root, text = 'Save Files', width = 20, bg ='#3A3B3C', fg = 'white') #doesn't do anything at the moment
+    save = tk.Button(root, text = 'Save Files', width = 20, bg ='#3A3B3C', fg = 'white',command =lambda:save_file()) #doesn't do anything at the moment
 
     start_window()
-    
-    # Double window is occuring because the select_file() function was taken out of open_image() and called here. Need to fix.
-    
-    #threshold_display(filename,intensityThreshold,differenceThreshold)
 
     root.mainloop() #allows the window to stay open
 
