@@ -44,7 +44,7 @@ def select_file():
     f_types = [('Jpg files', '*.jpg'), ('jpeg files', '*.jpeg'), ('PNG files','*.png')]
 
     # prompt dialog box
-    filename = tk.filedialog.askopenfilename( filetypes = f_types)
+    filename = tk.filedialog.askopenfilename(filetypes = f_types)
     #dynamic column variable
     #image resizing before displaying
     return filename
@@ -52,7 +52,7 @@ def select_file():
 def open_image():
     global filename
     filename = select_file()
-    img = Image.open(filename)
+    img = PIL.Image.open(filename)
     img = img.resize((512,512))
     #image display code
     # Use this code if no image resizing is wanted/needed: img = ImageTk.PhotoImage(file = filename)
