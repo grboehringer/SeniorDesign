@@ -33,6 +33,7 @@ class Window(Frame):
         menu.add_cascade(label="Analyze", menu=analyze)
         analyze.add_command(label="Region of Interest", command=self.regionOfInterest)
         analyze.add_command(label="Save Selection", command=self.save_selection)
+        analyze.add_command(label="Compare Images", command=self.compare_images)
 
         """Instructions image upload."""
         load = Image.open("images/Instructions.jpg")
@@ -75,6 +76,10 @@ class Window(Frame):
     def save_selection(self):
         """Save selection coordinates and crop image for perfusion"""
         print('Coordinate Selection Function')
+
+    def compare_images(self):
+        """Compare Images in new window"""
+        print('Compare Images Function')
 
     """ SUBFUNCTIONS """
 
