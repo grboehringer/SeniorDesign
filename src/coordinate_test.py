@@ -1,15 +1,8 @@
 from perfusion import *     # Connects Perfusion.py file
 import tkinter as tk        # Imports tkinter library
 from tkinter import *       # Imports tkinter functions
-
-""" Are these redundant? May want to check. """
-from PIL import Image, ImageTk
-import PIL.Image
-
-""" What do these do? """
-from tkinter.filedialog import askopenfilename
-from functools import update_wrapper
-from turtle import left, right
+from PIL import Image, ImageTk  # Image Import
+from tkinter.filedialog import askopenfilename  # Get filename
 
 class Window(Frame):
 
@@ -50,21 +43,17 @@ class Window(Frame):
 
     """ MENU FUNCTIONS """
     
-    def upload_image():
-            """Open the selected image and resize."""
-            global filename
-            filename = select_file()
-            img = PIL.Image.open(filename)
-            img = img.resize((512,512))
-            
-            #image display code
-            img = ImageTk.PhotoImage(img)
-            size = tk.Label(root)
-            size.grid(row = 0, column = 0, columnspan=2, rowspan=40,padx=10,pady=10)
-            size.image = img
-            size['image'] = img
-
-            #threshold_display(filename,intensityThreshold,differenceThreshold)
+    def upload_image(self):
+        """Open the selected image and resize."""
+        global filename
+        filename = select_file()
+        load = Image.open(filename)
+        render = ImageTk.PhotoImage(load)
+        img = Label(self, image=render)
+        img.image = render
+        img.place(x=0, y=0)
+        
+        #threshold_display(filename,intensityThreshold,differenceThreshold)
 
     def save_all(self):
         """Save image and associated data to file"""
@@ -102,13 +91,13 @@ class Window(Frame):
 
         #per_val_entry.insert(0,perfusionVal)
 
-    def select_file():
+    def select_file(self):
         """Finds the filename."""
         # define allowed file types
         f_types = [('Jpg files', '*.jpg'), ('jpeg files', '*.jpeg'), ('PNG files','*.png')]
 
         # prompt dialog box
-        filename = tk.filedialog.askopenfilename( filetypes = f_types)
+        filename = askopenfilename(filetypes = f_types)
 
         return filename
 
@@ -128,19 +117,20 @@ class Window(Frame):
             root.config(cursor="arrow")
             self.counter = 0
 
-"""Gets image size"""
-root = Tk()
-imgSize = Image.open("images/Instructions.jpg")
-tkimage =  ImageTk.PhotoImage(imgSize)
-w, h = imgSize.size
+if __name__ == '__main__':
+    """Gets image size"""
+    root = Tk()
+    imgSize = Image.open("images/test.jpg")
+    tkimage =  ImageTk.PhotoImage(imgSize)
+    w, h = imgSize.size
 
-"""Figure out what this does!!!"""
-canvas = Canvas(root, width=w, height=h)
-canvas.create_image((w/2,h/2),image=tkimage)
-canvas.pack()
+    """Figure out what this does!!!"""
+    canvas = Canvas(root, width=w, height=h)
+    canvas.create_image((w/2,h/2),image=tkimage)
+    canvas.pack()
 
-"""Sets window???"""
-root.geometry("%dx%d"%(w,h))        # Why does the prefix "%dx%d"% need to be there?
-#root.geometry("%dx%d"%(512,512))
-app = Window(root)
-root.mainloop() 
+    """Sets window???"""
+    root.geometry("%dx%d"%(w,h))        # Why does the prefix "%dx%d"% need to be there?
+    #root.geometry("%dx%d"%(512,512))
+    app = Window(root)
+    root.mainloop() 
