@@ -23,19 +23,20 @@ def start_window():
 
     id.grid(row = 5, column = 2, padx=5, sticky = "s")
     patient_ID.grid(row = 6, column = 2, padx=5,sticky = "n")
+    patient_ID.insert(0,"Enter Patient ID")
 
-    threshold_intensity.grid(row=7, column=2, padx=5, sticky = "s")
-    intensity_thresh_entry.grid(row=8, column=2, padx=5, sticky = "n")
-
-    diff_threshold.grid(row=9, column=2, padx=5, sticky = "s")
-    diff_thresh_entry.grid(row=10, column=2, padx=5, sticky = "n")
-
-    gain_val.grid(row=11, column=2, padx=5, sticky = "s")
-    gain_val_entry.grid(row=12, column=2, padx=5, sticky = "n")
+    gain_val.grid(row=7, column=2, padx=5, sticky = "s")
+    gain_val_entry.grid(row=8, column=2, padx=5, sticky = "n")
     gain_val_entry.insert(0,"Enter Gain Value")
 
-    perfusion_value.grid(row=13, column=2, padx=5, sticky = "s")
-    per_val_entry.grid(row=14, column=2, padx=5, sticky = "n")
+    threshold_intensity.grid(row=12, column=2, padx=5, sticky = "s")
+    intensity_thresh_entry.grid(row=13, column=2, padx=5, sticky = "n")
+
+    diff_threshold.grid(row=14, column=2, padx=5, sticky = "s")
+    diff_thresh_entry.grid(row=15, column=2, padx=5, sticky = "n")
+
+    perfusion_value.grid(row=16, column=2, padx=5, sticky = "s")
+    per_val_entry.grid(row=17, column=2, padx=5, sticky = "n")
 
     change_Th.grid(row = 21, column = 2, padx=5)
     crop.grid(row = 23, column = 2, padx=5)
@@ -87,6 +88,12 @@ def change_Thresholds():
     threshold_display(filename,int(new_int_thresh),int(new_diff_thresh))
 
 def save_file():
+    #to do: create file name as patient ID
+    # one file = one patient
+    # add header to file
+    # user can choose which file to open
+    # make it so user can choose where to save it
+    # first save image as sepaerate file, then save them in same file
     pID = patient_ID.get()
     diff_thresh = diff_thresh_entry.get()
     int_thresh = intensity_thresh_entry.get()
