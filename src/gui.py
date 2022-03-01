@@ -21,18 +21,21 @@ def start_window():
     upload = tk.Button(root, text = 'Upload Files', width = 20, bg ='#3A3B3C', fg = 'white', command =lambda:open_image())
     upload.grid(row = 1, column = 2, padx=5, sticky = "n")
 
-    threshold_intensity.grid(row=5, column=2, padx=5, sticky = "s")
-    intensity_thresh_entry.grid(row=6, column=2, padx=5, sticky = "n")
+    id.grid(row = 5, column = 2, padx=5, sticky = "s")
+    patient_ID.grid(row = 6, column = 2, padx=5,sticky = "n")
 
-    diff_threshold.grid(row=8, column=2, padx=5, sticky = "s")
-    diff_thresh_entry.grid(row=9, column=2, padx=5, sticky = "n")
+    threshold_intensity.grid(row=7, column=2, padx=5, sticky = "s")
+    intensity_thresh_entry.grid(row=8, column=2, padx=5, sticky = "n")
+
+    diff_threshold.grid(row=9, column=2, padx=5, sticky = "s")
+    diff_thresh_entry.grid(row=10, column=2, padx=5, sticky = "n")
 
     gain_val.grid(row=11, column=2, padx=5, sticky = "s")
     gain_val_entry.grid(row=12, column=2, padx=5, sticky = "n")
     gain_val_entry.insert(0,"Enter Gain Value")
 
-    perfusion_value.grid(row=14, column=2, padx=5, sticky = "s")
-    per_val_entry.grid(row=15, column=2, padx=5, sticky = "n")
+    perfusion_value.grid(row=13, column=2, padx=5, sticky = "s")
+    per_val_entry.grid(row=14, column=2, padx=5, sticky = "n")
 
     change_Th.grid(row = 21, column = 2, padx=5)
     crop.grid(row = 23, column = 2, padx=5)
@@ -84,12 +87,14 @@ def change_Thresholds():
     threshold_display(filename,int(new_int_thresh),int(new_diff_thresh))
 
 def save_file():
-    window = tk.Tk()
-    window.geometry("100x100")
-    window.title('Save')
-    window.configure(bg='#3A3B3C')
-    saved = tk.Label(window, text = ':)', bg ='#3A3B3C', fg = 'white')
-    saved.pack()
+    pID = patient_ID.get()
+    diff_thresh = diff_thresh_entry.get()
+    int_thresh = intensity_thresh_entry.get()
+    gain = gain_val_entry.get()
+    per_index = per_val_entry.get()
+    f = open('Ultrasound data', 'a+')
+    f.write('%s\t%s\t%s\t%s\t%s\n'%(pID,diff_thresh,int_thresh,gain,per_index))
+    f.close()
 
 if __name__ == '__main__':
     from perfusion import *
@@ -101,7 +106,8 @@ if __name__ == '__main__':
     root.title('Perfusion Index')
     root.configure(bg='#3A3B3C')
 
-
+    id = tk.Label(root, text = 'Patient ID', bg ='#3A3B3C', fg = 'white')
+    patient_ID = Entry(root)
     threshold_intensity = Label(root, text="Intensity Threshold", bg ='#3A3B3C', fg = 'white')
     intensity_thresh_entry = Entry(root)
     diff_threshold = Label(root, text="Difference Threshold",bg ='#3A3B3C', fg = 'white')
