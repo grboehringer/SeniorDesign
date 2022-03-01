@@ -50,7 +50,7 @@ def select_file():
     f_types = [('Jpg files', '*.jpg'), ('jpeg files', '*.jpeg'), ('PNG files','*.png')]
 
     # prompt dialog box
-    filename = tk.filedialog.askopenfilename(filetypes = f_types)
+    filename = askopenfilename(filetypes = f_types)
     #dynamic column variable
     #image resizing before displaying
     return filename
