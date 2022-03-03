@@ -38,9 +38,19 @@ class Window(Frame):
         """Instructions image upload."""
         load = Image.open("../images/Instructions.jpg")
         render = ImageTk.PhotoImage(load)
-        self.img = Label(self, image=render)
-        self.img.image = render
-        self.img.place(x=0, y=0)
+        img = Label(self, image=render)
+        img.image = render
+        img.place(x=0, y=0)
+        w, h = load.size
+
+        """Figure out what this does!!!"""
+        self.canvas = Canvas(root, width=w, height=h)
+        self.canvas.create_image((w/2,h/2),image=render)
+        self.canvas.pack()
+
+        """Sets window???"""
+        root.geometry("%dx%d"%(w,h))        # Why does the prefix "%dx%d"% need to be there?
+
     """ MENU FUNCTIONS """
     
     def upload_image(self):
@@ -70,7 +80,7 @@ class Window(Frame):
     def regionOfInterest(self):
         """Select ROI."""
         root.config(cursor="plus")
-        canvas.bind("<Button-1>", self.imgClick)
+        self.canvas.bind("<Button-1>", self.imgClick)
 
     def save_selection(self):
         """Save selection coordinates and crop image for perfusion"""
@@ -108,33 +118,21 @@ class Window(Frame):
     def imgClick(self, event):
         """Selection counter, displays rectangle, and stores selection values"""
         if self.counter < 2:
-            x = canvas.canvasx(event.x)
-            y = canvas.canvasy(event.y)
+            x = self.canvas.canvasx(event.x)
+            y = self.canvas.canvasy(event.y)
             self.pos.append((x, y))
             print(self.pos)
-            canvas.create_line(x - 5, y, x + 5, y, fill="red", tags="crosshair")
-            canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
+            self.canvas.create_line(x - 5, y, x + 5, y, fill="red", tags="crosshair")
+            self.canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
             self.counter += 1
         else:
-            canvas.create_rectangle(self.pos[0][0], self.pos[0][1], self.pos[1][0], self.pos[1][1], outline="red")
-            canvas.unbind("<Button 1>")
+            self.canvas.create_rectangle(self.pos[0][0], self.pos[0][1], self.pos[1][0], self.pos[1][1], outline="red")
+            self.canvas.unbind("<Button 1>")
             root.config(cursor="arrow")
             self.counter = 0
 
 if __name__ == '__main__':
-    """Gets image size"""
+
     root = Tk()
-    imgSize = Image.open("../images/test.jpg")
-    tkimage =  ImageTk.PhotoImage(imgSize)
-    w, h = imgSize.size
-
-    """Figure out what this does!!!"""
-    canvas = Canvas(root, width=w, height=h)
-    canvas.create_image((w/2,h/2),image=tkimage)
-    canvas.pack()
-
-    """Sets window???"""
-    root.geometry("%dx%d"%(w,h))        # Why does the prefix "%dx%d"% need to be there?
-    #root.geometry("%dx%d"%(512,512))
     app = Window(root)
     root.mainloop() 
