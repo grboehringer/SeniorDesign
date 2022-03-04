@@ -36,7 +36,7 @@ class Window(Frame):
         analyze.add_command(label="Compare Images", command=self.compare_images)
 
         """Instructions image upload."""
-        load = Image.open("../images/Instructions.jpg")
+        load = Image.open("images/Instructions.jpg")
         render = ImageTk.PhotoImage(load)
         img = Label(self, image=render)
         img.image = render
@@ -44,9 +44,13 @@ class Window(Frame):
         w, h = load.size
 
         """Figure out what this does!!!"""
-        self.canvas = Canvas(root, width=w, height=h)
+        self.canvas = Canvas(master, width=w, height=h)
         self.canvas.create_image((w/2,h/2),image=render)
         self.canvas.pack()
+
+        # Try these for image thing
+        # img = PhotoImage(file="python-tkinter-canvas-image-for-use.png")
+        # canvas.create_image(370, 200, image=img)
 
         """Sets window???"""
         root.geometry("%dx%d"%(w,h))        # Why does the prefix "%dx%d"% need to be there?
@@ -159,11 +163,22 @@ class Window(Frame):
             self.canvas.create_line(x - 5, y, x + 5, y, fill="red", tags="crosshair")
             self.canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
             self.counter += 1
+        elif self.counter == 2:
+            self.canvas.create_rectangle(self.pos[0][0], self.pos[0][1], self.pos[1][0], self.pos[1][1], outline="red", tags="crosshair")
+            self.counter += 1
+            
+            # Ask to save coordinates
+            # save_coordinates = tk.Tk()
+            # save_coordinates.geometry("300x200")
+            # save_coordinates.title('Settings')
+            # save_coordinates.configure(bg='#3A3B3C')
         else:
-            self.canvas.create_rectangle(self.pos[0][0], self.pos[0][1], self.pos[1][0], self.pos[1][1], outline="red")
+            # Ask if save selection
+            self.canvas.delete("crosshair")
+            self.pos = []
+            self.counter = 0
             self.canvas.unbind("<Button 1>")
             root.config(cursor="arrow")
-            self.counter = 0
 
 if __name__ == '__main__':
 
