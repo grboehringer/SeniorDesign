@@ -4,39 +4,72 @@ from gui import select_file
 import time
 import matplotlib.pyplot as plt
 
-intensityThreshold = 20
-differenceThreshold = 20
+class Perfusion():
+    def __init__(self):
+        self.intensityThreshold = 20
+        self.differenceThreshold = 20
 
-def algorithm(img_filename, intensityThreshold, differenceThreshold):
-    img = cv2.imread(img_filename) 
+    def algorithm(self, img):
+        intensity = np.mean(img, axis=2)    # Find intensity
 
-    intensity = np.mean(img, axis=2)    # Find intensity
+        red = img[:,:,2]
+        green = img[:,:,1]
+        blue = img[:,:,0]
 
-    red = img[:,:,2]
-    green = img[:,:,1]
-    blue = img[:,:,0]
+        #dt = np.where(intensity > self.intensityThreshold, self.differenceThreshold / 3, self.differenceThreshold)
 
-    dt = np.where(intensity > intensityThreshold, differenceThreshold / 3, differenceThreshold)
+        boolean = np.abs(red - green) > self.differenceThreshold
+        boolean = boolean | np.abs(red - blue) > self.differenceThreshold
+        boolean = boolean | np.abs(green - blue) > self.differenceThreshold
 
-    boolean = np.abs(red - green) > dt
-    boolean = boolean | np.abs(red - blue) > dt
-    boolean = boolean | np.abs(green - blue) > dt
+        perfusion = intensity * boolean
 
-    perfusion = intensity * boolean
+        return np.mean(perfusion), perfusion
 
-    return perfusion, dt 
+    def video(self, filename):
+        vid = cv2.VideoCapture(filename)
+        if not vid.isOpened():
+            print("Error opening video")
+            return None
+        perfusions = []
+        while vid.isOpened():
+            ret, frame = vid.read()
+            cv2.imshow('cool', frame)
+            if ret:
+                perfusion, doop = self.algorithm(frame)
+                perfusions.append(perfusion)
+                print(perfusion)
+            else:
+                vid.release()
+                return perfusions
+        
+            if cv2.waitKey(10) & 0xff == ord('q'):
+                vid.release()
+                return perfusions
+            cv2.imshow('doop', np.uint8(doop))
 
-def finalVal(perfusion):
-    perfusionVal = np.mean(perfusion)
-    
-    return perfusionVal
+    def image(self, filename):
+        img = cv2.imread(filename)
+        self.algorithm(img)
+
+    def changeThreshold(self, intensityThreshold, differenceThreshold):
+        self.intensityThreshold = intensityThreshold
+        self.differenceThreshold = differenceThreshold
+        
+
 
 if __name__ == '__main__':
+    '''
     img_filename = select_file()
     
-    perfusion, dt = algorithm(img_filename, intensityThreshold, differenceThreshold)
-    perfusionVal = finalVal(perfusion)
+    perObj = Perfusion()
+    perfusionVal, perfusion, dt = perObj.algorithm(img_filename)
 
     print(perfusionVal)
     plt.imshow(dt, 'gray')
+    plt.show()
+    '''
+    obj = Perfusion()
+    perfusions = obj.video(0)
+    plt.plot(perfusions)
     plt.show()

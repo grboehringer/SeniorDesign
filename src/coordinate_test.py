@@ -32,7 +32,6 @@ class Window(Frame):
         analyze = Menu(menu)
         menu.add_cascade(label="Analyze", menu=analyze)
         analyze.add_command(label="Region of Interest", command=self.regionOfInterest)
-        analyze.add_command(label="Save Selection", command=self.save_selection)
         analyze.add_command(label="Compare Images", command=self.compare_images)
 
         id = tk.Label(self, text = 'Patient ID:')
@@ -91,7 +90,6 @@ class Window(Frame):
         """Allow thresholds and machine constants to be entered manually"""
         # Setup New Window
         root2 = tk.Tk()
-        root2.geometry("304x400")
         root2.title('Settings')
         root2.configure(bg='#3A3B3C')
 
@@ -134,10 +132,6 @@ class Window(Frame):
         root.config(cursor="plus")
         self.canvas.bind("<Button-1>", self.imgClick)
 
-    def save_selection(self):
-        """Save selection coordinates and crop image for perfusion"""
-        print('Coordinate Selection Function')
-
     def compare_images(self):
         """Compare Images in new window"""
         print('Compare Images Function')
@@ -178,22 +172,46 @@ class Window(Frame):
             self.canvas.create_line(x - 5, y, x + 5, y, fill="red", tags="crosshair")
             self.canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
             self.counter += 1
-        elif self.counter == 2:
-            self.canvas.create_rectangle(self.pos[0][0], self.pos[0][1], self.pos[1][0], self.pos[1][1], outline="red", tags="crosshair")
-            self.counter += 1
-            
-            # Ask to save coordinates
-            # save_coordinates = tk.Tk()
-            # save_coordinates.geometry("300x200")
-            # save_coordinates.title('Settings')
-            # save_coordinates.configure(bg='#3A3B3C')
+
         else:
-            # Ask if save selection
-            self.canvas.delete("crosshair")
-            self.pos = []
-            self.counter = 0
-            self.canvas.unbind("<Button 1>")
-            root.config(cursor="arrow")
+            self.canvas.create_rectangle(self.pos[0][0], self.pos[0][1], self.pos[1][0], self.pos[1][1], outline="red", tags="crosshair")
+            
+            # Save Coordinates Window Setup
+            self.save_coordinates = Tk()
+            self.save_coordinates.title('Save Selection')
+            self.save_coordinates.configure(bg='#3A3B3C')
+            
+            # Disable closing the window
+            self.save_coordinates.protocol("WM_DELETE_WINDOW", self.disable_event)
+            # ADD RESIZING LOCK
+            
+            coord_msg = tk.Label(self.save_coordinates, text = 'Would you like to save this selection?', bg ='#3A3B3C', fg = 'white')
+            coord_msg.grid(row = 1, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
+            
+            save_sel = tk.Button(self.save_coordinates, text = "Save Selection", width = 15, bg ='#3A3B3C', fg = 'white',command =self.save_coord)
+            save_sel.grid(row = 2, column = 1, padx=5, pady=5)
+            
+            del_sel = tk.Button(self.save_coordinates, text = "Delete Selection", width = 15, bg ='#3A3B3C', fg = 'white',command =self.delete_coord)
+            del_sel.grid(row = 2, column = 2, padx=5, pady=5)
+
+    def save_coord(self):
+        """Save selection coordinates and crop image for perfusion"""
+        print("save coord and crop")
+        self.save_coordinates.destroy()
+        # RERUN ALGORITHM HERE TO GET NEW PV WITH CROPPED IMAGE
+
+    def delete_coord(self):
+        """Delete selection coordinates"""
+        self.canvas.delete("crosshair")
+        self.pos = []
+        self.counter = 0
+        self.canvas.unbind("<Button 1>")
+        root.config(cursor="arrow")
+        self.save_coordinates.destroy()
+
+    def disable_event(self):
+        pass
+
 
 if __name__ == '__main__':
 
