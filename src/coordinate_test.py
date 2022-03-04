@@ -12,7 +12,7 @@ class Window(Frame):
 
         self.master = master
         self.pos = []
-        self.master.title("GUI")
+        self.master.title("Perfusion Index")
         self.pack(fill=BOTH, expand=1)
 
         self.counter = 0
@@ -70,8 +70,42 @@ class Window(Frame):
         print('Image and Data Function')
     
     def settings(self):
-        """Allow thresholds and gain to be set manually"""
-        print('Threshold and gain settings')
+        """Allow thresholds and machine constants to be entered manually"""
+        # Setup New Window
+        root2 = tk.Tk()
+        root2.geometry("304x400")
+        root2.title('Settings')
+        root2.configure(bg='#3A3B3C')
+
+        # Initialize User Entries
+        id = tk.Label(root2, text = 'Patient ID:', bg ='#3A3B3C', fg = 'white')
+        patient_ID = Entry(root2)
+        
+        threshold_intensity = Label(root2, text="Intensity Threshold:", bg ='#3A3B3C', fg = 'white')
+        intensity_thresh_entry = Entry(root2)
+        
+        diff_threshold = Label(root2, text="Difference Threshold:",bg ='#3A3B3C', fg = 'white')
+        diff_thresh_entry = Entry(root2)
+        
+        gain_val = Label(root2, text="Gain Value:", bg ='#3A3B3C', fg = 'white')
+        gain_val_entry = Entry(root2)
+
+        # Display and Organize User Entries (Label & Box)
+        id.grid(row = 1, column = 1, padx=10, pady=5, sticky='e')
+        patient_ID.grid(row = 1, column = 2, padx=5, pady=5)
+        patient_ID.insert(0,"[Enter Patient ID]")
+
+        gain_val.grid(row=2, column=1, padx=10, pady=5, sticky='e')
+        gain_val_entry.grid(row=2, column=2, padx=5, pady=5)
+        gain_val_entry.insert(0,"[Enter Gain Value]")
+
+        threshold_intensity.grid(row=3, column=1, padx=10, pady=5, sticky='e')
+        intensity_thresh_entry.grid(row=3, column=2, padx=5, pady=5)
+
+        diff_threshold.grid(row=4, column=1, padx=10, pady=5, sticky='e')
+        diff_thresh_entry.grid(row=4, column=2, padx=5, pady=5)
+
+        # x = variable.get() can store entry
 
     def client_exit(self):
         """Exit program."""
