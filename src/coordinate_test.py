@@ -13,7 +13,7 @@ class Window(Frame):
         self.master = master
         self.pos = []
         self.master.title("Perfusion Index")
-        self.pack(fill=BOTH, expand=1)
+        self.pack(fill=BOTH, expand=True)
 
         self.counter = 0
 
@@ -35,39 +35,53 @@ class Window(Frame):
         analyze.add_command(label="Save Selection", command=self.save_selection)
         analyze.add_command(label="Compare Images", command=self.compare_images)
 
+        id = tk.Label(self, text = 'Patient ID:')
+        id.pack(side = TOP, expand = True, fill = BOTH)
+
         """Instructions image upload."""
+
         load = Image.open("images/Instructions.jpg")
         render = ImageTk.PhotoImage(load)
-        img = Label(self, image=render)
-        img.image = render
-        img.place(x=0, y=0)
+        self.img = Label(self, image=render)
+        self.img.image = render
+        self.img.config(image = render)
+        self.img.pack(side = TOP, expand = True, fill = BOTH)
         w, h = load.size
 
         """Figure out what this does!!!"""
-        self.canvas = Canvas(master, width=w, height=h)
-        self.canvas.create_image((w/2,h/2),image=render)
-        self.canvas.pack()
+        #self.canvas = Canvas(master, width=w, height=h)
+        #self.canvas.create_image((w/2,h/2),image=render)
+        #self.canvas.pack()
 
         # Try these for image thing
         # img = PhotoImage(file="python-tkinter-canvas-image-for-use.png")
         # canvas.create_image(370, 200, image=img)
 
         """Sets window???"""
-        root.geometry("%dx%d"%(w,h))        # Why does the prefix "%dx%d"% need to be there?
+        root.geometry("600x600")        # Why does the prefix "%dx%d"% need to be there?
 
     """ MENU FUNCTIONS """
     
     def upload_image(self):
         """Open the selected image and resize."""
         global filename
+        w = 0
+        h = 0
+        self.img.config(image='')
         filename = self.select_file()
         load = Image.open(filename)
         render = ImageTk.PhotoImage(load)
-        self.img = Label(self, image=render)
+        self.img.config(image = render)
+        #self.img = Label(self, image=render)
         self.img.image = render
-        self.img.place(x=0, y=0)
-        
-        #threshold_display(filename,intensityThreshold,differenceThreshold)
+        self.img.pack(side = TOP, expand = True, fill = BOTH)
+        w, h = load.size
+
+        self.canvas = Canvas(root, width=w, height=h)
+        self.canvas.create_image((w/2,h/2),image=render)
+        self.canvas.pack()
+
+        self.threshold_display(filename,intensityThreshold,differenceThreshold)
 
     def save_all(self):
         """Save image and associated data to file"""
@@ -134,6 +148,7 @@ class Window(Frame):
         """Update threshold values, perfusion value, and gain when changed by user."""
         perfusion = algorithm(filename,intensityThreshold,differenceThreshold)
         perfusionVal = finalVal(perfusion)
+
 
         #intensity_thresh_entry.insert(0,intensityThreshold)
 
