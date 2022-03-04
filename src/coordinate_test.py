@@ -80,7 +80,7 @@ class Window(Frame):
         self.canvas.create_image((w/2,h/2),image=render)
         self.canvas.pack()
 
-        self.threshold_display(filename,intensityThreshold,differenceThreshold)
+        #self.threshold_display(filename,intensityThreshold,differenceThreshold)
 
     def save_all(self):
         """Save image and associated data to file"""
