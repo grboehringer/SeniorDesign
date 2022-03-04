@@ -36,7 +36,7 @@ class Window(Frame):
         analyze.add_command(label="Compare Images", command=self.compare_images)
 
         """Instructions image upload."""
-        load = Image.open("images/Instructions.jpg")
+        load = Image.open("../images/Instructions.jpg")
         render = ImageTk.PhotoImage(load)
         img = Label(self, image=render)
         img.image = render
@@ -59,9 +59,9 @@ class Window(Frame):
         filename = self.select_file()
         load = Image.open(filename)
         render = ImageTk.PhotoImage(load)
-        img = Label(self, image=render)
-        img.image = render
-        img.place(x=0, y=0)
+        self.img = Label(self, image=render)
+        self.img.image = render
+        self.img.place(x=0, y=0)
         
         #threshold_display(filename,intensityThreshold,differenceThreshold)
 
