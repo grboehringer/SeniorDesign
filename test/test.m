@@ -1,6 +1,6 @@
 
-function [pv, perfusion, dt, intensity] = test(filename, differenceThreshold, intensityThreshold)
-    I = imread(filename);
+function [pv, perfusion] = test(I, differenceThreshold)
+%     I = imread(filename);
 
     red = I(:,:,1);
     green = I(:,:,2);
@@ -9,7 +9,7 @@ function [pv, perfusion, dt, intensity] = test(filename, differenceThreshold, in
     intensity = mean(I, 3);
 
     dt = ones(size(red)) * differenceThreshold;
-    dt(intensity > intensityThreshold) = differenceThreshold / 3; 
+%     dt(intensity > intensityThreshold) = differenceThreshold / 3; 
 
     boolean = abs(red - green) > dt;
     boolean = boolean | abs(red - blue) > dt;
@@ -19,13 +19,10 @@ function [pv, perfusion, dt, intensity] = test(filename, differenceThreshold, in
 
     pv = mean(perfusion, 'all');
 
-    figure(1)
-    imshow(I)
-    title('Original Image');
-    figure(2)
-    multi = cat(2,uint8(dt), uint8(perfusion));
+    figure
+    multi = ({uint8(I), uint8(perfusion)});
     montage(multi);
-    title(['Processed Image - Difference Threshold: ',num2str(differenceThreshold),' Intensity Threshold: ',num2str(intensityThreshold)]);
+    title(['Processed Image - Difference Threshold: ',num2str(differenceThreshold), ' Perfusion Value: ' ,num2str(pv)]);
 end
 
 
