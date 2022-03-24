@@ -64,7 +64,8 @@ class Window(Frame):
 
         root.geometry(f'{w}x{h}')
 
-        #self.threshold_display(filename,intensityThreshold,differenceThreshold)
+        perfusion = self.perfusion.algorithm(filename)
+        # Display Threshold
 
     def save_all(self):
         """Save image and associated data to file"""
@@ -101,9 +102,11 @@ class Window(Frame):
 
         threshold_intensity.grid(row=3, column=1, padx=10, pady=5, sticky='e')
         intensity_thresh_entry.grid(row=3, column=2, padx=5, pady=5)
+        intensity_thresh_entry.insert(0,self.perfusion.intensityThreshold)
 
         diff_threshold.grid(row=4, column=1, padx=10, pady=5, sticky='e')
         diff_thresh_entry.grid(row=4, column=2, padx=5, pady=5)
+        diff_thresh_entry.insert(0,self.perfusion.differenceThreshold)
 
         # x = variable.get() can store entry
 
