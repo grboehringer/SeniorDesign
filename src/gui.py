@@ -34,51 +34,34 @@ class Window(Frame):
         analyze.add_command(label="Region of Interest", command=self.regionOfInterest)
         analyze.add_command(label="Compare Images", command=self.compare_images)
 
-        id = tk.Label(self, text = 'Patient ID:')
-        id.pack(side = TOP, expand = True, fill = BOTH)
-
         """Instructions image upload."""
-
         load = Image.open("images/Instructions.jpg")
-        render = ImageTk.PhotoImage(load)
-        self.img = Label(self, image=render)
-        self.img.image = render
-        self.img.config(image = render)
-        self.img.pack(side = TOP, expand = True, fill = BOTH)
-        w, h = load.size
+        self.render = ImageTk.PhotoImage(load)
+        h = self.render.height()
+        w = self.render.width()
+        self.canvas = Canvas(master, width=w, height=h)
+        self.canvas.pack()
+        self.canvas.create_image((w/2,h/2),image=self.render)
 
-        """Figure out what this does!!!"""
-        #self.canvas = Canvas(master, width=w, height=h)
-        #self.canvas.create_image((w/2,h/2),image=render)
-        #self.canvas.pack()
-
-        # Try these for image thing
-        # img = PhotoImage(file="python-tkinter-canvas-image-for-use.png")
-        # canvas.create_image(370, 200, image=img)
-
-        """Sets window???"""
-        root.geometry("600x600")        # Why does the prefix "%dx%d"% need to be there?
+        """Sets window size"""
+        root.geometry(f'{w}x{h}')
 
     """ MENU FUNCTIONS """
     
     def upload_image(self):
         """Open the selected image and resize."""
         global filename
-        w = 0
-        h = 0
-        self.img.config(image='')
+
         filename = self.select_file()
         load = Image.open(filename)
-        render = ImageTk.PhotoImage(load)
-        self.img.config(image = render)
-        #self.img = Label(self, image=render)
-        self.img.image = render
-        self.img.pack(side = TOP, expand = True, fill = BOTH)
-        w, h = load.size
-
-        self.canvas = Canvas(root, width=w, height=h)
-        self.canvas.create_image((w/2,h/2),image=render)
+        self.render = ImageTk.PhotoImage(load)
+        h = self.render.height()
+        w = self.render.width()
+        self.canvas = Canvas(self, width=w, height=h)
         self.canvas.pack()
+        self.canvas.create_image((w/2,h/2), image=self.render)
+
+        root.geometry(f'{w}x{h}')
 
         #self.threshold_display(filename,intensityThreshold,differenceThreshold)
 
