@@ -14,6 +14,7 @@ class Window(Frame):
         self.pos = []
         self.master.title("Perfusion Index")
         self.pack(fill=BOTH, expand=True)
+        self.perfusion = Perfusion()
 
         self.counter = 0
 
@@ -121,10 +122,10 @@ class Window(Frame):
 
     """ SUBFUNCTIONS """
 
-    def threshold_display(filename,intensityThreshold,differenceThreshold):
+    def threshold_display(self, filename,intensityThreshold,differenceThreshold):
         """Update threshold values, perfusion value, and gain when changed by user."""
-        perfusion = algorithm(filename,intensityThreshold,differenceThreshold)
-        perfusionVal = finalVal(perfusion)
+        perfusion = self.perfusion.algorithm(filename,intensityThreshold,differenceThreshold)
+        perfusionVal = self.perfusion.finalVal(perfusion)
 
 
         #intensity_thresh_entry.insert(0,intensityThreshold)
