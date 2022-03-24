@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 class Perfusion():
     def __init__(self):
         self.intensityThreshold = 20
-        self.differenceThreshold = 20
+        self.differenceThreshold = 65
 
     def algorithm(self, img):
         intensity = np.mean(img, axis=2)    # Find intensity
