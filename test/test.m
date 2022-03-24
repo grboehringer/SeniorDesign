@@ -1,6 +1,6 @@
 
-function [pv, perfusion] = test(I, differenceThreshold)
-%     I = imread(filename);
+function [pv, perfusion] = test(filename, differenceThreshold)
+    I = imread(filename);
 
     red = I(:,:,1);
     green = I(:,:,2);
