@@ -108,6 +108,9 @@ class Window(Frame):
         diff_thresh_entry.grid(row=4, column=2, padx=5, pady=5)
         diff_thresh_entry.insert(0,self.perfusion.differenceThreshold)
 
+        root2.bind('<Return>',self.perfusion.changeThreshold(int(intensity_thresh_entry.get()),int(diff_thresh_entry.get())))
+        print(self.perfusion.intensityThreshold)
+        print(self.perfusion.differenceThreshold)
         # x = variable.get() can store entry
 
     def client_exit(self):
