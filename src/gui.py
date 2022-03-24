@@ -3,6 +3,7 @@ import tkinter as tk        # Imports tkinter library
 from tkinter import *       # Imports tkinter functions
 from PIL import Image, ImageTk  # Image Import
 from tkinter.filedialog import askopenfilename  # Get filename
+import json
 
 class Window(Frame):
 
@@ -51,10 +52,9 @@ class Window(Frame):
     
     def upload_image(self):
         """Open the selected image and resize."""
-        global filename
 
-        filename = self.select_file()
-        load = Image.open(filename)
+        self.filename = self.select_file()
+        load = Image.open(self.filename)
         self.render = ImageTk.PhotoImage(load)
         h = self.render.height()
         w = self.render.width()
@@ -64,13 +64,20 @@ class Window(Frame):
 
         root.geometry(f'{w}x{h}')
 
-        perfusion = self.perfusion.algorithm(filename)
+        self.perfusion_value = self.perfusion.algorithm(self.filename)
         # Display Threshold
 
     def save_all(self):
         """Save image and associated data to file"""
-        print('Image and Data Function')
-    
+        if (self.filename and self.perfusion_value):
+            dictionary = {
+                'filename': self.filename,
+                'perfusion': self.perfusion_value
+                }
+            string = json.dumps(dictionary)
+            with open('stuff.json', 'a') as file:
+                file.write(string)
+        
     def settings(self):
         """Allow thresholds and machine constants to be entered manually"""
         # Setup New Window
