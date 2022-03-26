@@ -39,32 +39,38 @@ class Window(Frame):
         """Instructions image upload."""
         load = Image.open("images/Instructions.jpg")
         self.render = ImageTk.PhotoImage(load)
-        h = self.render.height()
-        w = self.render.width()
-        self.canvas = Canvas(master, width=w, height=h)
+        #h = self.render.height()
+        #w = self.render.width()
+        #self.canvas = Canvas(master, width=w, height=h)
+        self.canvas = Canvas(master, width=512, height=512)
         self.canvas.pack()
-        self.canvas.create_image((w/2,h/2),image=self.render)
-
+        #self.img_id = self.canvas.create_image((w/2,w/2),image=self.render)
+        self.img_id = self.canvas.create_image((512/2,512/2),image=self.render)
         """Sets window size"""
-        root.geometry(f'{w}x{h}')
+        #root.geometry(f'{w}x{h}')
+        root.geometry("512x512")
 
     """ MENU FUNCTIONS """
     
     def upload_image(self):
         """Open the selected image and resize."""
-
+        #self.canvas.delete('txt')
+        #self.canvas.delete('img')
         self.filename = self.select_file()
         load = Image.open(self.filename)
         self.render = ImageTk.PhotoImage(load)
-        h = self.render.height()
-        w = self.render.width()
-        self.canvas = Canvas(self, width=w, height=h)
-        self.canvas.pack()
-        self.canvas.create_image((w/2,h/2), image=self.render)
+        self.canvas.itemconfig(self.img_id, image=self.render)
+        #h = self.render.height()
+        #w = self.render.width()
+        #self.canvas = Canvas(self, width=w, height=h)
+        #self.canvas.pack()
+        #self.img_id=self.canvas.create_image((w/2,h/2), image=self.render,tag="img")
+        #root.geometry(f'{w}x{h}')
 
-        root.geometry(f'{w}x{h}')
-
-        self.perfusion_value = self.perfusion.algorithm(self.filename)
+        #self.perfusion_value = self.perfusion.algorithm(self.filename) #this wasn't working for me -BF
+        self.perfusion_value = 20
+        txt ="P ID: [Enter Patient ID in Settings] \nPV: %d"%self.perfusion_value
+        self.txt_id = self.canvas.create_text(200, 50,fill="white",font="Times 20",text=txt,tag="txt")
         # Display Threshold
 
     def save_all(self):
@@ -81,44 +87,56 @@ class Window(Frame):
     def settings(self):
         """Allow thresholds and machine constants to be entered manually"""
         # Setup New Window
-        root2 = tk.Tk()
-        root2.title('Settings')
-        root2.configure(bg='#3A3B3C')
+        self.root2 = tk.Tk()
+        self.root2.title('Settings')
+        self.root2.configure(bg='#3A3B3C')
 
         # Initialize User Entries
-        id = tk.Label(root2, text = 'Patient ID:', bg ='#3A3B3C', fg = 'white')
-        patient_ID = Entry(root2)
+        id = tk.Label(self.root2, text = 'Patient ID:', bg ='#3A3B3C', fg = 'white')
+        self.patient_ID = Entry(self.root2)
         
-        threshold_intensity = Label(root2, text="Intensity Threshold:", bg ='#3A3B3C', fg = 'white')
-        intensity_thresh_entry = Entry(root2)
+        threshold_intensity = Label(self.root2, text="Intensity Threshold:", bg ='#3A3B3C', fg = 'white')
+        self.intensity_thresh_entry = Entry(self.root2)
         
-        diff_threshold = Label(root2, text="Difference Threshold:",bg ='#3A3B3C', fg = 'white')
-        diff_thresh_entry = Entry(root2)
+        diff_threshold = Label(self.root2, text="Difference Threshold:",bg ='#3A3B3C', fg = 'white')
+        self.diff_thresh_entry = Entry(self.root2)
         
-        gain_val = Label(root2, text="Gain Value:", bg ='#3A3B3C', fg = 'white')
-        gain_val_entry = Entry(root2)
+        gain_val = Label(self.root2, text="Gain Value:", bg ='#3A3B3C', fg = 'white')
+        gain_val_entry = Entry(self.root2)
 
         # Display and Organize User Entries (Label & Box)
         id.grid(row = 1, column = 1, padx=10, pady=5, sticky='e')
-        patient_ID.grid(row = 1, column = 2, padx=5, pady=5)
-        patient_ID.insert(0,"[Enter Patient ID]")
+        self.patient_ID.grid(row = 1, column = 2, padx=5, pady=5)
+        self.patient_ID.insert(0,"[Enter Patient ID]")
 
         gain_val.grid(row=2, column=1, padx=10, pady=5, sticky='e')
         gain_val_entry.grid(row=2, column=2, padx=5, pady=5)
         gain_val_entry.insert(0,"[Enter Gain Value]")
 
         threshold_intensity.grid(row=3, column=1, padx=10, pady=5, sticky='e')
-        intensity_thresh_entry.grid(row=3, column=2, padx=5, pady=5)
-        intensity_thresh_entry.insert(0,self.perfusion.intensityThreshold)
+        self.intensity_thresh_entry.grid(row=3, column=2, padx=5, pady=5)
+        self.intensity_thresh_entry.insert(0,self.perfusion.intensityThreshold)
 
         diff_threshold.grid(row=4, column=1, padx=10, pady=5, sticky='e')
-        diff_thresh_entry.grid(row=4, column=2, padx=5, pady=5)
-        diff_thresh_entry.insert(0,self.perfusion.differenceThreshold)
+        self.diff_thresh_entry.grid(row=4, column=2, padx=5, pady=5)
+        self.diff_thresh_entry.insert(0,self.perfusion.differenceThreshold)
 
-        root2.bind('<Return>',self.perfusion.changeThreshold(int(intensity_thresh_entry.get()),int(diff_thresh_entry.get())))
-        print(self.perfusion.intensityThreshold)
-        print(self.perfusion.differenceThreshold)
         # x = variable.get() can store entry
+        enter_sel = tk.Button(self.root2, text = "Enter", width = 15, bg ='#3A3B3C', fg = 'white',command =self.enter_selections)
+        enter_sel.grid(row = 5, column = 1, padx=5, pady=5)
+            
+
+    def enter_selections(self):
+        """Save entered data and put into algorithm or display"""
+        self.root2.bind('<Return>',self.perfusion.changeThreshold(int(self.intensity_thresh_entry.get()),int(self.diff_thresh_entry.get())))
+        print(self.perfusion.intensityThreshold) 
+        print(self.perfusion.differenceThreshold)
+        self.new_perfusion_value = self.perfusion.intensityThreshold + self.perfusion.differenceThreshold #need to change this so it is the actually perfusion value for perfusion.py
+        txt ="P ID: %s \nPV: %d"%(self.patient_ID.get(),self.new_perfusion_value)
+        self.root2.destroy()
+        self.canvas.delete('txt')
+        self.canvas.create_text(200,50,fill="white",font="Times 20",text=txt,tag="txt")
+        
 
     def client_exit(self):
         """Exit program."""
@@ -135,19 +153,12 @@ class Window(Frame):
 
     """ SUBFUNCTIONS """
 
-    def threshold_display(self, filename,intensityThreshold,differenceThreshold):
-        """Update threshold values, perfusion value, and gain when changed by user."""
-        perfusion = self.perfusion.algorithm(filename,intensityThreshold,differenceThreshold)
-        perfusionVal = self.perfusion.finalVal(perfusion)
-
-
-        #intensity_thresh_entry.insert(0,intensityThreshold)
-
-        #diff_thresh_entry.insert(0,differenceThreshold)
-
-        #gain_val_entry.insert(0,"Enter Gain Value")
-
-        #per_val_entry.insert(0,perfusionVal)
+    # do we even need this subfunction
+    def change_perfusion_val(self, filename,intensityThreshold,differenceThreshold):
+        """Update perfusion value"""
+        #self.perfusion_value = self.perfusion.algorithm(self.filename,)
+        #self.perfusion_value = self.perfusion.algorithm(self.filename,self.perfusion.intensityThreshold,self.perfusion.differenceThreshold)
+        #self.new_perfusion_value = int(self.perfusion.intensityThreshold) + int(self.perfusion.differenceThreshold)
 
     def select_file(self):
         """Finds the filename."""
