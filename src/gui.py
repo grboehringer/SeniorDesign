@@ -123,7 +123,7 @@ class Window(Frame):
     def client_exit(self):
         """Exit program."""
         exit()
-    
+
     def regionOfInterest(self):
         """Select ROI."""
         root.config(cursor="plus")
