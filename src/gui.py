@@ -67,9 +67,10 @@ class Window(Frame):
         #self.img_id=self.canvas.create_image((w/2,h/2), image=self.render,tag="img")
         #root.geometry(f'{w}x{h}')
 
-        #self.perfusion_value = self.perfusion.algorithm(self.filename) #this wasn't working for me -BF
-        self.perfusion_value = 20
-        txt ="P ID: [Enter Patient ID in Settings] \nPV: %d"%self.perfusion_value
+        print(self.filename)
+        self.perfusion_value = self.perfusion.image(self.filename)
+        print(self.perfusion_value)
+        txt ="P ID: [Enter Patient ID in Settings] \nPV:" + str(self.perfusion_value)
         self.txt_id = self.canvas.create_text(200, 50,fill="white",font="Times 20",text=txt,tag="txt")
         # Display Threshold
 
@@ -122,8 +123,8 @@ class Window(Frame):
         self.diff_thresh_entry.insert(0,self.perfusion.differenceThreshold)
 
         # x = variable.get() can store entry
-        enter_sel = tk.Button(self.root2, text = "Enter", width = 15, bg ='#3A3B3C', fg = 'white',command =self.enter_selections)
-        enter_sel.grid(row = 5, column = 1, padx=5, pady=5)
+        enter_sel = tk.Button(self.root2, text = "Enter", bg ='#3A3B3C', fg = 'white',command =self.enter_selections)
+        enter_sel.grid(row = 5, column = 1, columnspan = 2, padx=5, pady=5, sticky='e')
             
 
     def enter_selections(self):
@@ -131,8 +132,8 @@ class Window(Frame):
         self.root2.bind('<Return>',self.perfusion.changeThreshold(int(self.intensity_thresh_entry.get()),int(self.diff_thresh_entry.get())))
         print(self.perfusion.intensityThreshold) 
         print(self.perfusion.differenceThreshold)
-        self.new_perfusion_value = self.perfusion.intensityThreshold + self.perfusion.differenceThreshold #need to change this so it is the actually perfusion value for perfusion.py
-        txt ="P ID: %s \nPV: %d"%(self.patient_ID.get(),self.new_perfusion_value)
+        self.new_perfusion_value = self.perfusion.image(self.filename)
+        txt ="P ID:" + self.patient_ID.get() + "\nPV: " + str(self.new_perfusion_value)
         self.root2.destroy()
         self.canvas.delete('txt')
         self.canvas.create_text(200,50,fill="white",font="Times 20",text=txt,tag="txt")
