@@ -153,14 +153,6 @@ class Window(Frame):
         print('Compare Images Function')
 
     """ SUBFUNCTIONS """
-
-    # do we even need this subfunction
-    def change_perfusion_val(self, filename,intensityThreshold,differenceThreshold):
-        """Update perfusion value"""
-        #self.perfusion_value = self.perfusion.algorithm(self.filename,)
-        #self.perfusion_value = self.perfusion.algorithm(self.filename,self.perfusion.intensityThreshold,self.perfusion.differenceThreshold)
-        #self.new_perfusion_value = int(self.perfusion.intensityThreshold) + int(self.perfusion.differenceThreshold)
-
     def select_file(self):
         """Finds the filename."""
         # define allowed file types

@@ -22,7 +22,7 @@ class Perfusion():
 
         perfusion = intensity * boolean
 
-        return np.mean(perfusion), perfusion
+        return np.mean(perfusion)
 
     def video(self, filename):
         vid = cv2.VideoCapture(filename)
@@ -48,7 +48,7 @@ class Perfusion():
 
     def image(self, filename):
         img = cv2.imread(filename)
-        self.algorithm(img)
+        return self.algorithm(img)
 
     def changeThreshold(self, intensityThreshold, differenceThreshold):
         self.intensityThreshold = intensityThreshold
