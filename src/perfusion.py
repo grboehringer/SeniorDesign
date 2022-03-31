@@ -47,12 +47,15 @@ class Perfusion():
             cv2.imshow('doop', np.uint8(doop))
 
     def image(self, filename):
-        img = cv2.imread(filename)
-        return self.algorithm(img)
+        self.img = cv2.imread(filename)
+        return self.algorithm(self.img)
 
     def changeThreshold(self, intensityThreshold, differenceThreshold):
         self.intensityThreshold = intensityThreshold
         self.differenceThreshold = differenceThreshold
+
+    def rgb(self, x, y):
+        return self.img[y, x, 2], self.img[y, x, 1], self.img[y, x, 0]
         
 
 

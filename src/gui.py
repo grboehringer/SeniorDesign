@@ -28,6 +28,7 @@ class Window(Frame):
         file.add_command(label="Upload Image", command=self.upload_image)
         file.add_command(label="Save Image and Data", command=self.save_all)
         file.add_command(label="Settings", command=self.settings)
+        file.add_command(label="Calibrate Machine", command=self.calibrate_machine)
         file.add_command(label="Exit", command=self.client_exit)
         
         """Analyze drop down."""
@@ -80,14 +81,12 @@ class Window(Frame):
 
     def save_all(self):
         """Save image and associated data to file"""
-        if (self.filename and self.perfusion_value):
-            dictionary = {
-                'filename': self.filename,
-                'perfusion': self.perfusion_value
-                }
-            string = json.dumps(dictionary)
-            with open('stuff.json', 'a') as file:
-                file.write(string)
+        try:
+            with open('images.json') as file:
+                data = json.load(file)
+        except:
+            pass
+            
         
     def settings(self):
         """Allow thresholds and machine constants to be entered manually"""
@@ -130,6 +129,9 @@ class Window(Frame):
         enter_sel = tk.Button(self.root2, text = "Enter", bg ='#3A3B3C', fg = 'white',command =self.enter_selections)
         enter_sel.grid(row = 5, column = 1, columnspan = 2, padx=5, pady=5, sticky='e')
             
+    def calibrate_machine(self):
+        """Calibrate Ultrasound Machine"""
+        self.canvas.bind("<Button-1>", self.mouseRGB)
 
     def enter_selections(self):
         """Save entered data and put into algorithm or display"""
@@ -222,6 +224,31 @@ class Window(Frame):
         self.canvas.unbind("<Button 1>")
         root.config(cursor="arrow")
         self.save_coordinates.destroy()
+
+    def mouseRGB(self, event):
+        """Calibrate Machine Sub Function"""
+        # if event == cv2.EVENT_LBUTTONDOWN: #checks mouse left button down condition
+        if self.counter < 1:
+            x = int(self.canvas.canvasx(event.x))
+            y = int(self.canvas.canvasy(event.y))
+
+            self.pos.append((x, y))
+            print(self.pos)
+            self.canvas.create_line(x - 5, y, x + 5, y, fill="red", tags="crosshair")
+            self.canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
+
+            red, green, blue = self.perfusion.rgb(x,y)
+            print(f"RGB Format: r: {red} g: {green} b: {blue}")
+            print("Coordinates of pixel: X: ",x,"Y: ",y)
+            """Display RGB at Bottom"""
+            # bottom_status = Label(self.master,text= f'R: {red} G: {green} B: {blue}')
+            # bottom_status.grid(row=0, column=0, columnspan=3)
+
+        else:
+            self.canvas.delete("crosshair")
+            self.pos = []
+            self.counter = 0
+            self.canvas.unbind("<Button 1>")
 
     def disable_event(self):
         pass
