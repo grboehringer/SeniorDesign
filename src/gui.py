@@ -76,14 +76,11 @@ class Window(Frame):
 
     def save_all(self):
         """Save image and associated data to file"""
-        if (self.filename and self.perfusion_value):
-            dictionary = {
-                'filename': self.filename,
-                'perfusion': self.perfusion_value
-                }
-            string = json.dumps(dictionary)
-            with open('stuff.json', 'a') as file:
-                file.write(string)
+        try:
+            with open('images.json') as file:
+                data = json.load(file)
+        except:
+            
         
     def settings(self):
         """Allow thresholds and machine constants to be entered manually"""
