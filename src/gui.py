@@ -23,19 +23,22 @@ class Window(Frame):
         self.master.config(menu=menu)
 
         """File drop down."""
-        file = Menu(menu, tearoff=False)
-        menu.add_cascade(label="File", menu=file)
-        file.add_command(label="Upload Image", command=self.upload_image)
-        file.add_command(label="Save Image and Data", command=self.save_all)
-        file.add_command(label="Settings", command=self.settings)
-        file.add_command(label="Calibrate Machine", command=self.calibrate_machine)
-        file.add_command(label="Exit", command=self.client_exit)
+        self.file = Menu(menu, tearoff=False)
+        menu.add_cascade(label="File", menu=self.file)
+        self.file.add_command(label="Upload Image", command=self.upload_image)
+        self.file.add_command(label="Save Image and Data", command=self.save_all)
+        self.file.add_command(label="Settings", command=self.settings)
+        self.file.add_command(label="Calibrate Machine", command=self.calibrate_machine)
+        self.file.add_command(label="Exit", command=self.client_exit)
+
+        self.file.entryconfig("Calibrate Machine", state="disabled")
         
         """Analyze drop down."""
         self.analyze = Menu(menu, tearoff=False)
         menu.add_cascade(label="Analyze", menu=self.analyze)
         self.analyze.add_command(label="Region of Interest", command=self.regionOfInterest)
         self.analyze.add_command(label="Compare Images", command=self.compare_images)
+
         self.analyze.entryconfig("Compare Images", state="disabled")
 
         """Instructions image upload."""
@@ -76,8 +79,9 @@ class Window(Frame):
         self.txt_id = self.canvas.create_text(200, 50,fill="white",font="Times 20",text=txt,tag="txt")
         # Display Threshold
 
-        # Enable Compare function
+        # Enable menu functions
         self.analyze.entryconfig("Compare Images", state="normal")
+        self.file.entryconfig("Calibrate Machine", state="normal")
 
     def save_all(self):
         """Save image and associated data to file"""
@@ -141,6 +145,10 @@ class Window(Frame):
         enter_sel = tk.Button(self.root2, text = "Enter", bg ='#3A3B3C', fg = 'white',command =self.enter_selections)
         enter_sel.grid(row = 5, column = 1, columnspan = 2, padx=5, pady=5, sticky='e')
             
+    def calibrate_machine(self):
+        """Calibrate Ultrasound Machine"""
+        self.canvas.bind("<Button-1>", self.mouseRGB)
+
     def enter_selections(self):
         """Save entered data and put into algorithm or display"""
         self.root2.bind('<Return>',self.perfusion.changeThreshold(int(self.intensity_thresh_entry.get()),int(self.diff_thresh_entry.get())))
@@ -152,9 +160,6 @@ class Window(Frame):
         self.canvas.delete('txt')
         self.canvas.create_text(200,50,fill="white",font="Times 20",text=txt,tag="txt")
         
-    def calibrate_machine(self):
-        """Calibrate Ultrasound Machine"""
-        self.canvas.bind("<Button-1>", self.mouseRGB)        
 
     def client_exit(self):
         """Exit program."""
