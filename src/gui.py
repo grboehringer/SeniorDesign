@@ -23,19 +23,22 @@ class Window(Frame):
         self.master.config(menu=menu)
 
         """File drop down."""
-        file = Menu(menu, tearoff=False)
-        menu.add_cascade(label="File", menu=file)
-        file.add_command(label="Upload Image", command=self.upload_image)
-        file.add_command(label="Save Image and Data", command=self.save_all)
-        file.add_command(label="Settings", command=self.settings)
-        file.add_command(label="Calibrate Machine", command=self.calibrate_machine)
-        file.add_command(label="Exit", command=self.client_exit)
+        self.file = Menu(menu, tearoff=False)
+        menu.add_cascade(label="File", menu=self.file)
+        self.file.add_command(label="Upload Image", command=self.upload_image)
+        self.file.add_command(label="Save Image and Data", command=self.save_all)
+        self.file.add_command(label="Settings", command=self.settings)
+        self.file.add_command(label="Calibrate Machine", command=self.calibrate_machine)
+        self.file.add_command(label="Exit", command=self.client_exit)
+
+        self.file.entryconfig("Calibrate Machine", state="disabled")
         
         """Analyze drop down."""
         self.analyze = Menu(menu, tearoff=False)
         menu.add_cascade(label="Analyze", menu=self.analyze)
         self.analyze.add_command(label="Region of Interest", command=self.regionOfInterest)
         self.analyze.add_command(label="Compare Images", command=self.compare_images)
+
         self.analyze.entryconfig("Compare Images", state="disabled")
 
         """Instructions image upload."""
@@ -76,8 +79,9 @@ class Window(Frame):
         self.txt_id = self.canvas.create_text(200, 50,fill="white",font="Times 20",text=txt,tag="txt")
         # Display Threshold
 
-        # Enable Compare function
+        # Enable menu functions
         self.analyze.entryconfig("Compare Images", state="normal")
+        self.file.entryconfig("Calibrate Machine", state="normal")
 
     def save_all(self):
         """Save image and associated data to file"""
@@ -156,7 +160,14 @@ class Window(Frame):
         self.root2.destroy()
         self.canvas.delete('txt')
         self.canvas.create_text(200,50,fill="white",font="Times 20",text=txt,tag="txt")
+<<<<<<< HEAD
         
+=======
+
+    def calibrate_machine(self):
+        """Calibrate Ultrasound Machine"""
+        self.canvas.bind("<Button-1>", self.mouseRGB)        
+>>>>>>> 21e32c22f2457ea195eef5c5e28c678a95999b08
 
     def client_exit(self):
         """Exit program."""
@@ -256,6 +267,7 @@ class Window(Frame):
             """Display RGB at Bottom"""
             # bottom_status = Label(self.master,text= f'R: {red} G: {green} B: {blue}')
             # bottom_status.grid(row=0, column=0, columnspan=3)
+            self.counter += 1
 
         else:
             self.canvas.delete("crosshair")
