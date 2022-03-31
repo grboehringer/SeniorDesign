@@ -256,7 +256,7 @@ class Window(Frame):
             red, green, blue = self.perfusion.rgb(x,y)
             print(f"RGB Format: r: {red} g: {green} b: {blue}")
             print("Coordinates of pixel: X: ",x,"Y: ",y)
-            new_threshold = red - green
+            new_threshold = int(red) - int(green)
             print(f"Calibrated Threshold: {new_threshold}")
             """Display RGB at Bottom"""
             # bottom_status = Label(self.master,text= f'R: {red} G: {green} B: {blue}')
