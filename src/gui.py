@@ -267,6 +267,17 @@ class Window(Frame):
             self.pos = []
             self.counter = 0
             self.canvas.unbind("<Button 1>")
+    
+    def image_crop(self):
+        # Want to use imgClick here and use the x,y cordinates
+        # left = self.pos[0][0]
+        # upper = self.pos[0][1]
+        # right = self.pos[1][0]
+        # lower = self.pos[1][1]
+        # 4-tuple that defines the new image starting cordinates
+        # area = (left, upper, right, lower)
+        # img_crop = img.crop(area)
+        print("I'd sure like to work :)")
 
     def disable_event(self):
         pass
