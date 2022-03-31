@@ -243,7 +243,6 @@ class Window(Frame):
 
     def mouseRGB(self, event):
         """Calibrate Machine Sub Function"""
-        # if event == cv2.EVENT_LBUTTONDOWN: #checks mouse left button down condition
         if self.counter < 1:
             x = int(self.canvas.canvasx(event.x))
             y = int(self.canvas.canvasy(event.y))
