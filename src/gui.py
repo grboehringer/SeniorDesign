@@ -81,6 +81,7 @@ class Window(Frame):
             with open('images.json') as file:
                 data = json.load(file)
         except:
+            pass
             
         
     def settings(self):
@@ -215,28 +216,20 @@ class Window(Frame):
         """Calibrate Machine Sub Function"""
         # if event == cv2.EVENT_LBUTTONDOWN: #checks mouse left button down condition
         if self.counter < 1:
-            x = self.canvas.canvasx(event.x)
-            y = self.canvas.canvasy(event.y)
+            x = int(self.canvas.canvasx(event.x))
+            y = int(self.canvas.canvasy(event.y))
 
             self.pos.append((x, y))
             print(self.pos)
             self.canvas.create_line(x - 5, y, x + 5, y, fill="red", tags="crosshair")
             self.canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
 
-            colors = self.perfusion.rgb(x,y)
-            # colorsR = self.canvas[y,x,0]
-            # colorsG = self.canvas[y,x,1]
-            # colorsB = self.canvas[y,x,2]
-            # colors = self.canvas[y,x]
-            # reverse = colors[::-1] #reverses BGR array
-            # print("Red: ",colorsR)
-            # print("Green: ",colorsG)
-            # print("Blue: ",colorsB)
-            print("RGB Format: ",colors)
+            red, green, blue = self.perfusion.rgb(x,y)
+            print(f"RGB Format: r: {red} g: {green} b: {blue}")
             print("Coordinates of pixel: X: ",x,"Y: ",y)
-            # """Display RGB at Bottom"""
-            # bottom_status = Label(self.master,text= 'R: '+ colorsR + ' G: ' + colorsG + ' B: ' + colorsB)
-            # bottom_status.grid(row=2, column=0, columnspan=3)
+            """Display RGB at Bottom"""
+            # bottom_status = Label(self.master,text= f'R: {red} G: {green} B: {blue}')
+            # bottom_status.grid(row=0, column=0, columnspan=3)
 
         else:
             self.canvas.delete("crosshair")
