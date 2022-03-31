@@ -28,6 +28,7 @@ class Window(Frame):
         file.add_command(label="Upload Image", command=self.upload_image)
         file.add_command(label="Save Image and Data", command=self.save_all)
         file.add_command(label="Settings", command=self.settings)
+        file.add_command(label="Calibrate Machine", command=self.calibrate_machine)
         file.add_command(label="Exit", command=self.client_exit)
         
         """Analyze drop down."""
@@ -125,6 +126,9 @@ class Window(Frame):
         enter_sel = tk.Button(self.root2, text = "Enter", width = 15, bg ='#3A3B3C', fg = 'white',command =self.enter_selections)
         enter_sel.grid(row = 5, column = 1, padx=5, pady=5)
             
+    def calibrate_machine(self):
+        """Calibrate Ultrasound Machine"""
+        self.canvas.bind("<Button-1>", self.mouseRGB)
 
     def enter_selections(self):
         """Save entered data and put into algorithm or display"""
@@ -216,6 +220,38 @@ class Window(Frame):
         self.canvas.unbind("<Button 1>")
         root.config(cursor="arrow")
         self.save_coordinates.destroy()
+
+    def mouseRGB(self, event):
+        """Calibrate Machine Sub Function"""
+        # if event == cv2.EVENT_LBUTTONDOWN: #checks mouse left button down condition
+        if self.counter < 1:
+            x = self.canvas.canvasx(event.x)
+            y = self.canvas.canvasy(event.y)
+
+            self.pos.append((x, y))
+            print(self.pos)
+            self.canvas.create_line(x - 5, y, x + 5, y, fill="red", tags="crosshair")
+            self.canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
+
+            colorsR = self.canvas[y,x,0]
+            colorsG = self.canvas[y,x,1]
+            colorsB = self.canvas[y,x,2]
+            colors = self.canvas[y,x]
+            # reverse = colors[::-1] #reverses BGR array
+            print("Red: ",colorsR)
+            print("Green: ",colorsG)
+            print("Blue: ",colorsB)
+            print("RGB Format: ",colors)
+            print("Coordinates of pixel: X: ",x,"Y: ",y)
+            """Display RGB at Bottom"""
+            bottom_status = Label(self.master,text= 'R: '+ colorsR + ' G: ' + colorsG + ' B: ' + colorsB)
+            bottom_status.grid(row=2, column=0, columnspan=3)
+
+        else:
+            self.canvas.delete("crosshair")
+            self.pos = []
+            self.counter = 0
+            self.canvas.unbind("<Button 1>")
 
     def disable_event(self):
         pass
