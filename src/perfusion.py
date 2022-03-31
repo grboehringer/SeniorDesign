@@ -55,8 +55,7 @@ class Perfusion():
         self.differenceThreshold = differenceThreshold
 
     def rgb(self, x, y):
-        colors = self.img[y,x]
-        return colors[::-1]
+        return self.img[y, x, 2], self.img[y, x, 1], self.img[y, x, 0]
         
 
 
