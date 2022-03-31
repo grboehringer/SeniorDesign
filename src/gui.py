@@ -242,6 +242,7 @@ class Window(Frame):
             """Display RGB at Bottom"""
             # bottom_status = Label(self.master,text= f'R: {red} G: {green} B: {blue}')
             # bottom_status.grid(row=0, column=0, columnspan=3)
+            self.counter += 1
 
         else:
             self.canvas.delete("crosshair")
