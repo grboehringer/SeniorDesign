@@ -226,19 +226,20 @@ class Window(Frame):
             self.canvas.create_line(x - 5, y, x + 5, y, fill="red", tags="crosshair")
             self.canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
 
-            colorsR = self.canvas[y,x,0]
-            colorsG = self.canvas[y,x,1]
-            colorsB = self.canvas[y,x,2]
-            colors = self.canvas[y,x]
+            colors = self.perfusion.rgb(x,y)
+            # colorsR = self.canvas[y,x,0]
+            # colorsG = self.canvas[y,x,1]
+            # colorsB = self.canvas[y,x,2]
+            # colors = self.canvas[y,x]
             # reverse = colors[::-1] #reverses BGR array
-            print("Red: ",colorsR)
-            print("Green: ",colorsG)
-            print("Blue: ",colorsB)
+            # print("Red: ",colorsR)
+            # print("Green: ",colorsG)
+            # print("Blue: ",colorsB)
             print("RGB Format: ",colors)
             print("Coordinates of pixel: X: ",x,"Y: ",y)
-            """Display RGB at Bottom"""
-            bottom_status = Label(self.master,text= 'R: '+ colorsR + ' G: ' + colorsG + ' B: ' + colorsB)
-            bottom_status.grid(row=2, column=0, columnspan=3)
+            # """Display RGB at Bottom"""
+            # bottom_status = Label(self.master,text= 'R: '+ colorsR + ' G: ' + colorsG + ' B: ' + colorsB)
+            # bottom_status.grid(row=2, column=0, columnspan=3)
 
         else:
             self.canvas.delete("crosshair")
