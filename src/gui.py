@@ -23,7 +23,7 @@ class Window(Frame):
         self.master.config(menu=menu)
 
         """File drop down."""
-        file = Menu(menu)
+        file = Menu(menu, tearoff=False)
         menu.add_cascade(label="File", menu=file)
         file.add_command(label="Upload Image", command=self.upload_image)
         file.add_command(label="Save Image and Data", command=self.save_all)
@@ -31,10 +31,11 @@ class Window(Frame):
         file.add_command(label="Exit", command=self.client_exit)
         
         """Analyze drop down."""
-        analyze = Menu(menu)
-        menu.add_cascade(label="Analyze", menu=analyze)
-        analyze.add_command(label="Region of Interest", command=self.regionOfInterest)
-        analyze.add_command(label="Compare Images", command=self.compare_images)
+        self.analyze = Menu(menu, tearoff=False)
+        menu.add_cascade(label="Analyze", menu=self.analyze)
+        self.analyze.add_command(label="Region of Interest", command=self.regionOfInterest)
+        self.analyze.add_command(label="Compare Images", command=self.compare_images)
+        self.analyze.entryconfig("Compare Images", state="disabled")
 
         """Instructions image upload."""
         load = Image.open("images/Instructions.jpg")
@@ -74,6 +75,9 @@ class Window(Frame):
         self.txt_id = self.canvas.create_text(200, 50,fill="white",font="Times 20",text=txt,tag="txt")
         # Display Threshold
 
+        # Enable Compare function
+        self.analyze.entryconfig("Compare Images", state="normal")
+
     def save_all(self):
         """Save image and associated data to file"""
         if (self.filename and self.perfusion_value):
@@ -103,7 +107,7 @@ class Window(Frame):
         self.diff_thresh_entry = Entry(self.root2)
         
         gain_val = Label(self.root2, text="Gain Value:", bg ='#3A3B3C', fg = 'white')
-        gain_val_entry = Entry(self.root2)
+        self.gain_val_entry = Entry(self.root2)
 
         # Display and Organize User Entries (Label & Box)
         id.grid(row = 1, column = 1, padx=10, pady=5, sticky='e')
@@ -111,8 +115,8 @@ class Window(Frame):
         self.patient_ID.insert(0,"[Enter Patient ID]")
 
         gain_val.grid(row=2, column=1, padx=10, pady=5, sticky='e')
-        gain_val_entry.grid(row=2, column=2, padx=5, pady=5)
-        gain_val_entry.insert(0,"[Enter Gain Value]")
+        self.gain_val_entry.grid(row=2, column=2, padx=5, pady=5)
+        self.gain_val_entry.insert(0,"[Enter Gain Value]")
 
         threshold_intensity.grid(row=3, column=1, padx=10, pady=5, sticky='e')
         self.intensity_thresh_entry.grid(row=3, column=2, padx=5, pady=5)
@@ -150,7 +154,16 @@ class Window(Frame):
 
     def compare_images(self):
         """Compare Images in new window"""
-        print('Compare Images Function')
+ 
+        pv_compare_1 = self.perfusion.image(self.filename)
+        print(pv_compare_1)
+        self.filename_2 = self.select_file()
+        pv_compare_2 = self.perfusion.image(self.filename_2)
+        print(pv_compare_2)
+
+        compare_PV = pv_compare_1 - pv_compare_2
+        print(compare_PV)
+        # Display to main as well.
 
     """ SUBFUNCTIONS """
     def select_file(self):
