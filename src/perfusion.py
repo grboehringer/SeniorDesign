@@ -71,6 +71,7 @@ if __name__ == '__main__':
     plt.show()
     '''
     obj = Perfusion()
-    perfusions = obj.video(0)
-    plt.plot(perfusions)
-    plt.show()
+    perfusion = obj.image('images/test.jpg')
+    red, green, blue = obj.rgb(25, 25)
+    print(f'{red}, {green}, {blue}')
+    
