@@ -23,7 +23,7 @@ class Window(Frame):
         self.master.config(menu=menu)
 
         """File drop down."""
-        file = Menu(menu)
+        file = Menu(menu, tearoff=False)
         menu.add_cascade(label="File", menu=file)
         file.add_command(label="Upload Image", command=self.upload_image)
         file.add_command(label="Save Image and Data", command=self.save_all)
@@ -32,10 +32,11 @@ class Window(Frame):
         file.add_command(label="Exit", command=self.client_exit)
         
         """Analyze drop down."""
-        analyze = Menu(menu)
-        menu.add_cascade(label="Analyze", menu=analyze)
-        analyze.add_command(label="Region of Interest", command=self.regionOfInterest)
-        analyze.add_command(label="Compare Images", command=self.compare_images)
+        self.analyze = Menu(menu, tearoff=False)
+        menu.add_cascade(label="Analyze", menu=self.analyze)
+        self.analyze.add_command(label="Region of Interest", command=self.regionOfInterest)
+        self.analyze.add_command(label="Compare Images", command=self.compare_images)
+        self.analyze.entryconfig("Compare Images", state="disabled")
 
         """Instructions image upload."""
         load = Image.open("images/Instructions.jpg")
@@ -75,6 +76,9 @@ class Window(Frame):
         self.txt_id = self.canvas.create_text(200, 50,fill="white",font="Times 20",text=txt,tag="txt")
         # Display Threshold
 
+        # Enable Compare function
+        self.analyze.entryconfig("Compare Images", state="normal")
+
     def save_all(self):
         """Save image and associated data to file"""
         image_data = {
@@ -89,12 +93,16 @@ class Window(Frame):
                 data = json.load(file)
                 data[self.filename] = image_data
         except:
+<<<<<<< HEAD
             data = {
                 self.filename: image_data
             }
         finally:
             with open('images.json', 'w') as file:
                 json.dump(data, file)
+=======
+            pass
+>>>>>>> 489fcbe5a155ab9a7d14e1ed2b1425848c8fa1ae
             
         
     def settings(self):
@@ -115,7 +123,7 @@ class Window(Frame):
         self.diff_thresh_entry = Entry(self.root2)
         
         gain_val = Label(self.root2, text="Gain Value:", bg ='#3A3B3C', fg = 'white')
-        gain_val_entry = Entry(self.root2)
+        self.gain_val_entry = Entry(self.root2)
 
         # Display and Organize User Entries (Label & Box)
         id.grid(row = 1, column = 1, padx=10, pady=5, sticky='e')
@@ -123,8 +131,8 @@ class Window(Frame):
         self.patient_ID.insert(0,"[Enter Patient ID]")
 
         gain_val.grid(row=2, column=1, padx=10, pady=5, sticky='e')
-        gain_val_entry.grid(row=2, column=2, padx=5, pady=5)
-        gain_val_entry.insert(0,"[Enter Gain Value]")
+        self.gain_val_entry.grid(row=2, column=2, padx=5, pady=5)
+        self.gain_val_entry.insert(0,"[Enter Gain Value]")
 
         threshold_intensity.grid(row=3, column=1, padx=10, pady=5, sticky='e')
         self.intensity_thresh_entry.grid(row=3, column=2, padx=5, pady=5)
@@ -165,7 +173,16 @@ class Window(Frame):
 
     def compare_images(self):
         """Compare Images in new window"""
-        print('Compare Images Function')
+ 
+        pv_compare_1 = self.perfusion.image(self.filename)
+        print(pv_compare_1)
+        self.filename_2 = self.select_file()
+        pv_compare_2 = self.perfusion.image(self.filename_2)
+        print(pv_compare_2)
+
+        compare_PV = pv_compare_1 - pv_compare_2
+        print(compare_PV)
+        # Display to main as well.
 
     """ SUBFUNCTIONS """
     def select_file(self):
@@ -229,27 +246,20 @@ class Window(Frame):
         """Calibrate Machine Sub Function"""
         # if event == cv2.EVENT_LBUTTONDOWN: #checks mouse left button down condition
         if self.counter < 1:
-            x = self.canvas.canvasx(event.x)
-            y = self.canvas.canvasy(event.y)
+            x = int(self.canvas.canvasx(event.x))
+            y = int(self.canvas.canvasy(event.y))
 
             self.pos.append((x, y))
             print(self.pos)
             self.canvas.create_line(x - 5, y, x + 5, y, fill="red", tags="crosshair")
             self.canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
 
-            colorsR = self.canvas[y,x,0]
-            colorsG = self.canvas[y,x,1]
-            colorsB = self.canvas[y,x,2]
-            colors = self.canvas[y,x]
-            # reverse = colors[::-1] #reverses BGR array
-            print("Red: ",colorsR)
-            print("Green: ",colorsG)
-            print("Blue: ",colorsB)
-            print("RGB Format: ",colors)
+            red, green, blue = self.perfusion.rgb(x,y)
+            print(f"RGB Format: r: {red} g: {green} b: {blue}")
             print("Coordinates of pixel: X: ",x,"Y: ",y)
             """Display RGB at Bottom"""
-            bottom_status = Label(self.master,text= 'R: '+ colorsR + ' G: ' + colorsG + ' B: ' + colorsB)
-            bottom_status.grid(row=2, column=0, columnspan=3)
+            # bottom_status = Label(self.master,text= f'R: {red} G: {green} B: {blue}')
+            # bottom_status.grid(row=0, column=0, columnspan=3)
 
         else:
             self.canvas.delete("crosshair")
