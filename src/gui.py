@@ -77,10 +77,24 @@ class Window(Frame):
 
     def save_all(self):
         """Save image and associated data to file"""
+        image_data = {
+            'value': self.perfusion_value,
+            'threshold': self.perfusion.differenceThreshold,
+            'pid': self.patient_ID,
+            'gain': self.gain,
+            'gain': self.zoom
+        }
         try:
             with open('images.json') as file:
                 data = json.load(file)
+                data[self.filename] = image_data
         except:
+            data = {
+                self.filename: image_data
+            }
+        finally:
+            with open('images.json', 'w') as file:
+                json.dump(data, file)
             
         
     def settings(self):
