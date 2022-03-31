@@ -85,11 +85,28 @@ class Window(Frame):
 
     def save_all(self):
         """Save image and associated data to file"""
+        image_data = {
+            'value': self.perfusion_value,
+            'threshold': self.perfusion.differenceThreshold,
+            'pid': self.patient_ID,
+            'gain': self.gain,
+            'gain': self.zoom
+        }
         try:
             with open('images.json') as file:
                 data = json.load(file)
+                data[self.filename] = image_data
         except:
+<<<<<<< HEAD
+            data = {
+                self.filename: image_data
+            }
+        finally:
+            with open('images.json', 'w') as file:
+                json.dump(data, file)
+=======
             pass
+>>>>>>> 489fcbe5a155ab9a7d14e1ed2b1425848c8fa1ae
             
         
     def settings(self):
@@ -246,6 +263,7 @@ class Window(Frame):
             """Display RGB at Bottom"""
             # bottom_status = Label(self.master,text= f'R: {red} G: {green} B: {blue}')
             # bottom_status.grid(row=0, column=0, columnspan=3)
+            self.counter += 1
 
         else:
             self.canvas.delete("crosshair")
