@@ -93,17 +93,12 @@ class Window(Frame):
                 data = json.load(file)
                 data[self.filename] = image_data
         except:
-<<<<<<< HEAD
             data = {
                 self.filename: image_data
             }
         finally:
             with open('images.json', 'w') as file:
-                json.dump(data, file)
-=======
-            pass
->>>>>>> 489fcbe5a155ab9a7d14e1ed2b1425848c8fa1ae
-            
+                json.dump(data, file)    
         
     def settings(self):
         """Allow thresholds and machine constants to be entered manually"""
@@ -256,6 +251,8 @@ class Window(Frame):
             red, green, blue = self.perfusion.rgb(x,y)
             print(f"RGB Format: r: {red} g: {green} b: {blue}")
             print("Coordinates of pixel: X: ",x,"Y: ",y)
+            new_threshold = red - green
+            print(f"Calibrated Threshold: {new_threshold}")
             """Display RGB at Bottom"""
             # bottom_status = Label(self.master,text= f'R: {red} G: {green} B: {blue}')
             # bottom_status.grid(row=0, column=0, columnspan=3)
