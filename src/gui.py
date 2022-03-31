@@ -146,10 +146,6 @@ class Window(Frame):
         enter_sel = tk.Button(self.root2, text = "Enter", bg ='#3A3B3C', fg = 'white',command =self.enter_selections)
         enter_sel.grid(row = 5, column = 1, columnspan = 2, padx=5, pady=5, sticky='e')
             
-    def calibrate_machine(self):
-        """Calibrate Ultrasound Machine"""
-        self.canvas.bind("<Button-1>", self.mouseRGB)
-
     def enter_selections(self):
         """Save entered data and put into algorithm or display"""
         self.root2.bind('<Return>',self.perfusion.changeThreshold(int(self.intensity_thresh_entry.get()),int(self.diff_thresh_entry.get())))
@@ -161,6 +157,9 @@ class Window(Frame):
         self.canvas.delete('txt')
         self.canvas.create_text(200,50,fill="white",font="Times 20",text=txt,tag="txt")
         
+    def calibrate_machine(self):
+        """Calibrate Ultrasound Machine"""
+        self.canvas.bind("<Button-1>", self.mouseRGB)        
 
     def client_exit(self):
         """Exit program."""
