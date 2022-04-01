@@ -261,7 +261,7 @@ class Window(Frame):
             self.canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
 
             red, green, blue = self.perfusion.rgb(x,y)
-            calibrated_threshold = int(red) - int(green)
+            calibrated_threshold = abs(int(red) - int(green))
             print(f"RGB Format: r: {int(red)} g: {int(green)} b: {int(blue)}")
             print("Coordinates of pixel: X: ",x,"Y: ",y)
             print(f'Calibrated Threshold: {calibrated_threshold}')
