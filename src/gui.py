@@ -102,7 +102,8 @@ class Window(Frame):
             }
         finally:
             with open('images.json', 'w') as file:
-                json.dump(data, file)    
+                json.dump(data, file)
+            
         
     def settings(self):
         """Allow thresholds and machine constants to be entered manually"""
@@ -124,6 +125,9 @@ class Window(Frame):
         gain_val = Label(self.root2, text="Gain Value:", bg ='#3A3B3C', fg = 'white')
         self.gain_val_entry = Entry(self.root2)
 
+        zoom_val = Label(self.root2, text="Zoom Value:", bg ='#3A3B3C', fg = 'white')
+        self.zoom_val_entry = Entry(self.root2)
+
         # Display and Organize User Entries (Label & Box)
         id.grid(row = 1, column = 1, padx=10, pady=5, sticky='e')
         self.patient_ID.grid(row = 1, column = 2, padx=5, pady=5)
@@ -133,22 +137,22 @@ class Window(Frame):
         self.gain_val_entry.grid(row=2, column=2, padx=5, pady=5)
         self.gain_val_entry.insert(0,"[Enter Gain Value]")
 
-        threshold_intensity.grid(row=3, column=1, padx=10, pady=5, sticky='e')
-        self.intensity_thresh_entry.grid(row=3, column=2, padx=5, pady=5)
+        zoom_val.grid(row=3, column=1, padx=10, pady=5, sticky='e')
+        self.zoom_val_entry.grid(row=3, column=2, padx=5, pady=5)
+        self.zoom_val_entry.insert(0,"[Enter Zoom Value]")
+
+        threshold_intensity.grid(row=4, column=1, padx=10, pady=5, sticky='e')
+        self.intensity_thresh_entry.grid(row=4, column=2, padx=5, pady=5)
         self.intensity_thresh_entry.insert(0,self.perfusion.intensityThreshold)
 
-        diff_threshold.grid(row=4, column=1, padx=10, pady=5, sticky='e')
-        self.diff_thresh_entry.grid(row=4, column=2, padx=5, pady=5)
+        diff_threshold.grid(row=5, column=1, padx=10, pady=5, sticky='e')
+        self.diff_thresh_entry.grid(row=5, column=2, padx=5, pady=5)
         self.diff_thresh_entry.insert(0,self.perfusion.differenceThreshold)
 
         # x = variable.get() can store entry
         enter_sel = tk.Button(self.root2, text = "Enter", bg ='#3A3B3C', fg = 'white',command =self.enter_selections)
         enter_sel.grid(row = 5, column = 1, columnspan = 2, padx=5, pady=5, sticky='e')
             
-    def calibrate_machine(self):
-        """Calibrate Ultrasound Machine"""
-        self.canvas.bind("<Button-1>", self.mouseRGB)
-
     def enter_selections(self):
         """Save entered data and put into algorithm or display"""
         self.root2.bind('<Return>',self.perfusion.changeThreshold(int(self.intensity_thresh_entry.get()),int(self.diff_thresh_entry.get())))
@@ -159,7 +163,10 @@ class Window(Frame):
         self.root2.destroy()
         self.canvas.delete('txt')
         self.canvas.create_text(200,50,fill="white",font="Times 20",text=txt,tag="txt")
-        
+
+    def calibrate_machine(self):
+        """Calibrate Ultrasound Machine"""
+        self.canvas.bind("<Button-1>", self.mouseRGB)        
 
     def client_exit(self):
         """Exit program."""
@@ -243,6 +250,7 @@ class Window(Frame):
 
     def mouseRGB(self, event):
         """Calibrate Machine Sub Function"""
+        # if event == cv2.EVENT_LBUTTONDOWN: #checks mouse left button down condition
         if self.counter < 1:
             x = int(self.canvas.canvasx(event.x))
             y = int(self.canvas.canvasy(event.y))
@@ -255,8 +263,6 @@ class Window(Frame):
             red, green, blue = self.perfusion.rgb(x,y)
             print(f"RGB Format: r: {red} g: {green} b: {blue}")
             print("Coordinates of pixel: X: ",x,"Y: ",y)
-            new_threshold = int(red) - int(green)
-            print(f"Calibrated Threshold: {new_threshold}")
             """Display RGB at Bottom"""
             # bottom_status = Label(self.master,text= f'R: {red} G: {green} B: {blue}')
             # bottom_status.grid(row=0, column=0, columnspan=3)
@@ -267,17 +273,6 @@ class Window(Frame):
             self.pos = []
             self.counter = 0
             self.canvas.unbind("<Button 1>")
-    
-    def image_crop(self):
-        # Want to use imgClick here and use the x,y cordinates
-        # left = self.pos[0][0]
-        # upper = self.pos[0][1]
-        # right = self.pos[1][0]
-        # lower = self.pos[1][1]
-        # 4-tuple that defines the new image starting cordinates
-        # area = (left, upper, right, lower)
-        # img_crop = img.crop(area)
-        print("I'd sure like to work :)")
 
     def disable_event(self):
         pass
