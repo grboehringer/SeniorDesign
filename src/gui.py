@@ -41,38 +41,37 @@ class Window(Frame):
 
         self.analyze.entryconfig("Compare Images", state="disabled")
 
+        self.initial_image()
+
+    def initial_image(self):
+        self.grid()
+        self.canvas = Canvas(self,width=600, height=600)
+        self.canvas.grid(row = 2,column = 0,columnspan=2)
+
         """Instructions image upload."""
         load = Image.open("images/Instructions.jpg")
+        (w,h) = load.size
+        self.canvas.config(width=w,height=h)
         self.render = ImageTk.PhotoImage(load)
-        #h = self.render.height()
-        #w = self.render.width()
-        #self.canvas = Canvas(master, width=w, height=h)
-        self.canvas = Canvas(master, width=512, height=512)
-        self.canvas.pack()
-        #self.img_id = self.canvas.create_image((w/2,w/2),image=self.render)
-        self.img_id = self.canvas.create_image((512/2,512/2),image=self.render)
+        self.canvas.create_image(int(w/2),int(h/2),image=self.render)
         """Sets window size"""
-        #root.geometry(f'{w}x{h}')
-        root.geometry("512x512")
+        root.geometry(f'{w}x{h}')
+
 
     """ MENU FUNCTIONS """
     
     def upload_image(self):
         """Open the selected image and resize."""
-        #self.canvas.delete('txt')
-        #self.canvas.delete('img')
         self.filename = self.select_file()
         load = Image.open(self.filename)
+        (w,h) = load.size
+        self.canvas.config(width=w,height=h)
         self.render = ImageTk.PhotoImage(load)
-        self.canvas.itemconfig(self.img_id, image=self.render)
-        #h = self.render.height()
-        #w = self.render.width()
-        #self.canvas = Canvas(self, width=w, height=h)
-        #self.canvas.pack()
-        #self.img_id=self.canvas.create_image((w/2,h/2), image=self.render,tag="img")
-        #root.geometry(f'{w}x{h}')
+        self.canvas.create_image(int(w/2),int(h/2),image=self.render)
+        root.geometry(f'{w}x{h}')
 
-        print(self.filename)
+        #self.canvas.itemconfig(self.img_id, image=self.render)
+
         self.perfusion_value = self.perfusion.image(self.filename)
         print(self.perfusion_value)
         txt ="P ID: [Enter Patient ID in Settings] \nPV:" + str(format(self.perfusion_value,'.2f'))
@@ -255,24 +254,30 @@ class Window(Frame):
 
     def mouseRGB(self, event):
         """Calibrate Machine Sub Function"""
-        # if event == cv2.EVENT_LBUTTONDOWN: #checks mouse left button down condition
         if self.counter < 1:
             x = int(self.canvas.canvasx(event.x))
             y = int(self.canvas.canvasy(event.y))
 
             self.pos.append((x, y))
-            # print(self.pos)
             self.canvas.create_line(x - 5, y, x + 5, y, fill="red", tags="crosshair")
             self.canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
 
             red, green, blue = self.perfusion.rgb(x,y)
-            calibrated_threshold = abs(int(red) - int(green))
+            # calibrated_threshold = abs(int(red) - int(green))
             print(f"RGB Format: r: {int(red)} g: {int(green)} b: {int(blue)}")
             print("Coordinates of pixel: X: ",x,"Y: ",y)
-            print(f'Calibrated Threshold: {calibrated_threshold}')
+            print(f'Calibrated Threshold: {blue}')
+
             """Display RGB at Bottom"""
-            # bottom_status = Label(self.master,text= f'R: {red} G: {green} B: {blue}')
-            # bottom_status.grid(row=0, column=0, columnspan=3)
+            self.root3 = tk.Tk()
+            bot_R = Label(self.root3, text =f'R: {red}', fg='red')
+            bot_R.grid(row = 1, column = 1, padx=10, pady=1, sticky='e')
+            bot_G = Label(self.root3, text =f'G: {green}', fg='green')
+            bot_G.grid(row = 1, column = 2, padx=10, pady=1, sticky='e')
+            bot_B = Label(self.root3, text =f'B: {blue}', fg='blue')
+            bot_B.grid(row = 1, column = 3, padx=10, pady=1, sticky='e')
+            bot_C_Threshold = Label(self.root3, text = f'Calibrated Threshold: {blue}', fg = 'black')
+            bot_C_Threshold.grid(row = 1, column = 4, padx=10, pady=1, sticky='e')
             self.counter += 1
 
         else:
@@ -280,6 +285,7 @@ class Window(Frame):
             self.pos = []
             self.counter = 0
             self.canvas.unbind("<Button 1>")
+            self.root3.destroy()
 
     def calc_comp(self):
         self.compare_inst.destroy()
