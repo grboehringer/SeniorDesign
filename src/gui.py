@@ -266,7 +266,14 @@ class Window(Frame):
             print("Coordinates of pixel: X: ",x,"Y: ",y)
             print(f'Calibrated Threshold: {calibrated_threshold}')
             """Display RGB at Bottom"""
-            # bottom_status = Label(self.master,text= f'R: {red} G: {green} B: {blue}')
+            self.root3 = tk.Tk()
+            bot_R = Label(self.root3, text =f'R: {red}', fg='red')
+            bot_R.grid(row = 1, column = 1, padx=10, pady=5, sticky='e')
+            bot_G = Label(self.root3, text =f'G: {green}', fg='green')
+            bot_G.grid(row = 1, column = 2, padx=10, pady=5, sticky='e')
+            bot_B = Label(self.root3, text =f'B: {blue}', fg='blue')
+            bot_B.grid(row = 1, column = 3, padx=10, pady=5, sticky='e')
+            # bottom_status = Label(root,text= 'R: '+ red, fg= 'red'+' G: ' + green, fg= 'green'+' B: '+ blue, fg= 'blue')
             # bottom_status.grid(row=0, column=0, columnspan=3)
             self.counter += 1
 
