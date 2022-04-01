@@ -191,8 +191,11 @@ class Window(Frame):
         info_msg = tk.Label(self.compare_inst, text = "The first perfusion value being compared is the current image's. Select a second image to compare it with.", bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
         info_msg.grid(row = 1, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
         
+        info_msg = tk.Label(self.compare_inst, text = "IMPORTANT: Make sure image PIDs are the same!", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 10))
+        info_msg.grid(row = 2, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
+
         sel_img = tk.Button(self.compare_inst, text = "Select Image", width = 15, bg = '#3A3B3C', fg = 'white', command = self.calc_comp)
-        sel_img.grid(row = 2, column = 1, columnspan = 2, padx=5, pady=5)
+        sel_img.grid(row = 3, column = 1, columnspan = 2, padx=5, pady=5)
 
     """ SUBFUNCTIONS """
     def select_file(self):
@@ -309,24 +312,27 @@ class Window(Frame):
         title_msg = tk.Label(self.compare_show, text = "Image PV Comparison", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 14))
         title_msg.grid(row = 1, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
         
+        # Inclde PID
+        # pid = tk.Label(self.compare_show, text = "PID: " + self.patient_ID, bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
+        # pid.grid(row = 2, column = 1, columnspan = 2, padx=10)
+
         img_1 = tk.Label(self.compare_show, text = "Image 1: " + self.filename, bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
-        img_1.grid(row = 2, column = 1, columnspan = 2, padx=10)
+        img_1.grid(row = 3, column = 1, columnspan = 2, padx=10)
 
         img_2 = tk.Label(self.compare_show, text = "Image 2: " + self.filename_2, bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
-        img_2.grid(row = 3, column = 1, columnspan = 2, padx=10)
+        img_2.grid(row = 4, column = 1, columnspan = 2, padx=10)
 
         pv1 = tk.Label(self.compare_show, text = "Perfusion Value 1: " + str(format(pv_compare_1,'.2f')), bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
-        pv1.grid(row = 4, column = 1, columnspan = 2, padx=10)
+        pv1.grid(row = 5, column = 1, columnspan = 2, padx=10)
 
         pv2 = tk.Label(self.compare_show, text = "Perfusion Value 2: " + str(format(pv_compare_2,'.2f')), bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
-        pv2.grid(row = 5, column = 1, columnspan = 2, padx=10)
+        pv2.grid(row = 6, column = 1, columnspan = 2, padx=10)
 
         comparison = tk.Label(self.compare_show, text = "Comparison (Image 2 - Image 1): " + str(format(compare_PV,'.2f')), bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
-        comparison.grid(row = 6, column = 1, columnspan = 2, padx=10)
+        comparison.grid(row = 7, column = 1, columnspan = 2, padx=10)
 
     def disable_event(self):
         pass
-
 
 if __name__ == '__main__':
 
