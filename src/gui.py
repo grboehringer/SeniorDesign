@@ -27,6 +27,7 @@ class Window(Frame):
         menu.add_cascade(label="File", menu=self.file)
         self.file.add_command(label="Upload Image", command=self.upload_image)
         self.file.add_command(label="Save Image and Data", command=self.save_all)
+        self.file.add_command(label="Settings", command=self.settings)
         self.file.add_command(label="Calibrate Machine", command=self.calibrate_machine)
         self.file.add_command(label="Exit", command=self.client_exit)
 
@@ -73,7 +74,7 @@ class Window(Frame):
 
         print(self.filename)
         self.perfusion_value = self.perfusion.image(self.filename)
-        print(self.perfusion_value)
+        print(format(self.perfusion_value, ".2f"))
         txt ="P ID: [Enter Patient ID in Settings] \nPV:" + str(self.perfusion_value)
         self.txt_id = self.canvas.create_text(200, 50,fill="white",font="Times 20",text=txt,tag="txt")
         # Display Threshold
@@ -255,13 +256,15 @@ class Window(Frame):
             y = int(self.canvas.canvasy(event.y))
 
             self.pos.append((x, y))
-            print(self.pos)
+            # print(self.pos)
             self.canvas.create_line(x - 5, y, x + 5, y, fill="red", tags="crosshair")
             self.canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
 
             red, green, blue = self.perfusion.rgb(x,y)
-            print(f"RGB Format: r: {red} g: {green} b: {blue}")
+            calibrated_threshold = int(red) - int(green)
+            print(f"RGB Format: r: {int(red)} g: {int(green)} b: {int(blue)}")
             print("Coordinates of pixel: X: ",x,"Y: ",y)
+            print(f'Calibrated Threshold: {calibrated_threshold}')
             """Display RGB at Bottom"""
             # bottom_status = Label(self.master,text= f'R: {red} G: {green} B: {blue}')
             # bottom_status.grid(row=0, column=0, columnspan=3)
