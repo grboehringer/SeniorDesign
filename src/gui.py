@@ -27,7 +27,6 @@ class Window(Frame):
         menu.add_cascade(label="File", menu=self.file)
         self.file.add_command(label="Upload Image", command=self.upload_image)
         self.file.add_command(label="Save Image and Data", command=self.save_all)
-        self.file.add_command(label="Settings", command=self.settings)
         self.file.add_command(label="Calibrate Machine", command=self.calibrate_machine)
         self.file.add_command(label="Exit", command=self.client_exit)
 
@@ -160,14 +159,10 @@ class Window(Frame):
         self.root2.destroy()
         self.canvas.delete('txt')
         self.canvas.create_text(200,50,fill="white",font="Times 20",text=txt,tag="txt")
-<<<<<<< HEAD
-        
-=======
 
     def calibrate_machine(self):
         """Calibrate Ultrasound Machine"""
         self.canvas.bind("<Button-1>", self.mouseRGB)        
->>>>>>> 21e32c22f2457ea195eef5c5e28c678a95999b08
 
     def client_exit(self):
         """Exit program."""
