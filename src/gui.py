@@ -41,38 +41,37 @@ class Window(Frame):
 
         self.analyze.entryconfig("Compare Images", state="disabled")
 
+        self.initial_image()
+
+    def initial_image(self):
+        self.grid()
+        self.canvas = Canvas(self,width=600, height=600)
+        self.canvas.grid(row = 2,column = 0,columnspan=2)
+
         """Instructions image upload."""
         load = Image.open("images/Instructions.jpg")
+        (w,h) = load.size
+        self.canvas.config(width=w,height=h)
         self.render = ImageTk.PhotoImage(load)
-        #h = self.render.height()
-        #w = self.render.width()
-        #self.canvas = Canvas(master, width=w, height=h)
-        self.canvas = Canvas(master, width=512, height=512)
-        self.canvas.pack()
-        #self.img_id = self.canvas.create_image((w/2,w/2),image=self.render)
-        self.img_id = self.canvas.create_image((512/2,512/2),image=self.render)
+        self.canvas.create_image(int(w/2),int(h/2),image=self.render)
         """Sets window size"""
-        #root.geometry(f'{w}x{h}')
-        root.geometry("512x512")
+        root.geometry(f'{w}x{h}')
+
 
     """ MENU FUNCTIONS """
     
     def upload_image(self):
         """Open the selected image and resize."""
-        #self.canvas.delete('txt')
-        #self.canvas.delete('img')
         self.filename = self.select_file()
         load = Image.open(self.filename)
+        (w,h) = load.size
+        self.canvas.config(width=w,height=h)
         self.render = ImageTk.PhotoImage(load)
-        self.canvas.itemconfig(self.img_id, image=self.render)
-        #h = self.render.height()
-        #w = self.render.width()
-        #self.canvas = Canvas(self, width=w, height=h)
-        #self.canvas.pack()
-        #self.img_id=self.canvas.create_image((w/2,h/2), image=self.render,tag="img")
-        #root.geometry(f'{w}x{h}')
+        self.canvas.create_image(int(w/2),int(h/2),image=self.render)
+        root.geometry(f'{w}x{h}')
 
-        print(self.filename)
+        #self.canvas.itemconfig(self.img_id, image=self.render)
+
         self.perfusion_value = self.perfusion.image(self.filename)
         print(self.perfusion_value)
         txt ="P ID: [Enter Patient ID in Settings] \nPV:" + str(format(self.perfusion_value,'.2f'))
