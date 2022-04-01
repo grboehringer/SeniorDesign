@@ -124,6 +124,9 @@ class Window(Frame):
         gain_val = Label(self.root2, text="Gain Value:", bg ='#3A3B3C', fg = 'white')
         self.gain_val_entry = Entry(self.root2)
 
+        zoom_val = Label(self.root2, text="Zoom Value:", bg ='#3A3B3C', fg = 'white')
+        self.zoom_val_entry = Entry(self.root2)
+
         # Display and Organize User Entries (Label & Box)
         id.grid(row = 1, column = 1, padx=10, pady=5, sticky='e')
         self.patient_ID.grid(row = 1, column = 2, padx=5, pady=5)
@@ -133,22 +136,22 @@ class Window(Frame):
         self.gain_val_entry.grid(row=2, column=2, padx=5, pady=5)
         self.gain_val_entry.insert(0,"[Enter Gain Value]")
 
-        threshold_intensity.grid(row=3, column=1, padx=10, pady=5, sticky='e')
-        self.intensity_thresh_entry.grid(row=3, column=2, padx=5, pady=5)
+        zoom_val.grid(row=3, column=1, padx=10, pady=5, sticky='e')
+        self.zoom_val_entry.grid(row=3, column=2, padx=5, pady=5)
+        self.zoom_val_entry.insert(0,"[Enter Zoom Value]")
+
+        threshold_intensity.grid(row=4, column=1, padx=10, pady=5, sticky='e')
+        self.intensity_thresh_entry.grid(row=4, column=2, padx=5, pady=5)
         self.intensity_thresh_entry.insert(0,self.perfusion.intensityThreshold)
 
-        diff_threshold.grid(row=4, column=1, padx=10, pady=5, sticky='e')
-        self.diff_thresh_entry.grid(row=4, column=2, padx=5, pady=5)
+        diff_threshold.grid(row=5, column=1, padx=10, pady=5, sticky='e')
+        self.diff_thresh_entry.grid(row=5, column=2, padx=5, pady=5)
         self.diff_thresh_entry.insert(0,self.perfusion.differenceThreshold)
 
         # x = variable.get() can store entry
         enter_sel = tk.Button(self.root2, text = "Enter", bg ='#3A3B3C', fg = 'white',command =self.enter_selections)
         enter_sel.grid(row = 5, column = 1, columnspan = 2, padx=5, pady=5, sticky='e')
             
-    def calibrate_machine(self):
-        """Calibrate Ultrasound Machine"""
-        self.canvas.bind("<Button-1>", self.mouseRGB)
-
     def enter_selections(self):
         """Save entered data and put into algorithm or display"""
         self.root2.bind('<Return>',self.perfusion.changeThreshold(int(self.intensity_thresh_entry.get()),int(self.diff_thresh_entry.get())))
