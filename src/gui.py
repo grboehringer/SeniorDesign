@@ -254,24 +254,30 @@ class Window(Frame):
 
     def mouseRGB(self, event):
         """Calibrate Machine Sub Function"""
-        # if event == cv2.EVENT_LBUTTONDOWN: #checks mouse left button down condition
         if self.counter < 1:
             x = int(self.canvas.canvasx(event.x))
             y = int(self.canvas.canvasy(event.y))
 
             self.pos.append((x, y))
-            # print(self.pos)
             self.canvas.create_line(x - 5, y, x + 5, y, fill="red", tags="crosshair")
             self.canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
 
             red, green, blue = self.perfusion.rgb(x,y)
-            calibrated_threshold = abs(int(red) - int(green))
+            # calibrated_threshold = abs(int(red) - int(green))
             print(f"RGB Format: r: {int(red)} g: {int(green)} b: {int(blue)}")
             print("Coordinates of pixel: X: ",x,"Y: ",y)
-            print(f'Calibrated Threshold: {calibrated_threshold}')
+            print(f'Calibrated Threshold: {blue}')
+
             """Display RGB at Bottom"""
-            # bottom_status = Label(self.master,text= f'R: {red} G: {green} B: {blue}')
-            # bottom_status.grid(row=0, column=0, columnspan=3)
+            self.root3 = tk.Tk()
+            bot_R = Label(self.root3, text =f'R: {red}', fg='red')
+            bot_R.grid(row = 1, column = 1, padx=10, pady=1, sticky='e')
+            bot_G = Label(self.root3, text =f'G: {green}', fg='green')
+            bot_G.grid(row = 1, column = 2, padx=10, pady=1, sticky='e')
+            bot_B = Label(self.root3, text =f'B: {blue}', fg='blue')
+            bot_B.grid(row = 1, column = 3, padx=10, pady=1, sticky='e')
+            bot_C_Threshold = Label(self.root3, text = f'Calibrated Threshold: {blue}', fg = 'black')
+            bot_C_Threshold.grid(row = 1, column = 4, padx=10, pady=1, sticky='e')
             self.counter += 1
 
         else:
@@ -279,6 +285,7 @@ class Window(Frame):
             self.pos = []
             self.counter = 0
             self.canvas.unbind("<Button 1>")
+            self.root3.destroy()
 
     def calc_comp(self):
         self.compare_inst.destroy()
