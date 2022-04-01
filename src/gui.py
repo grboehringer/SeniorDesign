@@ -74,8 +74,8 @@ class Window(Frame):
 
         print(self.filename)
         self.perfusion_value = self.perfusion.image(self.filename)
-        print(format(self.perfusion_value, ".2f"))
-        txt ="P ID: [Enter Patient ID in Settings] \nPV:" + str(self.perfusion_value)
+        print(self.perfusion_value)
+        txt ="P ID: [Enter Patient ID in Settings] \nPV:" + str(format(self.perfusion_value,'.2f'))
         self.txt_id = self.canvas.create_text(200, 50,fill="white",font="Times 20",text=txt,tag="txt")
         # Display Threshold
 
@@ -159,7 +159,7 @@ class Window(Frame):
         print(self.perfusion.intensityThreshold) 
         print(self.perfusion.differenceThreshold)
         self.new_perfusion_value = self.perfusion.image(self.filename)
-        txt ="P ID:" + self.patient_ID.get() + "\nPV: " + str(self.new_perfusion_value)
+        txt ="P ID:" + self.patient_ID.get() + "\nPV: " + str(format(self.new_perfusion_value,'.2f'))
         self.root2.destroy()
         self.canvas.delete('txt')
         self.canvas.create_text(200,50,fill="white",font="Times 20",text=txt,tag="txt")
@@ -179,16 +179,21 @@ class Window(Frame):
 
     def compare_images(self):
         """Compare Images in new window"""
- 
-        pv_compare_1 = self.perfusion.image(self.filename)
-        print(pv_compare_1)
-        self.filename_2 = self.select_file()
-        pv_compare_2 = self.perfusion.image(self.filename_2)
-        print(pv_compare_2)
 
-        compare_PV = pv_compare_1 - pv_compare_2
-        print(compare_PV)
-        # Display to main as well.
+        # Compare Images Instruction Window Setup
+        self.compare_inst = Tk()
+        self.compare_inst.title('Compare Images')
+        self.compare_inst.configure(bg='#3A3B3C')
+        
+        # Disable closing the window
+        self.compare_inst.protocol("WM_DELETE_WINDOW", self.disable_event)
+        
+        # Window Information
+        info_msg = tk.Label(self.compare_inst, text = "The first perfusion value being compared is the current image's. Select a second image to compare it with.", bg ='#3A3B3C', fg = 'white')
+        info_msg.grid(row = 1, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
+        
+        sel_img = tk.Button(self.compare_inst, text = "Select Image", width = 15, bg = '#3A3B3C', fg = 'white', command = self.calc_comp)
+        sel_img.grid(row = 2, column = 1, columnspan = 2, padx=5, pady=5)
 
     """ SUBFUNCTIONS """
     def select_file(self):
@@ -222,8 +227,8 @@ class Window(Frame):
             
             # Disable closing the window
             self.save_coordinates.protocol("WM_DELETE_WINDOW", self.disable_event)
-            # ADD RESIZING LOCK
             
+            # Window Information
             coord_msg = tk.Label(self.save_coordinates, text = 'Would you like to save this selection?', bg ='#3A3B3C', fg = 'white')
             coord_msg.grid(row = 1, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
             
@@ -282,6 +287,43 @@ class Window(Frame):
             self.pos = []
             self.counter = 0
             self.canvas.unbind("<Button 1>")
+
+    def calc_comp(self):
+        self.compare_inst.destroy()
+
+        # Store Current (First) Image Info
+        pv_compare_1 = self.perfusion.image(self.filename)
+
+        # Select File and Store Second Image Info
+        self.filename_2 = self.select_file()
+        pv_compare_2 = self.perfusion.image(self.filename_2)
+
+        # Calculate Difference
+        compare_PV = pv_compare_2 - pv_compare_1
+        
+        # Compare Images Display Window Setup
+        self.compare_show = Tk()
+        self.compare_show.title('Compare Images')
+        self.compare_show.configure(bg='#3A3B3C')
+
+        # Window Information
+        title_msg = tk.Label(self.compare_show, text = "PV Image Comparison", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 14))
+        title_msg.grid(row = 1, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
+        
+        img_1 = tk.Label(self.compare_show, text = "Image 1: " + self.filename, bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
+        img_1.grid(row = 2, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
+
+        img_2 = tk.Label(self.compare_show, text = "Image 2: " + self.filename_2, bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
+        img_2.grid(row = 3, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
+
+        pv1 = tk.Label(self.compare_show, text = "Perfusion Value 1: " + str(format(pv_compare_1,'.2f')), bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
+        pv1.grid(row = 4, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
+
+        pv2 = tk.Label(self.compare_show, text = "Perfusion Value 2: " + str(format(pv_compare_2,'.2f')), bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
+        pv2.grid(row = 5, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
+
+        comparison = tk.Label(self.compare_show, text = "Comparison (Image 2 - Image 1): " + str(format(compare_PV,'.2f')), bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
+        comparison.grid(row = 6, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
 
     def disable_event(self):
         pass
