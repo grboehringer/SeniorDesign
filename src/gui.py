@@ -265,6 +265,10 @@ class Window(Frame):
             self.canvas.create_line(x - 5, y, x + 5, y, fill="red", tags="crosshair")
             self.canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
 
+            print(self.counter)
+            print(x)
+            print(y)
+
             red, green, blue = self.perfusion.rgb(x,y)
             # calibrated_threshold = abs(int(red) - int(green))
             print(f"RGB Format: r: {int(red)} g: {int(green)} b: {int(blue)}")
@@ -273,6 +277,7 @@ class Window(Frame):
 
             """Display RGB at Bottom"""
             self.root3 = tk.Tk()
+            self.root3.title('Calibration Threshold')
             bot_R = Label(self.root3, text =f'R: {red}', fg='red')
             bot_R.grid(row = 1, column = 1, padx=10, pady=1, sticky='e')
             bot_G = Label(self.root3, text =f'G: {green}', fg='green')
@@ -288,7 +293,6 @@ class Window(Frame):
             self.pos = []
             self.counter = 0
             self.canvas.unbind("<Button 1>")
-            self.root3.destroy()
 
     def calc_comp(self):
         self.compare_inst.destroy()
