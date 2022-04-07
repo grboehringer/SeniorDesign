@@ -164,6 +164,18 @@ class Window(Frame):
         self.root2.destroy()
 
     def calibrate_machine(self):
+        """Instructions Window Creation"""
+        self.info = Tk()
+        self.info.title('Calibration Instructions')
+        self.info.configure(bg='#3A3B3C')
+
+        # Window Information
+        info_msg = tk.Label(self.info, text = "To calibrate correctly select the color that represents the slowest motion first.\n Then select the fastest motion.", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 10))
+        info_msg.grid(row = 1, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
+
+        sel_img = tk.Button(self.info, text = "Continue", width = 15, bg = '#3A3B3C', fg = 'white', command = self.destroy_window)
+        sel_img.grid(row = 2, column = 1, columnspan = 2, padx=5, pady=5)
+
         """Calibrate Ultrasound Machine"""
         self.canvas.bind("<Button-1>", self.mouseRGB)        
 
@@ -255,8 +267,9 @@ class Window(Frame):
         root.config(cursor="arrow")
         self.save_coordinates.destroy()
 
+    """Calibrate Machine Sub Function"""
     def mouseRGB(self, event):
-        """Calibrate Machine Sub Function"""
+
         if self.counter < 1:
             x = int(self.canvas.canvasx(event.x))
             y = int(self.canvas.canvasy(event.y))
@@ -264,35 +277,60 @@ class Window(Frame):
             self.pos.append((x, y))
             self.canvas.create_line(x - 5, y, x + 5, y, fill="red", tags="crosshair")
             self.canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
+            self.counter += 1
+            # print(self.counter)
+            # print(x)
+            # print(y)
 
-            print(self.counter)
-            print(x)
-            print(y)
-
-            red, green, blue = self.perfusion.rgb(x,y)
-            # calibrated_threshold = abs(int(red) - int(green))
-            print(f"RGB Format: r: {int(red)} g: {int(green)} b: {int(blue)}")
-            print("Coordinates of pixel: X: ",x,"Y: ",y)
-            print(f'Calibrated Threshold: {blue}')
-
+            redMin, greenMin, blueMin = self.perfusion.rgb(x,y)
+            # print(f"RGB Format: r: {int(red)} g: {int(green)} b: {int(blue)}")
+            # print("Coordinates of pixel: X: ",x,"Y: ",y)
+            # print(f'Calibrated Threshold: {blue}')
             """Display RGB at Bottom"""
             self.root3 = tk.Tk()
             self.root3.title('Calibration Threshold')
-            bot_R = Label(self.root3, text =f'R: {red}', fg='red')
+            bot_R = Label(self.root3, text =f'RMin: {redMin}', fg='red')
             bot_R.grid(row = 1, column = 1, padx=10, pady=1, sticky='e')
-            bot_G = Label(self.root3, text =f'G: {green}', fg='green')
+            bot_G = Label(self.root3, text =f'GMin: {greenMin}', fg='green')
             bot_G.grid(row = 1, column = 2, padx=10, pady=1, sticky='e')
-            bot_B = Label(self.root3, text =f'B: {blue}', fg='blue')
+            bot_B = Label(self.root3, text =f'BMin: {blueMin}', fg='blue')
             bot_B.grid(row = 1, column = 3, padx=10, pady=1, sticky='e')
-            bot_C_Threshold = Label(self.root3, text = f'Calibrated Threshold: {blue}', fg = 'black')
+            bot_C_Threshold = Label(self.root3, text = f'Calibrated Threshold: {blueMin}', fg = 'black')
             bot_C_Threshold.grid(row = 1, column = 4, padx=10, pady=1, sticky='e')
+
+        elif self.counter < 2:
+            x1 = int(self.canvas.canvasx(event.x))
+            y1 = int(self.canvas.canvasy(event.y))
+
+            self.pos.append((x1, y1))
+            self.canvas.create_line(x1 - 5, y1, x1 + 5, y1, fill="red", tags="crosshair")
+            self.canvas.create_line(x1, y1 - 5, x1, y1 + 5, fill="red", tags="crosshair")
             self.counter += 1
+            # print(self.counter)
+            # print(x1)
+            # print(y1)
+
+            redMax, greenMax, blueMax = self.perfusion.rgb(x1,y1)
+            """The max perfusion possible"""
+            max_perf = (int(redMax)+int(greenMax)+int(blueMax))/3
+           
+            bot_R_M = Label(self.root3, text =f'RMax: {redMax}', fg='red')
+            bot_R_M.grid(row = 2, column = 1, padx=10, pady=1, sticky='e')
+            bot_G_M = Label(self.root3, text =f'GMax: {greenMax}', fg='green')
+            bot_G_M.grid(row = 2, column = 2, padx=10, pady=1, sticky='e')
+            bot_B_M = Label(self.root3, text =f'BMax: {blueMax}', fg='blue')
+            bot_B_M.grid(row = 2, column = 3, padx=10, pady=1, sticky='e')
+            bot_C_MaxPerf= Label(self.root3, text = 'Calibrated Max Perfusion:' + format(max_perf,'.2f'), fg = 'black')
+            bot_C_MaxPerf.grid(row = 2, column = 4, padx=10, pady=1, sticky='e')
 
         else:
             self.canvas.delete("crosshair")
             self.pos = []
             self.counter = 0
             self.canvas.unbind("<Button 1>")
+
+    def destroy_window(self):
+        self.kill = self.info.destroy()
 
     def calc_comp(self):
         self.compare_inst.destroy()
