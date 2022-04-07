@@ -22,6 +22,12 @@ class Perfusion():
 
         perfusion = intensity * boolean
 
+        """Percent Colored Calculation"""
+        percent_colored = (np.count_nonzero(boolean))/(np.size(boolean))*100
+        print('Number of True Values: ' + str(np.count_nonzero(boolean)))
+        print('Size: ' + str(np.size(boolean)))
+        print('Percent Colored: ' + str(format(percent_colored, '.2f')) + '%')
+
         return np.mean(perfusion)
 
     def video(self, filename):
