@@ -320,7 +320,7 @@ class Window(Frame):
             bot_G_M.grid(row = 2, column = 2, padx=10, pady=1, sticky='e')
             bot_B_M = Label(self.root3, text =f'BMax: {blueMax}', fg='blue')
             bot_B_M.grid(row = 2, column = 3, padx=10, pady=1, sticky='e')
-            bot_C_MaxPerf= Label(self.root3, text = 'Calibrated Max Perfusion:' + format(max_perf,'.2f'), fg = 'black')
+            bot_C_MaxPerf= Label(self.root3, text = 'Calibrated Max Perfusion: ' + format(max_perf,'.2f'), fg = 'black')
             bot_C_MaxPerf.grid(row = 2, column = 4, padx=10, pady=1, sticky='e')
 
         else:
