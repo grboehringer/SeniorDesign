@@ -46,7 +46,7 @@ class Window(Frame):
     def initial_image(self):
         self.grid()
         self.canvas = Canvas(self,width=600, height=600)
-        self.canvas.grid(row = 2,column = 0,columnspan=2)
+        self.canvas.grid(row = 2,column = 0,columnspan=20)
 
         """Instructions image upload."""
         load = Image.open("images/Instructions.jpg")
@@ -55,8 +55,6 @@ class Window(Frame):
         self.render = ImageTk.PhotoImage(load)
         self.canvas.create_image(int(w/2),int(h/2),image=self.render)
         """Sets window size"""
-        root.geometry(f'{w}x{h}')
-
 
     """ MENU FUNCTIONS """
     
@@ -68,15 +66,13 @@ class Window(Frame):
         self.canvas.config(width=w,height=h)
         self.render = ImageTk.PhotoImage(load)
         self.canvas.create_image(int(w/2),int(h/2),image=self.render)
-        root.geometry(f'{w}x{h}')
-
-        #self.canvas.itemconfig(self.img_id, image=self.render)
 
         self.perfusion_value = self.perfusion.image(self.filename)
         print(self.perfusion_value)
-        txt ="P ID: [Enter Patient ID in Settings] \nPV:" + str(format(self.perfusion_value,'.2f'))
-        self.txt_id = self.canvas.create_text(200, 50,fill="white",font="Times 20",text=txt,tag="txt")
-        # Display Threshold
+        self.pid = tk.Label(self, text = 'Patient ID: [Enter Patient ID in Settings]')
+        self.pid.grid(row = 0, column = 0, pady=5)
+        self.pv = tk.Label(self, text = 'PV:' + str(format(self.perfusion_value,'.2f')))
+        self.pv.grid(row = 0, column = 1, pady=5)
 
         # Enable menu functions
         self.analyze.entryconfig("Compare Images", state="normal")
@@ -150,7 +146,7 @@ class Window(Frame):
 
         # x = variable.get() can store entry
         enter_sel = tk.Button(self.root2, text = "Enter", bg ='#3A3B3C', fg = 'white',command =self.enter_selections)
-        enter_sel.grid(row = 5, column = 1, columnspan = 2, padx=5, pady=5, sticky='e')
+        enter_sel.grid(row = 6, column = 1, columnspan = 2, padx=5, pady=5)
             
     def enter_selections(self):
         """Save entered data and put into algorithm or display"""
@@ -158,10 +154,14 @@ class Window(Frame):
         print(self.perfusion.intensityThreshold) 
         print(self.perfusion.differenceThreshold)
         self.new_perfusion_value = self.perfusion.image(self.filename)
-        txt ="P ID:" + self.patient_ID.get() + "\nPV: " + str(format(self.new_perfusion_value,'.2f'))
+
+        #pid = tk.Label(self, text = 'Patient ID:' + str(format(self.patient_ID.get())))
+        self.pid['text'] = 'Patient ID:' + str(format(self.patient_ID.get()))
+        #pid.grid(row = 0, column = 0, pady=5)
+        #pv = tk.Label(self, text = 'PV:' + str(format(self.new_perfusion_value,'.2f')))
+        self.pv['text'] = 'PV:' + str(format(self.new_perfusion_value,'.2f'))
+        #pv.grid(row = 0, column = 1, pady=5)
         self.root2.destroy()
-        self.canvas.delete('txt')
-        self.canvas.create_text(200,50,fill="white",font="Times 20",text=txt,tag="txt")
 
     def calibrate_machine(self):
         """Calibrate Ultrasound Machine"""
@@ -265,6 +265,10 @@ class Window(Frame):
             self.canvas.create_line(x - 5, y, x + 5, y, fill="red", tags="crosshair")
             self.canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
 
+            print(self.counter)
+            print(x)
+            print(y)
+
             red, green, blue = self.perfusion.rgb(x,y)
             # calibrated_threshold = abs(int(red) - int(green))
             print(f"RGB Format: r: {int(red)} g: {int(green)} b: {int(blue)}")
@@ -273,6 +277,7 @@ class Window(Frame):
 
             """Display RGB at Bottom"""
             self.root3 = tk.Tk()
+            self.root3.title('Calibration Threshold')
             bot_R = Label(self.root3, text =f'R: {red}', fg='red')
             bot_R.grid(row = 1, column = 1, padx=10, pady=1, sticky='e')
             bot_G = Label(self.root3, text =f'G: {green}', fg='green')
@@ -288,7 +293,6 @@ class Window(Frame):
             self.pos = []
             self.counter = 0
             self.canvas.unbind("<Button 1>")
-            self.root3.destroy()
 
     def calc_comp(self):
         self.compare_inst.destroy()
