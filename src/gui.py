@@ -19,6 +19,10 @@ class Window(Frame):
 
         self.counter = 0
 
+        self.patient_ID = None
+        self.gain = None
+        self.zoom = None
+
         menu = Menu(self.master)
         self.master.config(menu=menu)
 
@@ -85,7 +89,7 @@ class Window(Frame):
             'threshold': self.perfusion.differenceThreshold,
             'pid': self.patient_ID,
             'gain': self.gain,
-            'gain': self.zoom
+            'zoom': self.zoom
         }
         try:
             with open('images.json') as file:

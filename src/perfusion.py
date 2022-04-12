@@ -9,7 +9,7 @@ class Perfusion():
         """|R-B| > DT at lowest color value"""
         self.differenceThreshold = 76
 
-    def algorithm(self, img):
+    def algorithm(self, img, coord):
         """Mean of the RGB value of each pixel"""
         intensity = np.mean(img, axis=2)    # Find intensity
 
