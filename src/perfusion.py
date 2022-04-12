@@ -9,13 +9,14 @@ class Perfusion():
         """|R-B| > DT at lowest color value"""
         self.differenceThreshold = 76
 
-    def algorithm(self, img):
+    def algorithm(self, img, coord):
         """Mean of the RGB value of each pixel"""
         intensity = np.mean(img, axis=2)    # Find intensity
 
         red = img[:,:,2]
         green = img[:,:,1]
         blue = img[:,:,0]
+
 
         #dt = np.where(intensity > self.intensityThreshold, self.differenceThreshold / 3, self.differenceThreshold)
 
@@ -58,9 +59,9 @@ class Perfusion():
                 return perfusions
             cv2.imshow('doop', np.uint8(doop))
 
-    def image(self, filename):
+    def image(self, filename, coord = None):
         self.img = cv2.imread(filename)
-        return self.algorithm(self.img)
+        return self.algorithm(self.img, coord)
 
     def changeThreshold(self, differenceThreshold):
         # self.intensityThreshold = intensityThreshold
