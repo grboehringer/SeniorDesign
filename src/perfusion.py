@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 
 class Perfusion():
     def __init__(self):
-        self.intensityThreshold = 20
-
         """|R-B| > DT at lowest color value"""
         self.differenceThreshold = 76
 
@@ -16,9 +14,6 @@ class Perfusion():
         red = img[:,:,2]
         green = img[:,:,1]
         blue = img[:,:,0]
-
-
-        #dt = np.where(intensity > self.intensityThreshold, self.differenceThreshold / 3, self.differenceThreshold)
 
         boolean = np.abs(red - green) > self.differenceThreshold
         boolean = boolean | np.abs(red - blue) > self.differenceThreshold
@@ -64,7 +59,6 @@ class Perfusion():
         return self.algorithm(self.img, coord)
 
     def changeThreshold(self, differenceThreshold):
-        # self.intensityThreshold = intensityThreshold
         self.differenceThreshold = differenceThreshold
 
     def rgb(self, x, y):

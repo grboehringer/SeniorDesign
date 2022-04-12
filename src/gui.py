@@ -117,9 +117,6 @@ class Window(Frame):
         id = tk.Label(self.root2, text = 'Patient ID:', bg ='#3A3B3C', fg = 'white', font=("Arial", 9))
         self.patient_ID = Entry(self.root2)
         
-        # threshold_intensity = Label(self.root2, text="Intensity Threshold:", bg ='#3A3B3C', fg = 'white')
-        # self.intensity_thresh_entry = Entry(self.root2)
-        
         diff_threshold = Label(self.root2, text="Difference Threshold:",bg ='#3A3B3C', fg = 'white', font=("Arial", 9))
         self.diff_thresh_entry = Entry(self.root2)
 
@@ -194,7 +191,6 @@ class Window(Frame):
     def enter_selections(self):
         """Save entered data and put into algorithm or display"""
         self.root2.bind('<Return>',self.perfusion.changeThreshold(int(self.diff_thresh_entry.get())))
-        # print(self.perfusion.intensityThreshold) 
         print(self.perfusion.differenceThreshold)
         self.new_perfusion_value = self.perfusion.image(self.filename)
         self.pid['text'] = 'Patient ID:' + str(format(self.patient_ID.get()))
