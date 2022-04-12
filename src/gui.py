@@ -27,6 +27,7 @@ class Window(Frame):
         menu.add_cascade(label="File", menu=self.file)
         self.file.add_command(label="Upload Image", command=self.upload_image)
         self.file.add_command(label="Save Image and Data", command=self.save_all)
+        self.file.add_command(label="Settings", command=self.settings)
         self.file.add_command(label="Calibrate Machine", command=self.calibrate_machine)
         self.file.add_command(label="Exit", command=self.client_exit)
 
@@ -40,43 +41,38 @@ class Window(Frame):
 
         self.analyze.entryconfig("Compare Images", state="disabled")
 
+        self.initial_image()
+
+    def initial_image(self):
+        self.grid()
+        self.canvas = Canvas(self,width=600, height=600)
+        self.canvas.grid(row = 2,column = 0,columnspan=20)
+
         """Instructions image upload."""
         load = Image.open("images/Instructions.jpg")
+        (w,h) = load.size
+        self.canvas.config(width=w,height=h)
         self.render = ImageTk.PhotoImage(load)
-        #h = self.render.height()
-        #w = self.render.width()
-        #self.canvas = Canvas(master, width=w, height=h)
-        self.canvas = Canvas(master, width=512, height=512)
-        self.canvas.pack()
-        #self.img_id = self.canvas.create_image((w/2,w/2),image=self.render)
-        self.img_id = self.canvas.create_image((512/2,512/2),image=self.render)
+        self.canvas.create_image(int(w/2),int(h/2),image=self.render)
         """Sets window size"""
-        #root.geometry(f'{w}x{h}')
-        root.geometry("512x512")
 
     """ MENU FUNCTIONS """
     
     def upload_image(self):
         """Open the selected image and resize."""
-        #self.canvas.delete('txt')
-        #self.canvas.delete('img')
         self.filename = self.select_file()
-        load = Image.open(self.filename)
-        self.render = ImageTk.PhotoImage(load)
-        self.canvas.itemconfig(self.img_id, image=self.render)
-        #h = self.render.height()
-        #w = self.render.width()
-        #self.canvas = Canvas(self, width=w, height=h)
-        #self.canvas.pack()
-        #self.img_id=self.canvas.create_image((w/2,h/2), image=self.render,tag="img")
-        #root.geometry(f'{w}x{h}')
+        self.load = Image.open(self.filename)
+        (w,h) = self.load.size
+        self.canvas.config(width=w,height=h)
+        self.render = ImageTk.PhotoImage(self.load)
+        self.canvas.create_image(int(w/2),int(h/2),image=self.render)
 
-        print(self.filename)
         self.perfusion_value = self.perfusion.image(self.filename)
         print(self.perfusion_value)
-        txt ="P ID: [Enter Patient ID in Settings] \nPV:" + str(self.perfusion_value)
-        self.txt_id = self.canvas.create_text(200, 50,fill="white",font="Times 20",text=txt,tag="txt")
-        # Display Threshold
+        self.pid = tk.Label(self, text = 'Patient ID: [Enter Patient ID in Settings]')
+        self.pid.grid(row = 0, column = 0, pady=5)
+        self.pv = tk.Label(self, text = 'PV:' + str(format(self.perfusion_value,'.2f')))
+        self.pv.grid(row = 0, column = 1, pady=5)
 
         # Enable menu functions
         self.analyze.entryconfig("Compare Images", state="normal")
@@ -150,7 +146,7 @@ class Window(Frame):
 
         # x = variable.get() can store entry
         enter_sel = tk.Button(self.root2, text = "Enter", bg ='#3A3B3C', fg = 'white',command =self.enter_selections)
-        enter_sel.grid(row = 5, column = 1, columnspan = 2, padx=5, pady=5, sticky='e')
+        enter_sel.grid(row = 6, column = 1, columnspan = 2, padx=5, pady=5)
             
     def enter_selections(self):
         """Save entered data and put into algorithm or display"""
@@ -158,12 +154,23 @@ class Window(Frame):
         print(self.perfusion.intensityThreshold) 
         print(self.perfusion.differenceThreshold)
         self.new_perfusion_value = self.perfusion.image(self.filename)
-        txt ="P ID:" + self.patient_ID.get() + "\nPV: " + str(self.new_perfusion_value)
+        self.pid['text'] = 'Patient ID:' + str(format(self.patient_ID.get()))
+        self.pv['text'] = 'PV:' + str(format(self.new_perfusion_value,'.2f'))
         self.root2.destroy()
-        self.canvas.delete('txt')
-        self.canvas.create_text(200,50,fill="white",font="Times 20",text=txt,tag="txt")
 
     def calibrate_machine(self):
+        """Instructions Window Creation"""
+        self.info = Tk()
+        self.info.title('Calibration Instructions')
+        self.info.configure(bg='#3A3B3C')
+
+        # Window Information
+        info_msg = tk.Label(self.info, text = "To calibrate correctly select the color that represents the slowest motion first.\n Then select the fastest motion.", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 10))
+        info_msg.grid(row = 1, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
+
+        sel_img = tk.Button(self.info, text = "Continue", width = 15, bg = '#3A3B3C', fg = 'white', command = self.destroy_window)
+        sel_img.grid(row = 2, column = 1, columnspan = 2, padx=5, pady=5)
+
         """Calibrate Ultrasound Machine"""
         self.canvas.bind("<Button-1>", self.mouseRGB)        
 
@@ -178,16 +185,24 @@ class Window(Frame):
 
     def compare_images(self):
         """Compare Images in new window"""
- 
-        pv_compare_1 = self.perfusion.image(self.filename)
-        print(pv_compare_1)
-        self.filename_2 = self.select_file()
-        pv_compare_2 = self.perfusion.image(self.filename_2)
-        print(pv_compare_2)
 
-        compare_PV = pv_compare_1 - pv_compare_2
-        print(compare_PV)
-        # Display to main as well.
+        # Compare Images Instruction Window Setup
+        self.compare_inst = Tk()
+        self.compare_inst.title('Compare Images')
+        self.compare_inst.configure(bg='#3A3B3C')
+        
+        # Disable closing the window
+        self.compare_inst.protocol("WM_DELETE_WINDOW", self.disable_event)
+        
+        # Window Information
+        info_msg = tk.Label(self.compare_inst, text = "The first perfusion value being compared is the current image's. Select a second image to compare it with.", bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
+        info_msg.grid(row = 1, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
+        
+        info_msg = tk.Label(self.compare_inst, text = "IMPORTANT: Make sure image PIDs are the same!", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 10))
+        info_msg.grid(row = 2, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
+
+        sel_img = tk.Button(self.compare_inst, text = "Select Image", width = 15, bg = '#3A3B3C', fg = 'white', command = self.calc_comp)
+        sel_img.grid(row = 3, column = 1, columnspan = 2, padx=5, pady=5)
 
     """ SUBFUNCTIONS """
     def select_file(self):
@@ -213,7 +228,7 @@ class Window(Frame):
 
         else:
             self.canvas.create_rectangle(self.pos[0][0], self.pos[0][1], self.pos[1][0], self.pos[1][1], outline="red", tags="crosshair")
-            
+            #self.cropped_image(self.pos[0][0], self.pos[0][1], self.pos[1][0], self.pos[1][1])
             # Save Coordinates Window Setup
             self.save_coordinates = Tk()
             self.save_coordinates.title('Save Selection')
@@ -221,8 +236,8 @@ class Window(Frame):
             
             # Disable closing the window
             self.save_coordinates.protocol("WM_DELETE_WINDOW", self.disable_event)
-            # ADD RESIZING LOCK
             
+            # Window Information
             coord_msg = tk.Label(self.save_coordinates, text = 'Would you like to save this selection?', bg ='#3A3B3C', fg = 'white')
             coord_msg.grid(row = 1, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
             
@@ -236,6 +251,18 @@ class Window(Frame):
         """Save selection coordinates and crop image for perfusion"""
         print("save coord and crop")
         self.save_coordinates.destroy()
+
+        #crop image and display to window
+        self.cropped_img = self.load.crop((int(self.pos[0][0]), int(self.pos[0][1]), int(self.pos[1][0]), int(self.pos[1][1])))
+        (w,h) = self.cropped_img.size
+        self.canvas.config(width=w,height=h)
+        self.render = ImageTk.PhotoImage(self.cropped_img)
+        self.canvas.create_image(int(w/2),int(h/2),image=self.render)
+
+        # send to image to perfusion.py to get new perfusion value
+        self.cropfilename = self.render.save(self.filename + "cropped")
+        self.cper_val = self.perfusion.image(self.cropfilename)
+        self.pv['text'] = 'PV:' + str(format(self.cper_val,'.2f'))
         # RERUN ALGORITHM HERE TO GET NEW PV WITH CROPPED IMAGE
 
     def delete_coord(self):
@@ -247,25 +274,61 @@ class Window(Frame):
         root.config(cursor="arrow")
         self.save_coordinates.destroy()
 
+    """Calibrate Machine Sub Function"""
     def mouseRGB(self, event):
-        """Calibrate Machine Sub Function"""
-        # if event == cv2.EVENT_LBUTTONDOWN: #checks mouse left button down condition
+
         if self.counter < 1:
             x = int(self.canvas.canvasx(event.x))
             y = int(self.canvas.canvasy(event.y))
 
             self.pos.append((x, y))
-            print(self.pos)
             self.canvas.create_line(x - 5, y, x + 5, y, fill="red", tags="crosshair")
             self.canvas.create_line(x, y - 5, x, y + 5, fill="red", tags="crosshair")
-
-            red, green, blue = self.perfusion.rgb(x,y)
-            print(f"RGB Format: r: {red} g: {green} b: {blue}")
-            print("Coordinates of pixel: X: ",x,"Y: ",y)
-            """Display RGB at Bottom"""
-            # bottom_status = Label(self.master,text= f'R: {red} G: {green} B: {blue}')
-            # bottom_status.grid(row=0, column=0, columnspan=3)
             self.counter += 1
+            # print(self.counter)
+            # print(x)
+            # print(y)
+
+            redMin, greenMin, blueMin = self.perfusion.rgb(x,y)
+            # print(f"RGB Format: r: {int(red)} g: {int(green)} b: {int(blue)}")
+            # print("Coordinates of pixel: X: ",x,"Y: ",y)
+            # print(f'Calibrated Threshold: {blue}')
+            """Display RGB at Bottom"""
+            self.root3 = tk.Tk()
+            self.root3.title('Calibration Threshold')
+            bot_R = Label(self.root3, text =f'RMin: {redMin}', fg='red')
+            bot_R.grid(row = 1, column = 1, padx=10, pady=1, sticky='e')
+            bot_G = Label(self.root3, text =f'GMin: {greenMin}', fg='green')
+            bot_G.grid(row = 1, column = 2, padx=10, pady=1, sticky='e')
+            bot_B = Label(self.root3, text =f'BMin: {blueMin}', fg='blue')
+            bot_B.grid(row = 1, column = 3, padx=10, pady=1, sticky='e')
+            bot_C_Threshold = Label(self.root3, text = f'Calibrated Threshold: {blueMin}', fg = 'black')
+            bot_C_Threshold.grid(row = 1, column = 4, padx=10, pady=1, sticky='e')
+
+        elif self.counter < 2:
+            x1 = int(self.canvas.canvasx(event.x))
+            y1 = int(self.canvas.canvasy(event.y))
+
+            self.pos.append((x1, y1))
+            self.canvas.create_line(x1 - 5, y1, x1 + 5, y1, fill="red", tags="crosshair")
+            self.canvas.create_line(x1, y1 - 5, x1, y1 + 5, fill="red", tags="crosshair")
+            self.counter += 1
+            # print(self.counter)
+            # print(x1)
+            # print(y1)
+
+            redMax, greenMax, blueMax = self.perfusion.rgb(x1,y1)
+            """The max perfusion possible"""
+            max_perf = (int(redMax)+int(greenMax)+int(blueMax))/3
+           
+            bot_R_M = Label(self.root3, text =f'RMax: {redMax}', fg='red')
+            bot_R_M.grid(row = 2, column = 1, padx=10, pady=1, sticky='e')
+            bot_G_M = Label(self.root3, text =f'GMax: {greenMax}', fg='green')
+            bot_G_M.grid(row = 2, column = 2, padx=10, pady=1, sticky='e')
+            bot_B_M = Label(self.root3, text =f'BMax: {blueMax}', fg='blue')
+            bot_B_M.grid(row = 2, column = 3, padx=10, pady=1, sticky='e')
+            bot_C_MaxPerf= Label(self.root3, text = 'Calibrated Max Perfusion: ' + format(max_perf,'.2f'), fg = 'black')
+            bot_C_MaxPerf.grid(row = 2, column = 4, padx=10, pady=1, sticky='e')
 
         else:
             self.canvas.delete("crosshair")
@@ -273,9 +336,52 @@ class Window(Frame):
             self.counter = 0
             self.canvas.unbind("<Button 1>")
 
+    def destroy_window(self):
+        self.kill = self.info.destroy()
+
+    def calc_comp(self):
+        self.compare_inst.destroy()
+
+        # Store Current (First) Image Info
+        pv_compare_1 = self.perfusion.image(self.filename)
+
+        # Select File and Store Second Image Info
+        self.filename_2 = self.select_file()
+        pv_compare_2 = self.perfusion.image(self.filename_2)
+
+        # Calculate Difference
+        compare_PV = pv_compare_2 - pv_compare_1
+        
+        # Compare Images Display Window Setup
+        self.compare_show = Tk()
+        self.compare_show.title('Compare Images')
+        self.compare_show.configure(bg='#3A3B3C')
+
+        # Window Information
+        title_msg = tk.Label(self.compare_show, text = "Image PV Comparison", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 14))
+        title_msg.grid(row = 1, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
+        
+        # Inclde PID
+        # pid = tk.Label(self.compare_show, text = "PID: " + self.patient_ID, bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
+        # pid.grid(row = 2, column = 1, columnspan = 2, padx=10)
+
+        img_1 = tk.Label(self.compare_show, text = "Image 1: " + self.filename, bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
+        img_1.grid(row = 3, column = 1, columnspan = 2, padx=10)
+
+        img_2 = tk.Label(self.compare_show, text = "Image 2: " + self.filename_2, bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
+        img_2.grid(row = 4, column = 1, columnspan = 2, padx=10)
+
+        pv1 = tk.Label(self.compare_show, text = "Perfusion Value 1: " + str(format(pv_compare_1,'.2f')), bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
+        pv1.grid(row = 5, column = 1, columnspan = 2, padx=10)
+
+        pv2 = tk.Label(self.compare_show, text = "Perfusion Value 2: " + str(format(pv_compare_2,'.2f')), bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
+        pv2.grid(row = 6, column = 1, columnspan = 2, padx=10)
+
+        comparison = tk.Label(self.compare_show, text = "Comparison (Image 2 - Image 1): " + str(format(compare_PV,'.2f')), bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
+        comparison.grid(row = 7, column = 1, columnspan = 2, padx=10)
+
     def disable_event(self):
         pass
-
 
 if __name__ == '__main__':
 

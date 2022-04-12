@@ -5,9 +5,12 @@ import matplotlib.pyplot as plt
 class Perfusion():
     def __init__(self):
         self.intensityThreshold = 20
-        self.differenceThreshold = 65
 
-    def algorithm(self, img, coord):
+        """|R-B| > DT at lowest color value"""
+        self.differenceThreshold = 76
+
+    def algorithm(self, img):
+        """Mean of the RGB value of each pixel"""
         intensity = np.mean(img, axis=2)    # Find intensity
 
         red = img[:,:,2]
@@ -21,8 +24,17 @@ class Perfusion():
         boolean = boolean | np.abs(red - blue) > self.differenceThreshold
         boolean = boolean | np.abs(green - blue) > self.differenceThreshold
 
+        """Thresholded RGB values"""
         perfusion = intensity * boolean
+        print('Intensity: '+ str(intensity))
 
+        """Percent Colored Calculation"""
+        percent_colored = (np.count_nonzero(boolean))/(np.size(boolean))*100
+        # print('Number of True Values: ' + str(np.count_nonzero(boolean)))
+        # print('Size: ' + str(np.size(boolean)))
+        print('Percent Colored: ' + str(format(percent_colored, '.2f')) + '%')
+
+        """Returns the mean of the Thresholded RGB values"""
         return np.mean(perfusion)
 
     def video(self, filename):
@@ -72,7 +84,7 @@ if __name__ == '__main__':
     plt.show()
     '''
     obj = Perfusion()
-    perfusion = obj.image('images/test.jpg')
+    perfusion = obj.image('images/AdeLow.png')
     red, green, blue = obj.rgb(25, 25)
     print(f'{red}, {green}, {blue}')
     
