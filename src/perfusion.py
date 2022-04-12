@@ -62,8 +62,8 @@ class Perfusion():
         self.img = cv2.imread(filename)
         return self.algorithm(self.img)
 
-    def changeThreshold(self, intensityThreshold, differenceThreshold):
-        self.intensityThreshold = intensityThreshold
+    def changeThreshold(self, differenceThreshold):
+        # self.intensityThreshold = intensityThreshold
         self.differenceThreshold = differenceThreshold
 
     def rgb(self, x, y):
