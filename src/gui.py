@@ -61,10 +61,10 @@ class Window(Frame):
     def upload_image(self):
         """Open the selected image and resize."""
         self.filename = self.select_file()
-        load = Image.open(self.filename)
-        (w,h) = load.size
+        self.load = Image.open(self.filename)
+        (w,h) = self.load.size
         self.canvas.config(width=w,height=h)
-        self.render = ImageTk.PhotoImage(load)
+        self.render = ImageTk.PhotoImage(self.load)
         self.canvas.create_image(int(w/2),int(h/2),image=self.render)
 
         self.perfusion_value = self.perfusion.image(self.filename)
@@ -154,13 +154,8 @@ class Window(Frame):
         print(self.perfusion.intensityThreshold) 
         print(self.perfusion.differenceThreshold)
         self.new_perfusion_value = self.perfusion.image(self.filename)
-
-        #pid = tk.Label(self, text = 'Patient ID:' + str(format(self.patient_ID.get())))
         self.pid['text'] = 'Patient ID:' + str(format(self.patient_ID.get()))
-        #pid.grid(row = 0, column = 0, pady=5)
-        #pv = tk.Label(self, text = 'PV:' + str(format(self.new_perfusion_value,'.2f')))
         self.pv['text'] = 'PV:' + str(format(self.new_perfusion_value,'.2f'))
-        #pv.grid(row = 0, column = 1, pady=5)
         self.root2.destroy()
 
     def calibrate_machine(self):
@@ -233,7 +228,7 @@ class Window(Frame):
 
         else:
             self.canvas.create_rectangle(self.pos[0][0], self.pos[0][1], self.pos[1][0], self.pos[1][1], outline="red", tags="crosshair")
-            
+            #self.cropped_image(self.pos[0][0], self.pos[0][1], self.pos[1][0], self.pos[1][1])
             # Save Coordinates Window Setup
             self.save_coordinates = Tk()
             self.save_coordinates.title('Save Selection')
@@ -256,6 +251,18 @@ class Window(Frame):
         """Save selection coordinates and crop image for perfusion"""
         print("save coord and crop")
         self.save_coordinates.destroy()
+
+        #crop image and display to window
+        self.cropped_img = self.load.crop((int(self.pos[0][0]), int(self.pos[0][1]), int(self.pos[1][0]), int(self.pos[1][1])))
+        (w,h) = self.cropped_img.size
+        self.canvas.config(width=w,height=h)
+        self.render = ImageTk.PhotoImage(self.cropped_img)
+        self.canvas.create_image(int(w/2),int(h/2),image=self.render)
+
+        # send to image to perfusion.py to get new perfusion value
+        self.cropfilename = self.render.save(self.filename + "cropped")
+        self.cper_val = self.perfusion.image(self.cropfilename)
+        self.pv['text'] = 'PV:' + str(format(self.cper_val,'.2f'))
         # RERUN ALGORITHM HERE TO GET NEW PV WITH CROPPED IMAGE
 
     def delete_coord(self):
