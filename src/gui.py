@@ -108,50 +108,89 @@ class Window(Frame):
         self.root2.configure(bg='#3A3B3C')
 
         # Initialize User Entries
+        alg_set = tk.Label(self.root2, text = "Patient Algorithm Settings", bg ='#3A3B3C', fg = 'white')
+
         id = tk.Label(self.root2, text = 'Patient ID:', bg ='#3A3B3C', fg = 'white')
         self.patient_ID = Entry(self.root2)
         
-        threshold_intensity = Label(self.root2, text="Intensity Threshold:", bg ='#3A3B3C', fg = 'white')
-        self.intensity_thresh_entry = Entry(self.root2)
+        # threshold_intensity = Label(self.root2, text="Intensity Threshold:", bg ='#3A3B3C', fg = 'white')
+        # self.intensity_thresh_entry = Entry(self.root2)
         
         diff_threshold = Label(self.root2, text="Difference Threshold:",bg ='#3A3B3C', fg = 'white')
         self.diff_thresh_entry = Entry(self.root2)
-        
+
+        mach_set = tk.Label(self.root2, text = "Patient Machine Settings", bg ='#3A3B3C', fg = 'white')
+
         gain_val = Label(self.root2, text="Gain Value:", bg ='#3A3B3C', fg = 'white')
         self.gain_val_entry = Entry(self.root2)
 
         zoom_val = Label(self.root2, text="Zoom Value:", bg ='#3A3B3C', fg = 'white')
         self.zoom_val_entry = Entry(self.root2)
 
+        frame_avg_val = Label(self.root2, text="Frame Average:", bg ='#3A3B3C', fg = 'white')
+        self.frame_avg_val_entry = Entry(self.root2)
+
+        thresh_val = Label(self.root2, text="Threshold (%):", bg ='#3A3B3C', fg = 'white')
+        self.thresh_val_entry = Entry(self.root2)
+
+        sample_vol_val = Label(self.root2, text="Sample Volume:", bg ='#3A3B3C', fg = 'white')
+        self.sample_vol_val_entry = Entry(self.root2)
+
+        wall_filter_val = Label(self.root2, text="Wall Filter:", bg ='#3A3B3C', fg = 'white')
+        self.wall_filter_val_entry = Entry(self.root2)
+
+        frequency_val = Label(self.root2, text="Frequency:", bg ='#3A3B3C', fg = 'white')
+        self.frequency_val_entry = Entry(self.root2)
+
         # Display and Organize User Entries (Label & Box)
-        id.grid(row = 1, column = 1, padx=10, pady=5, sticky='e')
-        self.patient_ID.grid(row = 1, column = 2, padx=5, pady=5)
+        alg_set.grid(row = 1, column = 1, columnspan=2, padx=10, pady=5)
+        
+        id.grid(row = 2, column = 1, padx=10, pady=5, sticky='e')
+        self.patient_ID.grid(row = 2, column = 2, padx=5, pady=5)
         self.patient_ID.insert(0,"[Enter Patient ID]")
 
-        gain_val.grid(row=2, column=1, padx=10, pady=5, sticky='e')
-        self.gain_val_entry.grid(row=2, column=2, padx=5, pady=5)
+        diff_threshold.grid(row=3, column=1, padx=10, pady=5, sticky='e')
+        self.diff_thresh_entry.grid(row=3, column=2, padx=5, pady=5)
+        self.diff_thresh_entry.insert(0,self.perfusion.differenceThreshold)
+
+        mach_set.grid(row = 4, column = 1, columnspan=2, padx=10, pady=5)
+
+        gain_val.grid(row=5, column=1, padx=10, pady=5, sticky='e')
+        self.gain_val_entry.grid(row=5, column=2, padx=5, pady=5)
         self.gain_val_entry.insert(0,"[Enter Gain Value]")
 
-        zoom_val.grid(row=3, column=1, padx=10, pady=5, sticky='e')
-        self.zoom_val_entry.grid(row=3, column=2, padx=5, pady=5)
+        zoom_val.grid(row=6, column=1, padx=10, pady=5, sticky='e')
+        self.zoom_val_entry.grid(row=6, column=2, padx=5, pady=5)
         self.zoom_val_entry.insert(0,"[Enter Zoom Value]")
 
-        threshold_intensity.grid(row=4, column=1, padx=10, pady=5, sticky='e')
-        self.intensity_thresh_entry.grid(row=4, column=2, padx=5, pady=5)
-        self.intensity_thresh_entry.insert(0,self.perfusion.intensityThreshold)
+        frame_avg_val.grid(row=7, column=1, padx=10, pady=5, sticky='e')
+        self.frame_avg_val_entry.grid(row=7, column=2, padx=5, pady=5)
+        self.frame_avg_val_entry.insert(0,"[Enter Frame Average Value]")
 
-        diff_threshold.grid(row=5, column=1, padx=10, pady=5, sticky='e')
-        self.diff_thresh_entry.grid(row=5, column=2, padx=5, pady=5)
-        self.diff_thresh_entry.insert(0,self.perfusion.differenceThreshold)
+        thresh_val.grid(row=8, column=1, padx=10, pady=5, sticky='e')
+        self.thresh_val_entry.grid(row=8, column=2, padx=5, pady=5)
+        self.thresh_val_entry.insert(0,"[Enter Threshold Percentage Value]")
+
+        sample_vol_val.grid(row=9, column=1, padx=10, pady=5, sticky='e')
+        self.sample_vol_val_entry.grid(row=9, column=2, padx=5, pady=5)
+        self.sample_vol_val_entry.insert(0,"[Enter Sample Volume Value]")
+
+        wall_filter_val.grid(row=10, column=1, padx=10, pady=5, sticky='e')
+        self.wall_filter_val_entry.grid(row=10, column=2, padx=5, pady=5)
+        self.wall_filter_val_entry.insert(0,"[Enter Wall Filter Value]")
+
+        frequency_val.grid(row=11, column=1, padx=10, pady=5, sticky='e')
+        self.frequency_val_entry.grid(row=11, column=2, padx=5, pady=5)
+        self.frequency_val_entry.insert(0,"[Enter Frequency Value]")
 
         # x = variable.get() can store entry
         enter_sel = tk.Button(self.root2, text = "Enter", bg ='#3A3B3C', fg = 'white',command =self.enter_selections)
-        enter_sel.grid(row = 6, column = 1, columnspan = 2, padx=5, pady=5)
+        enter_sel.grid(row = 12, column = 1, columnspan = 2, padx=5, pady=5)
             
     def enter_selections(self):
         """Save entered data and put into algorithm or display"""
-        self.root2.bind('<Return>',self.perfusion.changeThreshold(int(self.intensity_thresh_entry.get()),int(self.diff_thresh_entry.get())))
-        print(self.perfusion.intensityThreshold) 
+        self.root2.bind('<Return>',self.perfusion.changeThreshold(int(self.diff_thresh_entry.get())))
+        # print(self.perfusion.intensityThreshold) 
         print(self.perfusion.differenceThreshold)
         self.new_perfusion_value = self.perfusion.image(self.filename)
 
