@@ -4,6 +4,7 @@ from tkinter import *       # Imports tkinter functions
 from PIL import Image, ImageTk  # Image Import
 from tkinter.filedialog import askopenfilename  # Get filename
 import json
+import os
 
 class Window(Frame):
 
@@ -298,8 +299,9 @@ class Window(Frame):
         self.canvas.create_image(int(w/2),int(h/2),image=self.render)
 
         # send to image to perfusion.py to get new perfusion value
-        self.cropped_img.save("images/cropped.jpg")
-        self.filename = "images/cropped.jpg"
+        filename, extension = os.path.splitext(self.filename)
+        self.cropped_img.save(filename + "_cropped" + extension)
+        self.filename = filename + "_cropped" + extension
         self.cper_val = self.perfusion.image(self.filename)
         self.pv['text'] = 'PV:' + str(format(self.cper_val,'.2f'))
 
