@@ -21,7 +21,6 @@ class Perfusion():
 
         """Thresholded RGB values"""
         perfusion = intensity * boolean
-        print('Intensity: '+ str(intensity))
 
         """Percent Colored Calculation"""
         percent_colored = (np.count_nonzero(boolean))/(np.size(boolean))*100

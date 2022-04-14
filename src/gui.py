@@ -288,7 +288,6 @@ class Window(Frame):
 
     def save_coord(self):
         """Save selection coordinates and crop image for perfusion"""
-        print("save coord and crop")
         self.save_coordinates.destroy()
 
         #crop image and display to window
