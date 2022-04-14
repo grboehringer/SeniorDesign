@@ -299,10 +299,17 @@ class Window(Frame):
         self.canvas.create_image(int(w/2),int(h/2),image=self.render)
 
         # send to image to perfusion.py to get new perfusion value
-        self.cropfilename = self.render.save("cropped.jpg")
-        self.cper_val = self.perfusion.image(self.cropfilename)
+        self.cropped_img.save("images/cropped.jpg")
+        self.filename = "images/cropped.jpg"
+        self.cper_val = self.perfusion.image(self.filename)
         self.pv['text'] = 'PV:' + str(format(self.cper_val,'.2f'))
-        # RERUN ALGORITHM HERE TO GET NEW PV WITH CROPPED IMAGE
+
+        # Reset ROI variables to default
+        self.canvas.delete("crosshair")
+        self.pos = []
+        self.counter = 0
+        self.canvas.unbind("<Button 1>")
+        root.config(cursor="arrow")
 
     def delete_coord(self):
         """Delete selection coordinates"""
