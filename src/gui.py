@@ -349,7 +349,7 @@ class Window(Frame):
             bot_G.grid(row = 1, column = 2, padx=10, pady=1, sticky='e')
             bot_B = Label(self.root3, text =f'BMin: {blueMin}', fg='blue')
             bot_B.grid(row = 1, column = 3, padx=10, pady=1, sticky='e')
-            bot_C_Threshold = Label(self.root3, text = f'Calibrated Threshold: {blueMin}', fg = 'black')
+            bot_C_Threshold = Label(self.root3, text = f'Calibrated Threshold: {int(redMin) - int(blueMin)}', fg = 'black')
             bot_C_Threshold.grid(row = 1, column = 4, padx=10, pady=1, sticky='e')
 
         elif self.counter < 2:
