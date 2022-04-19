@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 
 class Perfusion():
     def __init__(self):
-        self.intensityThreshold = 20
-
         """|R-B| > DT at lowest color value"""
         self.differenceThreshold = 76
 
@@ -33,16 +31,12 @@ class Perfusion():
         green = img[:,:,1]
         blue = img[:,:,0]
 
-
-        #dt = np.where(intensity > self.intensityThreshold, self.differenceThreshold / 3, self.differenceThreshold)
-
         boolean = np.abs(red - green) > self.differenceThreshold
         boolean = boolean | np.abs(red - blue) > self.differenceThreshold
         boolean = boolean | np.abs(green - blue) > self.differenceThreshold
 
         """Thresholded RGB values"""
         perfusion = intensity * boolean
-        print('Intensity: '+ str(intensity))
 
         """Percent Colored Calculation"""
         percent_colored = (np.count_nonzero(boolean))/(np.size(boolean))*100
@@ -80,7 +74,6 @@ class Perfusion():
         return self.algorithm(self.img, coord)
 
     def changeThreshold(self, differenceThreshold):
-        # self.intensityThreshold = intensityThreshold
         self.differenceThreshold = differenceThreshold
 
     def rgb(self, x, y):

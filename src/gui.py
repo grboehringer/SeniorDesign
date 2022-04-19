@@ -4,6 +4,7 @@ from tkinter import *       # Imports tkinter functions
 from PIL import Image, ImageTk  # Image Import
 from tkinter.filedialog import askopenfilename  # Get filename
 import json
+import os
 
 class Window(Frame):
 
@@ -112,89 +113,85 @@ class Window(Frame):
         self.root2.configure(bg='#3A3B3C')
 
         # Initialize User Entries
-        alg_set = tk.Label(self.root2, text = "Patient Algorithm Settings", bg ='#3A3B3C', fg = 'white')
+        alg_set = tk.Label(self.root2, text = "Patient Algorithm Settings", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 10))
 
-        id = tk.Label(self.root2, text = 'Patient ID:', bg ='#3A3B3C', fg = 'white')
+        id = tk.Label(self.root2, text = 'Patient ID:', bg ='#3A3B3C', fg = 'white', font=("Arial", 9))
         self.patient_ID = Entry(self.root2)
         
-        # threshold_intensity = Label(self.root2, text="Intensity Threshold:", bg ='#3A3B3C', fg = 'white')
-        # self.intensity_thresh_entry = Entry(self.root2)
-        
-        diff_threshold = Label(self.root2, text="Difference Threshold:",bg ='#3A3B3C', fg = 'white')
+        diff_threshold = Label(self.root2, text="Difference Threshold:",bg ='#3A3B3C', fg = 'white', font=("Arial", 9))
         self.diff_thresh_entry = Entry(self.root2)
 
-        mach_set = tk.Label(self.root2, text = "Patient Machine Settings", bg ='#3A3B3C', fg = 'white')
+        mach_set = tk.Label(self.root2, text = "Patient Machine Settings", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 10))
 
-        gain_val = Label(self.root2, text="Gain Value:", bg ='#3A3B3C', fg = 'white')
+        gain_val = Label(self.root2, text="Gain Value:", bg ='#3A3B3C', fg = 'white', font=("Arial", 9))
         self.gain_val_entry = Entry(self.root2)
 
-        zoom_val = Label(self.root2, text="Zoom Value:", bg ='#3A3B3C', fg = 'white')
+        zoom_val = Label(self.root2, text="Zoom Value:", bg ='#3A3B3C', fg = 'white', font=("Arial", 9))
         self.zoom_val_entry = Entry(self.root2)
 
-        frame_avg_val = Label(self.root2, text="Frame Average:", bg ='#3A3B3C', fg = 'white')
+        frame_avg_val = Label(self.root2, text="Frame Average:", bg ='#3A3B3C', fg = 'white', font=("Arial", 9))
         self.frame_avg_val_entry = Entry(self.root2)
 
-        thresh_val = Label(self.root2, text="Threshold (%):", bg ='#3A3B3C', fg = 'white')
+        thresh_val = Label(self.root2, text="Threshold (%):", bg ='#3A3B3C', fg = 'white', font=("Arial", 9))
         self.thresh_val_entry = Entry(self.root2)
 
-        sample_vol_val = Label(self.root2, text="Sample Volume:", bg ='#3A3B3C', fg = 'white')
+        sample_vol_val = Label(self.root2, text="Sample Volume:", bg ='#3A3B3C', fg = 'white', font=("Arial", 9))
         self.sample_vol_val_entry = Entry(self.root2)
 
-        wall_filter_val = Label(self.root2, text="Wall Filter:", bg ='#3A3B3C', fg = 'white')
+        wall_filter_val = Label(self.root2, text="Wall Filter:", bg ='#3A3B3C', fg = 'white', font=("Arial", 9))
         self.wall_filter_val_entry = Entry(self.root2)
 
-        frequency_val = Label(self.root2, text="Frequency:", bg ='#3A3B3C', fg = 'white')
+        frequency_val = Label(self.root2, text="Frequency:", bg ='#3A3B3C', fg = 'white', font=("Arial", 9))
         self.frequency_val_entry = Entry(self.root2)
 
         # Display and Organize User Entries (Label & Box)
         alg_set.grid(row = 1, column = 1, columnspan=2, padx=10, pady=5)
         
-        id.grid(row = 2, column = 1, padx=10, pady=5, sticky='e')
+        id.grid(row = 2, column = 1, padx=10, pady=5, sticky='w')
         self.patient_ID.grid(row = 2, column = 2, padx=5, pady=5)
         self.patient_ID.insert(0,"[Enter Patient ID]")
 
-        diff_threshold.grid(row=3, column=1, padx=10, pady=5, sticky='e')
+        diff_threshold.grid(row=3, column=1, padx=10, pady=5, sticky='w')
         self.diff_thresh_entry.grid(row=3, column=2, padx=5, pady=5)
         self.diff_thresh_entry.insert(0,self.perfusion.differenceThreshold)
 
         mach_set.grid(row = 4, column = 1, columnspan=2, padx=10, pady=5)
 
-        gain_val.grid(row=5, column=1, padx=10, pady=5, sticky='e')
+        gain_val.grid(row=5, column=1, padx=10, pady=5, sticky='w')
         self.gain_val_entry.grid(row=5, column=2, padx=5, pady=5)
         self.gain_val_entry.insert(0,"[Enter Gain Value]")
 
-        zoom_val.grid(row=6, column=1, padx=10, pady=5, sticky='e')
+        zoom_val.grid(row=6, column=1, padx=10, pady=5, sticky='w')
         self.zoom_val_entry.grid(row=6, column=2, padx=5, pady=5)
         self.zoom_val_entry.insert(0,"[Enter Zoom Value]")
 
-        frame_avg_val.grid(row=7, column=1, padx=10, pady=5, sticky='e')
+        frame_avg_val.grid(row=7, column=1, padx=10, pady=5, sticky='w')
         self.frame_avg_val_entry.grid(row=7, column=2, padx=5, pady=5)
         self.frame_avg_val_entry.insert(0,"[Enter Frame Average Value]")
 
-        thresh_val.grid(row=8, column=1, padx=10, pady=5, sticky='e')
+        thresh_val.grid(row=8, column=1, padx=10, pady=5, sticky='w')
         self.thresh_val_entry.grid(row=8, column=2, padx=5, pady=5)
         self.thresh_val_entry.insert(0,"[Enter Threshold Percentage Value]")
 
-        sample_vol_val.grid(row=9, column=1, padx=10, pady=5, sticky='e')
+        sample_vol_val.grid(row=9, column=1, padx=10, pady=5, sticky='w')
         self.sample_vol_val_entry.grid(row=9, column=2, padx=5, pady=5)
         self.sample_vol_val_entry.insert(0,"[Enter Sample Volume Value]")
 
-        wall_filter_val.grid(row=10, column=1, padx=10, pady=5, sticky='e')
+        wall_filter_val.grid(row=10, column=1, padx=10, pady=5, sticky='w')
         self.wall_filter_val_entry.grid(row=10, column=2, padx=5, pady=5)
         self.wall_filter_val_entry.insert(0,"[Enter Wall Filter Value]")
 
-        frequency_val.grid(row=11, column=1, padx=10, pady=5, sticky='e')
+        frequency_val.grid(row=11, column=1, padx=10, pady=5, sticky='w')
         self.frequency_val_entry.grid(row=11, column=2, padx=5, pady=5)
         self.frequency_val_entry.insert(0,"[Enter Frequency Value]")
 
         # x = variable.get() can store entry
-        enter_sel = tk.Button(self.root2, text = "Enter", bg ='#3A3B3C', fg = 'white',command =self.enter_selections)
-        enter_sel.grid(row = 12, column = 1, columnspan = 2, padx=5, pady=5)
+        enter_sel = tk.Button(self.root2, text = "Enter", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 9), command =self.enter_selections)
+        enter_sel.grid(row = 12, column = 1, columnspan = 2, padx=5, pady=5, ipadx=100)
             
     def enter_selections(self):
         """Save entered data and put into algorithm or display"""
         self.root2.bind('<Return>',self.perfusion.changeThreshold(int(self.diff_thresh_entry.get())))
-        # print(self.perfusion.intensityThreshold) 
         print(self.perfusion.differenceThreshold)
         self.new_perfusion_value = self.perfusion.image(self.filename)
         self.pid['text'] = 'Patient ID:' + str(format(self.patient_ID.get()))
@@ -241,7 +238,7 @@ class Window(Frame):
         info_msg = tk.Label(self.compare_inst, text = "The first perfusion value being compared is the current image's. Select a second image to compare it with.", bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
         info_msg.grid(row = 1, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
         
-        info_msg = tk.Label(self.compare_inst, text = "IMPORTANT: Make sure image PIDs are the same!", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 10))
+        info_msg = tk.Label(self.compare_inst, text = "IMPORTANT: Make sure image PIDs and ultrasound machine settings are the same!", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 10))
         info_msg.grid(row = 2, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
 
         sel_img = tk.Button(self.compare_inst, text = "Select Image", width = 15, bg = '#3A3B3C', fg = 'white', command = self.calc_comp)
@@ -292,7 +289,6 @@ class Window(Frame):
 
     def save_coord(self):
         """Save selection coordinates and crop image for perfusion"""
-        print("save coord and crop")
         self.save_coordinates.destroy()
 
         #crop image and display to window
@@ -303,10 +299,18 @@ class Window(Frame):
         self.canvas.create_image(int(w/2),int(h/2),image=self.render)
 
         # send to image to perfusion.py to get new perfusion value
-        self.cropfilename = self.render.save(self.filename + "cropped")
-        self.cper_val = self.perfusion.image(self.cropfilename)
+        filename, extension = os.path.splitext(self.filename)
+        self.cropped_img.save(filename + "_cropped" + extension)
+        self.filename = filename + "_cropped" + extension
+        self.cper_val = self.perfusion.image(self.filename)
         self.pv['text'] = 'PV:' + str(format(self.cper_val,'.2f'))
-        # RERUN ALGORITHM HERE TO GET NEW PV WITH CROPPED IMAGE
+
+        # Reset ROI variables to default
+        self.canvas.delete("crosshair")
+        self.pos = []
+        self.counter = 0
+        self.canvas.unbind("<Button 1>")
+        root.config(cursor="arrow")
 
     def delete_coord(self):
         """Delete selection coordinates"""
@@ -345,7 +349,7 @@ class Window(Frame):
             bot_G.grid(row = 1, column = 2, padx=10, pady=1, sticky='e')
             bot_B = Label(self.root3, text =f'BMin: {blueMin}', fg='blue')
             bot_B.grid(row = 1, column = 3, padx=10, pady=1, sticky='e')
-            bot_C_Threshold = Label(self.root3, text = f'Calibrated Threshold: {blueMin}', fg = 'black')
+            bot_C_Threshold = Label(self.root3, text = f'Calibrated Threshold: {int(redMin) - int(blueMin)}', fg = 'black')
             bot_C_Threshold.grid(row = 1, column = 4, padx=10, pady=1, sticky='e')
 
         elif self.counter < 2:
@@ -404,9 +408,12 @@ class Window(Frame):
         title_msg = tk.Label(self.compare_show, text = "Image PV Comparison", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 14))
         title_msg.grid(row = 1, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
         
-        # Inclde PID
-        # pid = tk.Label(self.compare_show, text = "PID: " + self.patient_ID, bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
-        # pid.grid(row = 2, column = 1, columnspan = 2, padx=10)
+        # NEED TO ADD PATIENT ID BUT ITS BUGGY RIGHT NOW
+        # if self.patient_ID == None:
+        #     pass
+        # else:
+        #     pid = tk.Label(self.compare_show, text = "PID: " + str(format(self.patient_ID.get())), bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
+        #     pid.grid(row = 2, column = 1, columnspan = 2, padx=10)
 
         img_1 = tk.Label(self.compare_show, text = "Image 1: " + self.filename, bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
         img_1.grid(row = 3, column = 1, columnspan = 2, padx=10)
