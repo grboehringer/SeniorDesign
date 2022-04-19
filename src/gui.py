@@ -188,6 +188,8 @@ class Window(Frame):
         # x = variable.get() can store entry
         enter_sel = tk.Button(self.root2, text = "Enter", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 9), command =self.enter_selections)
         enter_sel.grid(row = 12, column = 1, columnspan = 2, padx=5, pady=5, ipadx=100)
+
+        # Adding presets to the settings
             
     def enter_selections(self):
         """Save entered data and put into algorithm or display"""
@@ -196,7 +198,8 @@ class Window(Frame):
         self.new_perfusion_value = self.perfusion.image(self.filename)
         self.pid['text'] = 'Patient ID:' + str(format(self.patient_ID.get()))
         self.pv['text'] = 'PV:' + str(format(self.new_perfusion_value,'.2f'))
-        self.root2.destroy()
+        # Removed because this caused the overlay issue
+        # self.root2.destroy()
 
     def calibrate_machine(self):
         """Instructions Window Creation"""
