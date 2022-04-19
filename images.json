@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"/home/grant/Documents/SeniorDesign/images/test.jpg": {"value": 50.92589366191413, "threshold": 76, "pid": null, "gain": null, "zoom": null}, "C:/Users/moses/Desktop/SeniorDesign/images/3Image4.png": {"value": 0.0, "threshold": 90, "pid": 
+=======
+{"/home/grant/Documents/SeniorDesign/images/test.jpg": {"value": 48.48027951901014, "threshold": 76, "pid": null, "gain": null, "zoom": null}, "/home/grant/Documents/SeniorDesign/images/OrignialPDT.jpg": {"value": 14.399840963886078, "threshold": 76, "pid": null, "gain": null, "zoom": null}, "/home/grant/Documents/SeniorDesign/images/ProcessedTestImage75_255.jpg": {"value": 0.0, "threshold": 76, "pid": null, "gain": null, "zoom": null}, "/home/grant/Documents/SeniorDesign/images/PowerDopplerTest.jpg": {"value": 24.99143178760674, "threshold": 76, "pid": null, "gain": null, "zoom": null}}
+>>>>>>> ca40e751c1f018975894088f069b06aabeaedc75

@@ -9,6 +9,22 @@ class Perfusion():
 
     def algorithm(self, img, coord):
         """Mean of the RGB value of each pixel"""
+
+        if coord != None:
+            if coord[0][0] < coord[1][0]:
+                img[:int(coord[0][0]), :, :] = 0
+                img[int(coord[1][0]):, :, :] = 0
+            else:
+                img[:int(coord[1][0]):, :, :] = 0
+                img[int(coord[0][0]):, :, :] = 0
+            if coord[0][1] < coord[1][1]:
+                img[:, :int(coord[0][0]), :] = 0
+                img[:, int(coord[1][0]):, :] = 0
+            else:
+                img[:, :int(coord[1][0]):, :] = 0
+                img[:, int(coord[0][0]):, :] = 0
+
+
         intensity = np.mean(img, axis=2)    # Find intensity
 
         red = img[:,:,2]
