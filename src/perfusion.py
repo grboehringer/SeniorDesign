@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 class Perfusion():
     def __init__(self):
         """|R-B| > DT at lowest color value"""
-        self.differenceThreshold = 76
+        self.differenceThreshold = 89
 
     def algorithm(self, img, coord):
         """Mean of the RGB value of each pixel"""
