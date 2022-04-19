@@ -202,7 +202,7 @@ class Window(Frame):
         enter_sel.grid(row = 12, column = 1, columnspan = 2, padx=5, pady=5, ipadx=100)
             
     def preset_1(self): 
-        print("yikes1")   
+        print("yikes 1")   
     def preset_2(self):        
         print("yikes 2")
     def preset_3(self):
