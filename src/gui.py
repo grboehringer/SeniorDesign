@@ -215,8 +215,8 @@ class Window(Frame):
         self.root2.bind('<Return>',self.perfusion.changeThreshold(int(self.diff_thresh_entry.get())))
         print(self.perfusion.differenceThreshold)
         self.new_perfusion_value = self.perfusion.image(self.filename)
-        self.pid['text'] = 'Patient ID:' + str(format(self.patient_ID.get()))
-        self.pv['text'] = 'PV:' + str(format(self.new_perfusion_value,'.2f'))
+        self.pid['text'] = 'Patient ID: ' + str(format(self.patient_ID.get()))
+        self.pv['text'] = 'PV: ' + str(format(self.new_perfusion_value,'.2f'))
         # Removed because this caused the overlay issue
         # self.root2.destroy()
 
