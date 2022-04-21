@@ -219,6 +219,13 @@ class Window(Frame):
         self.pv['text'] = 'PV: ' + str(format(self.new_perfusion_value,'.2f'))
         # Removed because this caused the overlay issue
         # self.root2.destroy()
+    
+    def cal_selections(self):
+        """Save entered data and put into algorithm or display"""
+        self.root3.bind('<Return>',self.perfusion.changeThreshold(int(self.perfusion.differenceThreshold)))
+        print(self.perfusion.differenceThreshold)
+        self.new_perfusion_value = self.perfusion.image(self.filename)
+        self.pv['text'] = 'PV: ' + str(format(self.new_perfusion_value,'.2f'))
 
     def calibrate_machine(self):
         """Instructions Window Creation"""
@@ -371,8 +378,17 @@ class Window(Frame):
             bot_G.grid(row = 1, column = 2, padx=10, pady=1, sticky='e')
             bot_B = Label(self.root3, text =f'BMin: {blueMin}', fg='blue')
             bot_B.grid(row = 1, column = 3, padx=10, pady=1, sticky='e')
-            bot_C_Threshold = Label(self.root3, text = f'Calibrated Threshold: {int(redMin) - int(blueMin)}', fg = 'black')
+            cal_thresh = int(redMin) - int(blueMin) -1
+            bot_C_Threshold = Label(self.root3, text = f'Calibrated Threshold: {cal_thresh}', fg = 'black')
             bot_C_Threshold.grid(row = 1, column = 4, padx=10, pady=1, sticky='e')
+
+            # auto update the threshold value
+            self.perfusion.differenceThreshold = cal_thresh
+            self.new_perfusion_value = cal_thresh
+            
+            # Button to rerun the PV calculation after calibrated
+            enter_sel = tk.Button(self.root3, text = "Change Threshold", bg = 'White', fg = 'Black', font=("Arial Bold", 9), command =self.cal_selections)
+            enter_sel.grid(row = 12, column = 3, columnspan = 1)
 
         elif self.counter < 2:
             x1 = int(self.canvas.canvasx(event.x))
