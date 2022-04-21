@@ -71,6 +71,9 @@ class Window(Frame):
         self.canvas.create_image(int(w/2),int(h/2),image=self.render)
         """Sets window size"""
 
+        self.pid = tk.Label(self, text = '')
+        self.pv = tk.Label(self, text = '')
+
     """ MENU FUNCTIONS """
     
     def upload_image(self):
@@ -82,12 +85,15 @@ class Window(Frame):
         self.render = ImageTk.PhotoImage(self.load)
         self.canvas.create_image(int(w/2),int(h/2),image=self.render)
 
+        self.pid.destroy()
+        self.pv.destroy()
         self.perfusion_value = self.perfusion.image(self.filename)
         print(self.perfusion_value)
         self.pid = tk.Label(self, text = 'Patient ID: [Enter Patient ID in Settings]')
         self.pid.grid(row = 0, column = 0, pady=5)
         self.pv = tk.Label(self, text = 'PV:' + str(format(self.perfusion_value,'.2f')))
         self.pv.grid(row = 0, column = 1, pady=5)
+
 
         # Enable menu functions
         self.analyze.entryconfig("Compare Images", state="normal")
