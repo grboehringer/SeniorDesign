@@ -31,9 +31,9 @@ class Perfusion():
         green = img[:,:,1]
         blue = img[:,:,0]
 
-        boolean = np.abs(red - green) > self.differenceThreshold
-        boolean = boolean | np.abs(red - blue) > self.differenceThreshold
-        boolean = boolean | np.abs(green - blue) > self.differenceThreshold
+        # boolean = np.abs(red - green) > self.differenceThreshold
+        boolean = np.abs(red - blue) > self.differenceThreshold
+        # boolean = boolean | np.abs(green - blue) > self.differenceThreshold
 
         """Thresholded RGB values"""
         perfusion = intensity * boolean
