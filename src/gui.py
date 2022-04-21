@@ -52,9 +52,9 @@ class Window(Frame):
         self.file = Menu(menu, tearoff=False)
         menu.add_cascade(label="File", menu=self.file)
         self.file.add_command(label="Upload Image", command=self.upload_image)
-        self.file.add_command(label="Save Image and Data", command=self.save_all)
+        self.file.add_command(label="Save Image Data", command=self.save_all)
 
-        # creating a sub menu
+        # Settings Sub Menu
         self.sub_menu = Menu(menu, tearoff=False)
         self.sub_menu.add_command(label = 'Edit Settings', command=self.settings)
         self.sub_menu.add_command(label = 'Preset 1', command = self.preset_1)
@@ -63,20 +63,21 @@ class Window(Frame):
         self.file.add_cascade(label="Settings", menu=self.sub_menu)
 
         self.file.add_command(label="Exit", command=self.client_exit)
-
-        self.file.entryconfig("Settings", state="disabled")
-
         
+        self.file.entryconfig("Save Image Data", state="disabled")
+        self.file.entryconfig("Settings", state="disabled")
+                
         """Analyze drop down."""
         self.analyze = Menu(menu, tearoff=False)
         menu.add_cascade(label="Analyze", menu=self.analyze)
         self.analyze.add_command(label="Region of Interest", command=self.regionOfInterest)
         self.analyze.add_command(label="Compare Images", command=self.compare_images)
         self.analyze.add_command(label="Calibrate Machine", command=self.calibrate_machine)
-
-        self.analyze.entryconfig("Calibrate Machine", state="disabled")
+        
+        self.analyze.entryconfig("Region of Interest", state="disabled")
         self.analyze.entryconfig("Compare Images", state="disabled")
-
+        self.analyze.entryconfig("Calibrate Machine", state="disabled")
+        
         self.initial_image()
 
     def initial_image(self):
@@ -114,13 +115,14 @@ class Window(Frame):
         self.pid.grid(row = 0, column = 0, pady=5)
         self.pv = tk.Label(self, text = 'PV:' + str(format(self.perfusion_value,'.2f')))
         self.pv.grid(row = 0, column = 1, pady=5)
-
+        self.new_pid = "[Enter Patient ID]"
 
         # Enable menu functions
+        self.analyze.entryconfig("Region of Interest", state="normal")
         self.analyze.entryconfig("Compare Images", state="normal")
         self.analyze.entryconfig("Calibrate Machine", state="normal")
+        self.file.entryconfig("Save Image Data", state="normal")
         self.file.entryconfig("Settings", state="normal")
-
 
     def save_all(self):
         """Save image and associated data to file"""
