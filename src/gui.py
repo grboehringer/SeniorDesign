@@ -20,9 +20,30 @@ class Window(Frame):
 
         self.counter = 0
 
+        # Settings Window Defaults
+        d_pid = "[Enter Patient ID]"
+        self.new_pid = d_pid
+        d_gain = "[Enter Gain Value]"
+        self.new_gain = d_gain
+        d_zoom = "[Enter Zoom Value]"
+        self.new_zoom = d_zoom
+        d_frameavg = "[Enter Frame Average Value]"
+        self.new_frameavg = d_frameavg
+        d_thresh = "[Enter Threshold Percentage Value]"
+        self.new_thresh = d_thresh
+        d_samplevol = "[Enter Sample Volume Value]"
+        self.new_samplevol = d_samplevol
+        d_wallfilt = "[Enter Wall Filter Value]"
+        self.new_wallfilt = d_wallfilt
+        d_freq = "[Enter Frequency Value]"
+        self.new_freq = d_freq
+        
+
+        # JSON Variables
         self.patient_ID = None
         self.gain = None
         self.zoom = None
+        
         # Main menu
         menu = Menu(self.master)
         self.master.config(menu=menu)
@@ -31,9 +52,9 @@ class Window(Frame):
         self.file = Menu(menu, tearoff=False)
         menu.add_cascade(label="File", menu=self.file)
         self.file.add_command(label="Upload Image", command=self.upload_image)
-        self.file.add_command(label="Save Image and Data", command=self.save_all)
+        self.file.add_command(label="Save Image Data", command=self.save_all)
 
-        # creating a sub menu
+        # Settings Sub Menu
         self.sub_menu = Menu(menu, tearoff=False)
         self.sub_menu.add_command(label = 'Edit Settings', command=self.settings)
         self.sub_menu.add_command(label = 'Preset 1', command = self.preset_1)
@@ -42,20 +63,21 @@ class Window(Frame):
         self.file.add_cascade(label="Settings", menu=self.sub_menu)
 
         self.file.add_command(label="Exit", command=self.client_exit)
-
-        self.file.entryconfig("Settings", state="disabled")
-
         
+        self.file.entryconfig("Save Image Data", state="disabled")
+        self.file.entryconfig("Settings", state="disabled")
+                
         """Analyze drop down."""
         self.analyze = Menu(menu, tearoff=False)
         menu.add_cascade(label="Analyze", menu=self.analyze)
         self.analyze.add_command(label="Region of Interest", command=self.regionOfInterest)
         self.analyze.add_command(label="Compare Images", command=self.compare_images)
         self.analyze.add_command(label="Calibrate Machine", command=self.calibrate_machine)
-
-        self.analyze.entryconfig("Calibrate Machine", state="disabled")
+        
+        self.analyze.entryconfig("Region of Interest", state="disabled")
         self.analyze.entryconfig("Compare Images", state="disabled")
-
+        self.analyze.entryconfig("Calibrate Machine", state="disabled")
+        
         self.initial_image()
 
     def initial_image(self):
@@ -93,13 +115,14 @@ class Window(Frame):
         self.pid.grid(row = 0, column = 0, pady=5)
         self.pv = tk.Label(self, text = 'PV:' + str(format(self.perfusion_value,'.2f')))
         self.pv.grid(row = 0, column = 1, pady=5)
-
+        self.new_pid = "[Enter Patient ID]"
 
         # Enable menu functions
+        self.analyze.entryconfig("Region of Interest", state="normal")
         self.analyze.entryconfig("Compare Images", state="normal")
         self.analyze.entryconfig("Calibrate Machine", state="normal")
+        self.file.entryconfig("Save Image Data", state="normal")
         self.file.entryconfig("Settings", state="normal")
-
 
     def save_all(self):
         """Save image and associated data to file"""
@@ -167,7 +190,7 @@ class Window(Frame):
         
         id.grid(row = 2, column = 1, padx=10, pady=5, sticky='w')
         self.patient_ID.grid(row = 2, column = 2, padx=5, pady=5)
-        self.patient_ID.insert(0,"[Enter Patient ID]")
+        self.patient_ID.insert(0,self.new_pid)
 
         diff_threshold.grid(row=3, column=1, padx=10, pady=5, sticky='w')
         self.diff_thresh_entry.grid(row=3, column=2, padx=5, pady=5)
@@ -177,31 +200,31 @@ class Window(Frame):
 
         gain_val.grid(row=5, column=1, padx=10, pady=5, sticky='w')
         self.gain_val_entry.grid(row=5, column=2, padx=5, pady=5)
-        self.gain_val_entry.insert(0,"[Enter Gain Value]")
+        self.gain_val_entry.insert(0,self.new_gain)
 
         zoom_val.grid(row=6, column=1, padx=10, pady=5, sticky='w')
         self.zoom_val_entry.grid(row=6, column=2, padx=5, pady=5)
-        self.zoom_val_entry.insert(0,"[Enter Zoom Value]")
+        self.zoom_val_entry.insert(0,self.new_zoom)
 
         frame_avg_val.grid(row=7, column=1, padx=10, pady=5, sticky='w')
         self.frame_avg_val_entry.grid(row=7, column=2, padx=5, pady=5)
-        self.frame_avg_val_entry.insert(0,"[Enter Frame Average Value]")
+        self.frame_avg_val_entry.insert(0,self.new_frameavg)
 
         thresh_val.grid(row=8, column=1, padx=10, pady=5, sticky='w')
         self.thresh_val_entry.grid(row=8, column=2, padx=5, pady=5)
-        self.thresh_val_entry.insert(0,"[Enter Threshold Percentage Value]")
+        self.thresh_val_entry.insert(0,self.new_thresh)
 
         sample_vol_val.grid(row=9, column=1, padx=10, pady=5, sticky='w')
         self.sample_vol_val_entry.grid(row=9, column=2, padx=5, pady=5)
-        self.sample_vol_val_entry.insert(0,"[Enter Sample Volume Value]")
+        self.sample_vol_val_entry.insert(0,self.new_samplevol)
 
         wall_filter_val.grid(row=10, column=1, padx=10, pady=5, sticky='w')
         self.wall_filter_val_entry.grid(row=10, column=2, padx=5, pady=5)
-        self.wall_filter_val_entry.insert(0,"[Enter Wall Filter Value]")
+        self.wall_filter_val_entry.insert(0,self.new_wallfilt)
 
         frequency_val.grid(row=11, column=1, padx=10, pady=5, sticky='w')
         self.frequency_val_entry.grid(row=11, column=2, padx=5, pady=5)
-        self.frequency_val_entry.insert(0,"[Enter Frequency Value]")
+        self.frequency_val_entry.insert(0,self.new_freq)
 
         # x = variable.get() can store entry
         enter_sel = tk.Button(self.root2, text = "Enter", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 9), command =self.enter_selections)
@@ -221,8 +244,21 @@ class Window(Frame):
         self.root2.bind('<Return>',self.perfusion.changeThreshold(int(self.diff_thresh_entry.get())))
         print(self.perfusion.differenceThreshold)
         self.new_perfusion_value = self.perfusion.image(self.filename)
-        self.pid['text'] = 'Patient ID: ' + str(format(self.patient_ID.get()))
+
+        # Update PID and PV values
+        self.new_pid = self.patient_ID.get()
+        self.pid['text'] = 'Patient ID: ' + str(format(self.new_pid))
         self.pv['text'] = 'PV: ' + str(format(self.new_perfusion_value,'.2f'))
+        
+        # Update Settings Values
+        self.new_gain = self.gain_val_entry.get()
+        self.new_zoom = self.zoom_val_entry.get()
+        self.new_frameavg = self.frame_avg_val_entry.get()
+        self.new_thresh = self.thresh_val_entry.get()
+        self.new_samplevol = self.sample_vol_val_entry.get()
+        self.new_wallfilt = self.wall_filter_val_entry.get()
+        self.new_freq = self.frequency_val_entry.get()
+
         # Removed because this caused the overlay issue
         # self.root2.destroy()
     
