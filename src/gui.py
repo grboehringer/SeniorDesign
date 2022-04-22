@@ -210,11 +210,11 @@ class Window(Frame):
         # Adding presets to the settings
             
     def preset_1(self): 
-        print("yikes 1")   
+        print("Add preset 1")   
     def preset_2(self):        
-        print("yikes 2")
+        print("Add preset 3")
     def preset_3(self):
-        print("Yikes 3")
+        print("Add preset 3")
 
     def enter_selections(self):
         """Save entered data and put into algorithm or display"""
