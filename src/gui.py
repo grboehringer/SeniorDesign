@@ -37,7 +37,6 @@ class Window(Frame):
         self.new_wallfilt = d_wallfilt
         d_freq = "[Enter Frequency Value]"
         self.new_freq = d_freq
-        
 
         # JSON Variables
         self.patient_ID = None
@@ -53,15 +52,7 @@ class Window(Frame):
         menu.add_cascade(label="File", menu=self.file)
         self.file.add_command(label="Upload Image", command=self.upload_image)
         self.file.add_command(label="Save Image Data", command=self.save_all)
-
-        # Settings Sub Menu
-        self.sub_menu = Menu(menu, tearoff=False)
-        self.sub_menu.add_command(label = 'Edit Settings', command=self.settings)
-        self.sub_menu.add_command(label = 'Preset 1', command = self.preset_1)
-        self.sub_menu.add_command(label = 'Preset 2', command = self.preset_2)
-        self.sub_menu.add_command(label = 'Preset 3', command = self.preset_3)
-        self.file.add_cascade(label="Settings", menu=self.sub_menu)
-
+        self.file.add_command(label="Settings", command=self.settings)
         self.file.add_command(label="Exit", command=self.client_exit)
         
         self.file.entryconfig("Save Image Data", state="disabled")
@@ -226,21 +217,170 @@ class Window(Frame):
         self.frequency_val_entry.grid(row=11, column=2, padx=5, pady=5)
         self.frequency_val_entry.insert(0,self.new_freq)
 
-        # x = variable.get() can store entry
-        enter_sel = tk.Button(self.root2, text = "Enter", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 9), command =self.enter_selections)
-        enter_sel.grid(row = 12, column = 1, columnspan = 2, padx=5, pady=5, ipadx=100)
+        load_preset_button = tk.Button(self.root2, text = "Load Preset", width = 40, bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 9), command =self.select_load_preset)
+        load_preset_button.grid(row = 12, column = 1, columnspan = 2, padx=5, pady=5)
 
-        # Adding presets to the settings
+        save_preset_button = tk.Button(self.root2, text = "Save Preset", width = 40, bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 9), command =self.select_save_preset)
+        save_preset_button.grid(row = 13, column = 1, columnspan = 2, padx=5, pady=5)
+
+        enter_sel = tk.Button(self.root2, text = "Enter", width = 40, bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 9), command =self.enter_selections)
+        enter_sel.grid(row = 14, column = 1, columnspan = 2, padx=5, pady=5)
+
+    def select_save_preset(self):
+        # Setup New Window
+        self.save_select = tk.Tk()
+        self.save_select.title('Select Preset')
+        self.save_select.configure(bg='#3A3B3C')
+
+        save_instruct = tk.Label(self.save_select, text = "Which preset would you like to save these values to?", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 10))
+        save_instruct.grid(row = 1, column = 1, columnspan=3, padx=10, pady=5)
+
+        preset1_button = tk.Button(self.save_select, text = "Preset 1", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 9), command = self.save_preset_1)
+        preset1_button.grid(row = 2, column = 1, padx=5, pady=5)
+
+        preset2_button = tk.Button(self.save_select, text = "Preset 2", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 9), command = self.save_preset_2)
+        preset2_button.grid(row = 2, column = 2, padx=5, pady=5)
+
+        preset3_button = tk.Button(self.save_select, text = "Preset 3", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 9), command = self.save_preset_3)
+        preset3_button.grid(row = 2, column = 3, padx=5, pady=5)
+
+    def select_load_preset(self):
+        # Setup New Window
+        self.load_select = tk.Tk()
+        self.load_select.title('Load Preset')
+        self.load_select.configure(bg='#3A3B3C')
+
+        load_instruct = tk.Label(self.load_select, text = "Which preset would you like to load?", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 10))
+        load_instruct.grid(row = 1, column = 1, columnspan=3, padx=10, pady=5)
+
+        preset1_button = tk.Button(self.load_select, text = "Preset 1", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 9), command = self.load_preset_1)
+        preset1_button.grid(row = 2, column = 1, padx=5, pady=5)
+
+        preset2_button = tk.Button(self.load_select, text = "Preset 2", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 9), command = self.load_preset_2)
+        preset2_button.grid(row = 2, column = 2, padx=5, pady=5)
+
+        preset3_button = tk.Button(self.load_select, text = "Preset 3", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 9), command = self.load_preset_3)
+        preset3_button.grid(row = 2, column = 3, padx=5, pady=5)
+
+    def save_preset(self):
+        self.enter_selections()
+        preset = {
+            'PID': self.new_pid,
+            'Difference Threshold': self.perfusion.differenceThreshold,
+            'Gain': self.new_gain,
+            'Zoom': self.new_zoom,
+            'Frame Average': self.new_frameavg,
+            'Threshold (%)': self.new_thresh,
+            'Sample Volume': self.new_samplevol,
+            'Wall Filter': self.new_wallfilt,
+            'Frequency': self.new_freq
+        }
+        return preset
+
+    def save_preset_1(self): 
+        self.save_select.destroy()
+        preset1 = self.save_preset()
+        preset1_string = json.dumps(preset1)
+        print(preset1_string)
+
+        with open('preset1.json', 'w') as presetfile:
+            presetfile.write(preset1_string)
+
+    def save_preset_2(self):   
+        self.save_select.destroy()    
+        preset2 = self.save_preset()
+        preset2_string = json.dumps(preset2)
+        print(preset2_string)
+
+        with open('preset2.json', 'w') as presetfile:
+            presetfile.write(preset2_string)
+
+    def save_preset_3(self):
+        self.save_select.destroy()
+        preset3 = self.save_preset()
+        preset3_string = json.dumps(preset3)
+        print(preset3_string)
+
+        with open('preset3.json', 'w') as presetfile:
+            presetfile.write(preset3_string)
+
+    def load_preset(self):
+        self.patient_ID.delete(0,END)
+        self.diff_thresh_entry.delete(0,END)
+        self.gain_val_entry.delete(0,END)
+        self.zoom_val_entry.delete(0,END)
+        self.frame_avg_val_entry.delete(0,END)
+        self.thresh_val_entry.delete(0,END)
+        self.sample_vol_val_entry.delete(0,END)
+        self.wall_filter_val_entry.delete(0,END)
+        self.frequency_val_entry.delete(0,END)
+
+        self.patient_ID.insert(0,self.new_pid)
+        self.diff_thresh_entry.insert(0,self.perfusion.differenceThreshold)
+        self.gain_val_entry.insert(0,self.new_gain)
+        self.zoom_val_entry.insert(0,self.new_zoom)
+        self.frame_avg_val_entry.insert(0,self.new_frameavg)
+        self.thresh_val_entry.insert(0,self.new_thresh)
+        self.sample_vol_val_entry.insert(0,self.new_samplevol)
+        self.wall_filter_val_entry.insert(0,self.new_wallfilt)
+        self.frequency_val_entry.insert(0,self.new_freq)
+
+    def load_preset_1(self):
+        self.load_select.destroy()
+
+        with open('preset1.json') as presetfile:
+            preset1 = json.load(presetfile)
             
-    def preset_1(self): 
-        print("yikes 1")   
-    def preset_2(self):        
-        print("yikes 2")
-    def preset_3(self):
-        print("Yikes 3")
+        self.new_pid = preset1['PID']
+        self.perfusion.differenceThreshold = preset1['Difference Threshold']
+        self.new_gain = preset1['Gain']
+        self.new_zoom = preset1['Zoom']
+        self.new_frameavg = preset1['Frame Average']
+        self.new_thresh = preset1['Threshold (%)']
+        self.new_samplevol = preset1['Sample Volume']
+        self.new_wallfilt = preset1['Wall Filter']
+        self.new_freq = preset1['Frequency']
+        self.load_preset()
+        self.enter_selections()
+
+    def load_preset_2(self):
+        self.load_select.destroy()
+
+        with open('preset2.json') as presetfile:
+            preset2 = json.load(presetfile)
+
+        self.new_pid = preset2['PID']
+        self.perfusion.differenceThreshold = preset2['Difference Threshold']
+        self.new_gain = preset2['Gain']
+        self.new_zoom = preset2['Zoom']
+        self.new_frameavg = preset2['Frame Average']
+        self.new_thresh = preset2['Threshold (%)']
+        self.new_samplevol = preset2['Sample Volume']
+        self.new_wallfilt = preset2['Wall Filter']
+        self.new_freq = preset2['Frequency']
+        self.load_preset()
+        self.enter_selections()
+
+    def load_preset_3(self):
+        self.load_select.destroy()
+
+        with open('preset3.json') as presetfile:
+            preset3 = json.load(presetfile)
+
+        self.new_pid = preset3['PID']
+        self.perfusion.differenceThreshold = preset3['Difference Threshold']
+        self.new_gain = preset3['Gain']
+        self.new_zoom = preset3['Zoom']
+        self.new_frameavg = preset3['Frame Average']
+        self.new_thresh = preset3['Threshold (%)']
+        self.new_samplevol = preset3['Sample Volume']
+        self.new_wallfilt = preset3['Wall Filter']
+        self.new_freq = preset3['Frequency']
+        self.load_preset()
+        self.enter_selections()
 
     def enter_selections(self):
-        """Save entered data and put into algorithm or display"""
+        """Save entered settings data and put into algorithm or display"""
         self.root2.bind('<Return>',self.perfusion.changeThreshold(int(self.diff_thresh_entry.get())))
         print(self.perfusion.differenceThreshold)
         self.new_perfusion_value = self.perfusion.image(self.filename)
