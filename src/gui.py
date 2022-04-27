@@ -116,26 +116,45 @@ class Window(Frame):
         self.file.entryconfig("Settings", state="normal")
 
     def save_all(self):
-        """Save image and associated data to file"""
-        image_data = {
-            'value': self.perfusion_value,
-            'threshold': self.perfusion.differenceThreshold,
-            'pid': self.patient_ID,
-            'gain': self.gain,
-            'zoom': self.zoom
-        }
-        try:
-            with open('images.json') as file:
-                data = json.load(file)
-                data[self.filename] = image_data
-        except:
-            data = {
-                self.filename: image_data
-            }
-        finally:
-            with open('images.json', 'w') as file:
-                json.dump(data, file)
-            
+        """Prompt user filename choice"""
+        # Choose Filename
+        self.savename = tk.Tk()
+        self.savename.title('File Name Entry')
+        self.savename.configure(bg='#3A3B3C')
+
+        nameq = tk.Label(self.savename, text = 'What would you like to name the saved file?', width = 40, bg ='#3A3B3C', fg = 'white', font=("Arial", 10))
+        nameq.grid(row = 1, column = 1, padx=10, pady=5)
+
+        warnq = tk.Label(self.savename, text = 'IMPORTANT: Do not include file type! i.e. ".txt"', bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 8))
+        warnq.grid(row = 2, column = 1, padx=10, pady=5)
+
+        self.nameq_entry = Entry(self.savename, width = 40)
+        self.nameq_entry.grid(row = 3, column = 1, padx=5, pady=5)
+
+        nameq_button = tk.Button(self.savename, text = "Save", width = 20, bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 9), command =self.save_to_file)
+        nameq_button.grid(row = 4, column = 1, padx=5, pady=5)
+
+    def save_to_file(self):
+        """Save image associated data to file"""
+        self.append_nameq_entry = str(format(self.nameq_entry.get())) + ".txt"
+        self.savename.destroy()
+        with open(self.append_nameq_entry, 'w') as img:
+            imgdata = [
+                '--- Image Information ---\n'
+                '\tImage Location: ' + str(format(self.filename)) + '\n',
+                '\tPID: ' + str(format(self.new_pid)) + '\n',
+                '\tPV: ' + str(format(self.perfusion_value,'.2f')) + '\n\n',
+                '--- Settings ---\n',
+                '\tDifference Threshold: ' + str(format(self.perfusion.differenceThreshold)) + '\n',
+                '\tGain: ' + str(format(self.new_gain)) + '\n',
+                '\tZoom: ' + str(format(self.new_zoom)) + '\n',
+                '\tFrame Average: ' + str(format(self.new_frameavg)) + '\n',
+                '\tThreshold (%): ' + str(format(self.new_thresh)) + '\n',
+                '\tSample Volume: ' + str(format(self.new_samplevol)) + '\n',
+                '\tWall Filter: ' + str(format(self.new_wallfilt)) + '\n',
+                '\tFrequency: ' + str(format(self.new_freq))
+            ]
+            img.writelines(imgdata)
         
     def settings(self):
         """Allow thresholds and machine constants to be entered manually"""
