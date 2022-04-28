@@ -424,7 +424,6 @@ class Window(Frame):
     def cal_selections(self):
         """Save entered data and put into algorithm or display"""
         self.perfusion.differenceThreshold = self.cal_thresh
-        # self.new_perfusion_value = self.cal_thresh
         self.root3.bind('<Return>',self.perfusion.changeThreshold(int(self.perfusion.differenceThreshold)))
         print(self.perfusion.differenceThreshold)
         self.new_perfusion_value = self.perfusion.image(self.filename)
@@ -437,7 +436,7 @@ class Window(Frame):
         self.info.configure(bg='#3A3B3C')
 
         # Window Information
-        info_msg = tk.Label(self.info, text = "To calibrate correctly select the color that represents the slowest motion first.\n Then select the fastest motion.", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 10))
+        info_msg = tk.Label(self.info, text = "To calibrate your machine correctly, select the color that represents the slowest motion first.\n Then select the fastest motion.", bg ='#3A3B3C', fg = 'white', font=("Arial Bold", 10))
         info_msg.grid(row = 1, column = 1, columnspan = 2, padx=10, pady=5, ipady=5)
 
         sel_img = tk.Button(self.info, text = "Continue", width = 15, bg = '#3A3B3C', fg = 'white', command = self.destroy_window)
