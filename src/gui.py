@@ -77,7 +77,7 @@ class Window(Frame):
         self.canvas.grid(row = 2,column = 0,columnspan=20)
 
         """Instructions image upload."""
-        load = Image.open("images/Instructions.jpg")
+        load = Image.open("images/instructions_final.jpg")
         (w,h) = load.size
         self.canvas.config(width=w,height=h)
         self.render = ImageTk.PhotoImage(load)
