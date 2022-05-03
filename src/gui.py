@@ -402,12 +402,12 @@ class Window(Frame):
         """Save entered settings data and put into algorithm or display"""
         self.root2.bind('<Return>',self.perfusion.changeThreshold(int(self.diff_thresh_entry.get())))
         print(self.perfusion.differenceThreshold)
-        self.new_perfusion_value = self.perfusion.image(self.filename)
+        self.perfusion_value = self.perfusion.image(self.filename)
 
         # Update PID and PV values
         self.new_pid = self.patient_ID.get()
         self.pid['text'] = 'Patient ID: ' + str(format(self.new_pid))
-        self.pv['text'] = 'PV: ' + str(format(self.new_perfusion_value,'.2f'))
+        self.pv['text'] = 'PV: ' + str(format(self.perfusion_value,'.2f'))
         
         # Update Settings Values
         self.new_gain = self.gain_val_entry.get()
@@ -426,8 +426,8 @@ class Window(Frame):
         self.perfusion.differenceThreshold = self.cal_thresh
         self.root3.bind('<Return>',self.perfusion.changeThreshold(int(self.perfusion.differenceThreshold)))
         print(self.perfusion.differenceThreshold)
-        self.new_perfusion_value = self.perfusion.image(self.filename)
-        self.pv['text'] = 'PV: ' + str(format(self.new_perfusion_value,'.2f'))
+        self.perfusion_value = self.perfusion.image(self.filename)
+        self.pv['text'] = 'PV: ' + str(format(self.perfusion_value,'.2f'))
 
     def calibrate_machine(self):
         """Instructions Window Creation"""
